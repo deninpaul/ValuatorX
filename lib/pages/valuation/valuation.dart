@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/pages/valuation/components/logout.dart';
 import '../../providers/auth_provider.dart';
 
 class Valuations extends StatelessWidget {

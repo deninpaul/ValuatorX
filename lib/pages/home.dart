@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/tab.dart';
-import 'package:valuatorx/pages/common/createButton.dart';
+import 'package:valuatorx/pages/common/create_button.dart';
 import 'package:valuatorx/pages/common/header.dart';
+import 'package:valuatorx/pages/land_rate/land_rate.dart';
 import 'package:valuatorx/pages/valuation/valuation.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 
@@ -20,6 +21,20 @@ class _HomeScreenState extends State<HomeScreen> {
   bool showTrailing = false;
   double groupAlignment = -1.0;
   String searchQuery = "";
+  late final AuthProvider authProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
+    tryAPI();
+  }
+
+  void tryAPI() async {
+    final client = await authProvider.getClient();
+    final res = await client.get(Uri.parse("https://graph.microsoft.com/v1.0/me"));
+    print(res.body);
+  }
 
   final TextEditingController searchController = TextEditingController();
   final List<TabItem> tabs = [
@@ -41,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       createText: "Add Data",
       onCreate: () => print("Add data"),
       onSearch: (query) => print(query),
-      child: Text("Land Rate Tab"),
+      child: LandRate(),
     ),
     TabItem(
       name: "More",
@@ -51,10 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Text("Settings Tab"),
     ),
   ];
-
-  void createEntry() {
-    print("Add button");
-  }
 
   void clearSearch() {
     searchController.clear();

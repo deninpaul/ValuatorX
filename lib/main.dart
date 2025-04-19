@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/pages/home.dart';
-import 'package:valuatorx/pages/login/login.dart';
+import 'package:valuatorx/pages/home_screen.dart';
+import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
+import 'package:valuatorx/pages/login/login_screen.dart';
 import 'package:valuatorx/pages/splash_screen/splash_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -35,7 +36,9 @@ class MyApp extends StatelessWidget {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginScreen(),
           '/home': (context) => const HomeScreen(),
+          '/land_rate/add': (context) => const LandRateForm(),
         },
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

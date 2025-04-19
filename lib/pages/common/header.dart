@@ -24,7 +24,7 @@ class Header extends StatelessWidget {
             Row(
               children: [
                 const SizedBox(width: 12),
-                Text(item.title, style: textTheme.titleLarge?.copyWith(color: colorScheme.primary)),
+                Text(item.title, style: textTheme.bodyLarge?.copyWith(color: colorScheme.primary, fontSize: 18)),
               ],
             ),
           Spacer(),

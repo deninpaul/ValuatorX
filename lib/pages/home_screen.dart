@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/tab.dart';
 import 'package:valuatorx/pages/common/create_button.dart';
 import 'package:valuatorx/pages/common/header.dart';
-import 'package:valuatorx/pages/land_rate/land_rate.dart';
-import 'package:valuatorx/pages/valuation/valuation.dart';
+import 'package:valuatorx/pages/land_rate/land_rate_screen.dart';
+import 'package:valuatorx/pages/valuation/valuation_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,50 +22,44 @@ class _HomeScreenState extends State<HomeScreen> {
   double groupAlignment = -1.0;
   String searchQuery = "";
   late final AuthProvider authProvider;
+  late final List<TabItem> tabs;
 
   @override
   void initState() {
     super.initState();
     authProvider = Provider.of<AuthProvider>(context, listen: false);
-    tryAPI();
-  }
-
-  void tryAPI() async {
-    final client = await authProvider.getClient();
-    final res = await client.get(Uri.parse("https://graph.microsoft.com/v1.0/me"));
-    print(res.body);
+    tabs = [
+      TabItem(
+        name: "Valuation",
+        title: "Valuation Reports",
+        icon: Icon(Icons.home_outlined),
+        selectedIcon: Icon(Icons.home),
+        createText: "New report",
+        onCreate: () => print("Create report"),
+        onSearch: (query) => print(query),
+        child: Valuations(),
+      ),
+      TabItem(
+        name: "Land rate",
+        title: "Land Rate Data",
+        icon: Icon(Icons.map_outlined),
+        selectedIcon: Icon(Icons.map),
+        createText: "Add data",
+        onCreate: () => Navigator.pushNamed(context, "/land_rate/add"),
+        onSearch: (query) => print(query),
+        child: LandRate(),
+      ),
+      TabItem(
+        name: "More",
+        title: "More tools",
+        icon: Icon(Icons.more_horiz_outlined),
+        selectedIcon: Icon(Icons.more_horiz_rounded),
+        child: Text("Settings Tab"),
+      ),
+    ];
   }
 
   final TextEditingController searchController = TextEditingController();
-  final List<TabItem> tabs = [
-    TabItem(
-      name: "Valuation",
-      title: "Valuation Reports",
-      icon: Icon(Icons.home_outlined),
-      selectedIcon: Icon(Icons.home),
-      createText: "New Report",
-      onCreate: () => print("Create report"),
-      onSearch: (query) => print(query),
-      child: Valuations(),
-    ),
-    TabItem(
-      name: "Land rate",
-      title: "Land Rate Data",
-      icon: Icon(Icons.map_outlined),
-      selectedIcon: Icon(Icons.map),
-      createText: "Add Data",
-      onCreate: () => print("Add data"),
-      onSearch: (query) => print(query),
-      child: LandRate(),
-    ),
-    TabItem(
-      name: "More",
-      title: "More tools",
-      icon: Icon(Icons.more_horiz_outlined),
-      selectedIcon: Icon(Icons.more_horiz_rounded),
-      child: Text("Settings Tab"),
-    ),
-  ];
 
   void clearSearch() {
     searchController.clear();
@@ -139,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Header(item: tabs[selectedIndex], searchController: searchController),
                       Expanded(
                         child: Container(
-                          margin: const EdgeInsets.fromLTRB(8, 8, 8, 16),
+                          margin: const EdgeInsets.fromLTRB(8, 8, 12, 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(24),
                             color: colorScheme.surface,

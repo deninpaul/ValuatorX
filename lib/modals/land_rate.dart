@@ -23,6 +23,17 @@ class LandRate {
     required this.road,
   });
 
+  static final editableFields = [
+    "Lattitude",
+    "Longitude",
+    "Land Rate/ Range per Cent",
+    "Type of Land",
+    "Size of land considered / Remarks",
+    "Month of Visit",
+    "Year Of Visit",
+    "Road",
+  ];
+
   factory LandRate.fromJson(Map<String, dynamic> json) {
     return LandRate(
       id: json["id"],
@@ -51,5 +62,9 @@ class LandRate {
       "Year Of Visit": yearOfVisit,
       "Road": road,
     };
+  }
+
+  List toList() {
+    return [slNo, latitude, longitude, landRatePerCent, landType, landSizeRemarks, monthOfVisit, yearOfVisit, road];
   }
 }

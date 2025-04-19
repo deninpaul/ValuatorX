@@ -3,8 +3,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/pages/common/summary_tile.dart';
+import 'package:valuatorx/pages/land_rate/components/summary_tile.dart';
 import 'package:valuatorx/pages/land_rate/components/numbered_marker.dart';
+import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
+
 import 'package:valuatorx/pages/land_rate/components/pill.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 
@@ -18,17 +20,18 @@ class LandRate extends StatefulWidget {
 class _LandRateState extends State<LandRate> {
   final MapController _mapController = MapController();
   LatLng _currentLocation = LatLng(0, 0);
+  double pinSize = 44;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _goToMyLocation();
       final provider = Provider.of<LandRateProvider>(context, listen: false);
       if (provider.landRates.isEmpty) {
-        provider.getLandRates();
+        provider.getLandRates(context);
       }
     });
-    _goToMyLocation();
   }
 
   Future<void> _goToMyLocation() async {
@@ -36,7 +39,7 @@ class _LandRateState extends State<LandRate> {
     if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) return;
     final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() => _currentLocation = LatLng(position.latitude, position.longitude));
-    _mapController.move(_currentLocation, 12);
+    _mapController.move(_currentLocation, 15);
   }
 
   @override
@@ -49,30 +52,31 @@ class _LandRateState extends State<LandRate> {
       children: [
         FlutterMap(
           mapController: _mapController,
-          options: MapOptions(initialCenter: _currentLocation),
+          options: MapOptions(
+            initialCenter: _currentLocation,
+            interactionOptions: InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
+          ),
           children: [
             Container(color: colorScheme.surface),
             TileLayer(
               urlTemplate: "https://api.maptiler.com/maps/bright-v2/{z}/{x}/{y}.png?key=cnscXQAGGIRCXm0KVoTo",
               userAgentPackageName: "com.example.valuatorx",
+              tileProvider: CancellableNetworkTileProvider(),
             ),
             MarkerLayer(
               markers: [
-                Marker(point: _currentLocation, child: Icon(Icons.my_location, color: Colors.blue, size: 32)),
                 ...provider.landRates.map((rate) {
                   return Marker(
-                    width: 48,
-                    height: 48,
+                    width: pinSize,
+                    height: pinSize,
                     point: LatLng(double.tryParse(rate.latitude) ?? 0, double.tryParse(rate.longitude) ?? 0),
-                    child: NumberedMarker(text: rate.slNo),
+                    child: NumberedMarker(text: rate.slNo, size: pinSize),
                   );
                 }),
+                Marker(point: _currentLocation, child: Icon(Icons.my_location, color: Colors.blue, size: 28)),
               ],
             ),
-            Container(
-              alignment: AlignmentDirectional.topEnd,
-              child: ElevatedButton(onPressed: () {}, child: Text("test")),
-            ),
+            mapActions(provider, theme),
           ],
         ),
         DraggableScrollableSheet(
@@ -88,7 +92,7 @@ class _LandRateState extends State<LandRate> {
               ),
               child: Column(
                 children: [
-                  SingleChildScrollView(controller: scrollController, child: Pill(color: theme.dividerColor)),
+                  SingleChildScrollView(controller: scrollController, child: Pill(color: colorScheme.surfaceDim)),
                   Expanded(
                     child:
                         provider.isLoading
@@ -99,7 +103,9 @@ class _LandRateState extends State<LandRate> {
                               physics: BouncingScrollPhysics(),
                               controller: scrollController,
                               itemCount: provider.landRates.length,
-                              itemBuilder: (context, index) => SummaryTile(landRate: provider.landRates[index]),
+                              itemBuilder:
+                                  (context, index) =>
+                                      SummaryTile(landRate: provider.landRates.reversed.toList()[index]),
                               separatorBuilder: (context, index) => Divider(),
                             ),
                   ),
@@ -109,6 +115,25 @@ class _LandRateState extends State<LandRate> {
           },
         ),
       ],
+    );
+  }
+
+  Widget mapActions(LandRateProvider provider, ThemeData theme) {
+    return Container(
+      alignment: AlignmentDirectional.topEnd,
+      padding: EdgeInsets.all(16),
+      child: ElevatedButton(
+        onPressed: () => provider.goToLocation(_mapController),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: theme.colorScheme.surface,
+          shape: const CircleBorder(),
+          padding: EdgeInsets.all(16),
+        ),
+        child:
+            provider.isLoadingLocation
+                ? CircularProgressIndicator()
+                : Icon(Icons.gps_fixed, color: theme.colorScheme.onSurfaceVariant, size: 24),
+      ),
     );
   }
 }

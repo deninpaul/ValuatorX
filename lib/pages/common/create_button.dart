@@ -16,7 +16,7 @@ class CreateButton extends StatelessWidget {
           child: FloatingActionButton.extended(
             onPressed: item.onCreate,
             icon: const Icon(Icons.add),
-            label: Text("${item.createText}", style: textTheme.bodyLarge),
+            label: Text("${item.createText}", style: textTheme.bodyMedium),
           ),
         )
         : SizedBox();

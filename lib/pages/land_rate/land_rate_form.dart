@@ -51,12 +51,12 @@ class _LandRateFormState extends State<LandRateForm> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
-        title: Text("New Land Rate", style: textTheme.bodyLarge!.copyWith(fontSize: 18)),
+        title: Text("New Land Rate", style: textTheme.titleLarge),
         actions: [Padding(padding: const EdgeInsets.only(right: 24), child: saveButton(theme))],
         leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 48, vertical: 24),
         child: Form(
           key: _formKey,
           child: Column(
@@ -66,6 +66,7 @@ class _LandRateFormState extends State<LandRateForm> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: TextFormField(
                     controller: controllers[key],
+                    textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       labelText: key, // You can prettify this if needed
                       border: const OutlineInputBorder(),
@@ -90,7 +91,7 @@ class _LandRateFormState extends State<LandRateForm> {
         }
       },
       style: TextButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
         backgroundColor: theme.colorScheme.primary,
       ),
       child: Text("Save", style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onPrimary)),

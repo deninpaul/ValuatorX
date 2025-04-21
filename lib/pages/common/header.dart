@@ -10,9 +10,6 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
-    final size = MediaQuery.of(context).size;
-    final onMobile = size.width < 600;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
@@ -20,17 +17,8 @@ class Header extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (!onMobile)
-            Row(
-              children: [
-                const SizedBox(width: 12),
-                Text(item.title, style: textTheme.bodyLarge?.copyWith(color: colorScheme.primary, fontSize: 18)),
-              ],
-            ),
-          Spacer(),
           if (item.onSearch != null)
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: !onMobile ? 256 : size.width - 160),
+            Expanded(
               child: SearchBar(
                 controller: searchController,
                 onSubmitted: item.onSearch,

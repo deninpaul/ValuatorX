@@ -8,8 +8,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.2.1
-  flutter_map: ^8.1.1
-  flutter_map_cancellable_tile_provider: ^3.1.0
+  flutter_map: ^7.0.2
+  flutter_map_cancellable_tile_provider: ^3.0.2
+  flutter_map_marker_cluster: ^1.4.0
   geolocator: ^11.0.0
   latlong2: ^0.9.1
   oauth2: ^2.0.1

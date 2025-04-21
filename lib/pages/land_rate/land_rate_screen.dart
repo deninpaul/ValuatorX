@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/pages/land_rate/components/summary_tile.dart';
 import 'package:valuatorx/pages/land_rate/components/numbered_marker.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
-
 import 'package:valuatorx/pages/land_rate/components/pill.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 
@@ -19,27 +18,15 @@ class LandRate extends StatefulWidget {
 
 class _LandRateState extends State<LandRate> {
   final MapController _mapController = MapController();
-  LatLng _currentLocation = LatLng(0, 0);
-  double pinSize = 44;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _goToMyLocation();
       final provider = Provider.of<LandRateProvider>(context, listen: false);
-      if (provider.landRates.isEmpty) {
-        provider.getLandRates(context);
-      }
+      provider.getLandRates(context, refresh: provider.landRates.isEmpty);
+      provider.goToLocation(_mapController);
     });
-  }
-
-  Future<void> _goToMyLocation() async {
-    final permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) return;
-    final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    setState(() => _currentLocation = LatLng(position.latitude, position.longitude));
-    _mapController.move(_currentLocation, 15);
   }
 
   @override
@@ -53,7 +40,7 @@ class _LandRateState extends State<LandRate> {
         FlutterMap(
           mapController: _mapController,
           options: MapOptions(
-            initialCenter: _currentLocation,
+            initialCenter: provider.currentLocation,
             interactionOptions: InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
           ),
           children: [
@@ -63,18 +50,26 @@ class _LandRateState extends State<LandRate> {
               userAgentPackageName: "com.example.valuatorx",
               tileProvider: CancellableNetworkTileProvider(),
             ),
+            MarkerClusterLayerWidget(
+              options: MarkerClusterLayerOptions(
+                size: Size(64, 64),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(50),
+                builder: (context, markers) => clusterIcon(markers.length, theme),
+                markers: [
+                  ...provider.landRates.map((rate) {
+                    return Marker(
+                      width: 64,
+                      height: 40,
+                      point: LatLng(double.tryParse(rate.latitude) ?? 0, double.tryParse(rate.longitude) ?? 0),
+                      child: NumberedMarker(text: rate.slNo),
+                    );
+                  }),
+                ],
+              ),
+            ),
             MarkerLayer(
-              markers: [
-                ...provider.landRates.map((rate) {
-                  return Marker(
-                    width: pinSize,
-                    height: pinSize,
-                    point: LatLng(double.tryParse(rate.latitude) ?? 0, double.tryParse(rate.longitude) ?? 0),
-                    child: NumberedMarker(text: rate.slNo, size: pinSize),
-                  );
-                }),
-                Marker(point: _currentLocation, child: Icon(Icons.my_location, color: Colors.blue, size: 28)),
-              ],
+              markers: [Marker(point: provider.currentLocation, child: Icon(Icons.my_location, color: Colors.blue, size: 28))],
             ),
             mapActions(provider, theme),
           ],
@@ -88,7 +83,7 @@ class _LandRateState extends State<LandRate> {
               decoration: BoxDecoration(
                 color: colorScheme.surface,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(25), blurRadius: 10, offset: Offset(0, 0))],
+                boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(24), blurRadius: 16, offset: Offset(0, 0))],
               ),
               child: Column(
                 children: [
@@ -131,9 +126,25 @@ class _LandRateState extends State<LandRate> {
         ),
         child:
             provider.isLoadingLocation
-                ? CircularProgressIndicator()
+                ? SizedBox(width: 24, height: 24, child: CircularProgressIndicator())
                 : Icon(Icons.gps_fixed, color: theme.colorScheme.onSurfaceVariant, size: 24),
       ),
+    );
+  }
+
+  Widget clusterIcon(int text, ThemeData theme) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: theme.colorScheme.surfaceContainer,
+        border: Border.all(
+          width: 8,
+          strokeAlign: BorderSide.strokeAlignOutside,
+          color: theme.colorScheme.primary.withAlpha(64),
+        ),
+      ),
+      alignment: Alignment.center,
+      child: Text(text.toString(), style: TextStyle(color: theme.colorScheme.onSurfaceVariant)),
     );
   }
 }

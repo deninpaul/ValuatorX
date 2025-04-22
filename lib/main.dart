@@ -7,6 +7,7 @@ import 'package:valuatorx/pages/splash_screen/splash_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
+import 'package:valuatorx/providers/location_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LandRateProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
       ],
       child: MaterialApp(
         title: 'Microsoft Auth Demo',

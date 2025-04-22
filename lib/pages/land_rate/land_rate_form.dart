@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/land_rate.dart';
+import 'package:valuatorx/pages/common/location_field.dart';
+import 'package:valuatorx/pages/land_rate/components/save_button.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 
 class LandRateForm extends StatefulWidget {
@@ -41,6 +43,7 @@ class _LandRateFormState extends State<LandRateForm> {
 
     final LandRate newLandRate = LandRate.fromJson(values);
     await provider.addLandRate(context, newLandRate);
+    await provider.getLandRates(context);
   }
 
   @override
@@ -52,8 +55,8 @@ class _LandRateFormState extends State<LandRateForm> {
       appBar: AppBar(
         toolbarHeight: 80,
         title: Text("New Land Rate", style: textTheme.titleLarge),
-        actions: [Padding(padding: const EdgeInsets.only(right: 24), child: saveButton(theme))],
         leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
+        actions: [SaveButton(formKey: _formKey, onSubmit: submitForm)],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 48, vertical: 24),
@@ -61,6 +64,11 @@ class _LandRateFormState extends State<LandRateForm> {
           key: _formKey,
           child: Column(
             children: [
+              LocationField(
+                latitudeController: controllers["Lattitude"]!,
+                longitudeController: controllers["Longitude"]!,
+              ),
+
               ...fieldKeys.map((key) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -79,22 +87,6 @@ class _LandRateFormState extends State<LandRateForm> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget saveButton(ThemeData theme) {
-    return TextButton(
-      onPressed: () async {
-        if (_formKey.currentState!.validate()) {
-          await submitForm();
-          if (mounted) Navigator.of(context).pop();
-        }
-      },
-      style: TextButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
-        backgroundColor: theme.colorScheme.primary,
-      ),
-      child: Text("Save", style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onPrimary)),
     );
   }
 }

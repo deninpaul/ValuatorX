@@ -1,11 +1,15 @@
-import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 
-Future<LatLng?> getCurrentPosition() async {
-  final permission = await Geolocator.requestPermission();
-  if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) {
-    throw Exception("Location access denied");
-  }
-  final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  return LatLng(position.latitude, position.longitude);
+List baseMapLayers(BuildContext context) {
+  final colorScheme = Theme.of(context).colorScheme;
+  return [
+    Container(color: colorScheme.surface),
+    TileLayer(
+      urlTemplate: 'https://api.maptiler.com/maps/bright-v2/{z}/{x}/{y}.png?key=cnscXQAGGIRCXm0KVoTo',
+      userAgentPackageName: 'com.example.valuatorx',
+      tileProvider: CancellableNetworkTileProvider(),
+    ),
+  ];
 }

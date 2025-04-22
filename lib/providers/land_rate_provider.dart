@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/land_rate.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:valuatorx/utils/excel_service.dart';
-import 'package:valuatorx/utils/common_utils.dart';
 
 class LandRateProvider extends ChangeNotifier {
   List<LandRate> landRates = [];
-  LatLng currentLocation = LatLng(0, 0);
   bool isLoading = false;
-  bool isLoadingLocation = false;
 
   final LandRateService service = LandRateService();
 
@@ -38,24 +33,10 @@ class LandRateProvider extends ChangeNotifier {
       final client = await authProvider.getClient();
       await service.addToExcelTable(client: client, values: newLandRate.toList());
       debugPrint("New Land Rate added to Excel table successfully.");
-      getLandRates(context, refresh: false);
     } catch (e) {
       debugPrint("Failed to add Land Rate: ${e.toString()}");
     } finally {
       setLoading(false);
-    }
-  }
-
-  goToLocation(MapController controller, {LatLng? location}) async {
-    try {
-      setLoadingLocation(true);
-      location ??= await getCurrentPosition();
-      currentLocation = LatLng(location!.latitude, location.longitude);
-      controller.move(currentLocation, 15);
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      setLoadingLocation(false);
     }
   }
 
@@ -65,11 +46,6 @@ class LandRateProvider extends ChangeNotifier {
 
   void setLoading(bool value) {
     isLoading = value;
-    notifyListeners();
-  }
-
-  void setLoadingLocation(bool value) {
-    isLoadingLocation = value;
     notifyListeners();
   }
 }

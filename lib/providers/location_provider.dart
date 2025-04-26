@@ -10,10 +10,9 @@ class LocationProvider extends ChangeNotifier {
   goToLocation(MapController controller, {LatLng? location}) async {
     try {
       setLoading(true);
-      location ??= await getCurrentPosition();
-      currentLocation = LatLng(location!.latitude, location.longitude);
+      currentLocation = location ?? await getCurrentPosition();
       WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.move(currentLocation, 15);
+        controller.move(currentLocation, 15);
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -22,7 +21,7 @@ class LocationProvider extends ChangeNotifier {
     }
   }
 
-  Future<LatLng?> getCurrentPosition() async {
+  Future<LatLng> getCurrentPosition() async {
     final permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) {
       throw Exception("Location access denied");

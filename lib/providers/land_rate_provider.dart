@@ -7,6 +7,7 @@ import 'package:valuatorx/utils/excel_service.dart';
 class LandRateProvider extends ChangeNotifier {
   List<LandRate> landRates = [];
   bool isLoading = false;
+  bool isCreating = false;
 
   final LandRateService service = LandRateService();
 
@@ -28,7 +29,7 @@ class LandRateProvider extends ChangeNotifier {
 
   addLandRate(BuildContext context, LandRate newLandRate) async {
     try {
-      setLoading(true);
+      setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
       await service.addToExcelTable(client: client, values: newLandRate.toList());
@@ -36,16 +37,21 @@ class LandRateProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint("Failed to add Land Rate: ${e.toString()}");
     } finally {
-      setLoading(false);
+      setCreating(false);
     }
   }
 
   int generateIndex() {
-    return landRates[landRates.length - 1].id + 1;
+    return landRates.isEmpty ? -1 : landRates.last.id + 1;
   }
 
   void setLoading(bool value) {
     isLoading = value;
+    notifyListeners();
+  }
+
+  void setCreating(bool value) {
+    isCreating = value;
     notifyListeners();
   }
 }

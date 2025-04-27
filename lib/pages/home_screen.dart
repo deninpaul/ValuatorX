@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         createText: "Add data",
         onCreate: () => Navigator.pushNamed(context, "/land_rate/add"),
         onSearch: (query) => print(query),
-        child: LandRate(),
+        child: LandRateScreen(),
       ),
       TabItem(
         name: "More",

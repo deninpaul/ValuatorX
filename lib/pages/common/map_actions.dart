@@ -15,7 +15,7 @@ class MapActions extends StatelessWidget {
       alignment: AlignmentDirectional.topEnd,
       padding: EdgeInsets.all(16),
       child: ElevatedButton(
-        onPressed: () => locationProvider.goToLocation(controller),
+        onPressed: () => locationProvider.moveToMyLocation(controller),
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.surface,
           shape: const CircleBorder(),

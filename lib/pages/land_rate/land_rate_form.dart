@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/land_rate.dart';
-import 'package:valuatorx/pages/common/texfields/basic_field.dart';
-import 'package:valuatorx/pages/common/texfields/dropdown_field.dart';
-import 'package:valuatorx/pages/common/texfields/location_field.dart';
+import 'package:valuatorx/pages/common/fields/basic_field.dart';
+import 'package:valuatorx/pages/common/fields/dropdown_field.dart';
+import 'package:valuatorx/pages/common/fields/location_field.dart';
 import 'package:valuatorx/pages/land_rate/components/save_button.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 
 class LandRateForm extends StatefulWidget {
-  const LandRateForm({super.key});
+  final bool editMode;
+  const LandRateForm({super.key, this.editMode = false});
 
   @override
   State<LandRateForm> createState() => _LandRateFormState();
@@ -26,17 +27,8 @@ class _LandRateFormState extends State<LandRateForm> {
       controllers[key] = TextEditingController();
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setValues();
+      populateForm();
     });
-  }
-
-  setValues() async {
-    final provider = Provider.of<LandRateProvider>(context, listen: false);
-    if (provider.landRates.isEmpty) {
-      controllers[LandRate.SL_NO]!.text = "Loading...";
-      await provider.getLandRates(context, refresh: false);
-    }
-    controllers[LandRate.SL_NO]!.text = (provider.generateIndex() + 1).toString();
   }
 
   @override
@@ -47,13 +39,33 @@ class _LandRateFormState extends State<LandRateForm> {
     super.dispose();
   }
 
+  populateForm() async {
+    final provider = Provider.of<LandRateProvider>(context, listen: false);
+    if (widget.editMode) {
+      final landRateToEdit = provider.getSelectedLandRate();
+      final values = landRateToEdit.toJson();
+      for (final key in fieldKeys) {
+        setState(() => controllers[key]!.text = values[key]);
+      }
+    } else {
+      if (provider.landRates.isEmpty) {
+        controllers[LandRate.SL_NO]!.text = "Loading...";
+        await provider.getLandRates(context, refresh: false);
+      }
+      controllers[LandRate.SL_NO]!.text = (provider.generateIndex() + 1).toString();
+    }
+  }
+
   submitForm() async {
     final provider = Provider.of<LandRateProvider>(context, listen: false);
-    final values = {for (final key in fieldKeys) key: controllers[key]!.text.trim(), "id": provider.generateIndex()};
-
+    final id = widget.editMode ? provider.getSelectedLandRate().id : provider.generateIndex();
+    final values = {for (final key in fieldKeys) key: controllers[key]!.text.trim(), "id": id};
     final LandRate newLandRate = LandRate.fromJson(values);
-    await provider.addLandRate(context, newLandRate);
-    await provider.getLandRates(context);
+    if (widget.editMode) {
+      await provider.updateLandRate(context, newLandRate);
+    } else {
+      await provider.addLandRate(context, newLandRate);
+    }
   }
 
   @override
@@ -62,15 +74,19 @@ class _LandRateFormState extends State<LandRateForm> {
     final textTheme = theme.textTheme;
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 600;
+    final modeName = widget.editMode ? "Edit" : "New";
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
-        title: Text("New Land Rate", style: textTheme.titleLarge),
+        title: Text("$modeName Land Rate", style: textTheme.titleLarge),
         leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         actions: [
           SaveButton(formKey: _formKey, onSubmit: submitForm),
-          PopupMenuButton(offset: const Offset(0, 48), itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))]),
+          PopupMenuButton(
+            offset: const Offset(0, 48),
+            itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))],
+          ),
         ],
       ),
       body: SingleChildScrollView(

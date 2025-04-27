@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:valuatorx/modals/land_rate.dart';
 
 class SummaryTile extends StatelessWidget {
-  final LandRate landRate;
+  final int id;
+  final String title;
+  final String subtitle;
+  final String info;
+  final String tag;
   final bool showDivider;
-  const SummaryTile({super.key, required this.landRate, this.showDivider = true});
+  final Function onTapAction;
+  const SummaryTile({
+    super.key,
+    this.showDivider = true,
+    required this.onTapAction,
+    required this.id,
+    required this.title,
+    required this.subtitle,
+    required this.info,
+    required this.tag,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,30 +27,34 @@ class SummaryTile extends StatelessWidget {
     final labelColor = colorScheme.onSurface.withAlpha(160);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
-        title: Text("${landRate.latitude} ${landRate.longitude}", style: textTheme.bodyLarge!.copyWith(color: colorScheme.onSurfaceVariant)),
+        title: Text(title, style: textTheme.bodyLarge),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: Text("${landRate.landRatePerCent}/cent", style: textTheme.bodyLarge!.copyWith(color: labelColor)),
+          child: Text(subtitle, style: textTheme.bodyLarge!.copyWith(color: labelColor)),
         ),
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("${landRate.monthOfVisit} ${landRate.yearOfVisit}", style: textTheme.bodyMedium!.copyWith(color: labelColor)),
+            Text(info, style: textTheme.bodyMedium!.copyWith(color: labelColor)),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: colorScheme.onSurface.withAlpha(24)),
-                  child: Center(child: Text("No.: ${landRate.slNo}", style: textTheme.bodyMedium!.copyWith(color: colorScheme.onSurface))),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: colorScheme.onSurface.withAlpha(24),
+                  ),
+                  child: Center(child: Text(tag, style: textTheme.bodyMedium)),
                 ),
               ],
             ),
           ],
         ),
+        onTap: () => onTapAction(id),
         contentPadding: EdgeInsets.symmetric(horizontal: 0),
       ),
     );

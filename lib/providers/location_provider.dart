@@ -7,12 +7,12 @@ class LocationProvider extends ChangeNotifier {
   bool isLoading = false;
   LatLng currentLocation = LatLng(0, 0);
 
-  goToLocation(MapController controller, {LatLng? location}) async {
+  moveToMyLocation(MapController controller) async {
     try {
       setLoading(true);
-      currentLocation = location ?? await getCurrentPosition();
+      currentLocation = await getCurrentPosition();
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        controller.move(currentLocation, 15);
+        controller.move(currentLocation, 15.2);
       });
     } catch (e) {
       debugPrint(e.toString());

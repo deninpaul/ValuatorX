@@ -9,7 +9,7 @@ import 'package:valuatorx/utils/common_utils.dart';
 class LocationField extends StatefulWidget {
   final TextEditingController latitudeController;
   final TextEditingController longitudeController;
-  LocationField({super.key, required this.latitudeController, required this.longitudeController});
+  const LocationField({super.key, required this.latitudeController, required this.longitudeController});
 
   @override
   State<LocationField> createState() => _LocationFieldState();
@@ -33,9 +33,15 @@ class _LocationFieldState extends State<LocationField> {
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<LocationProvider>(context, listen: false);
-      if (provider.currentLocation.latitude == 0) provider.goToLocation(_mapController);
-      widget.latitudeController.text = provider.currentLocation.latitude.toString();
-      widget.longitudeController.text = provider.currentLocation.longitude.toString();
+      final latitudeValue = widget.latitudeController.text;
+      final longitudeValue = widget.longitudeController.text;
+      if (latitudeValue.isNotEmpty && longitudeValue.isNotEmpty) {
+        _mapController.move(LatLng(double.parse(latitudeValue), double.parse(longitudeValue)), 18);
+      } else {
+        if (provider.currentLocation.latitude == 0) provider.moveToMyLocation(_mapController);
+        widget.latitudeController.text = provider.currentLocation.latitude.toString();
+        widget.longitudeController.text = provider.currentLocation.longitude.toString();
+      }
     });
   }
 
@@ -70,10 +76,7 @@ class _LocationFieldState extends State<LocationField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 24,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Icon(Icons.location_on_outlined, size: 24),
-        ),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(Icons.location_on_outlined, size: 24)),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -90,7 +93,7 @@ class _LocationFieldState extends State<LocationField> {
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.numberWithOptions(decimal: true, signed: true),
                       enabled: !provider.isLoading,
-                      decoration: InputDecoration(labelText: 'Lattitude', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: 'Latitude', border: OutlineInputBorder()),
                     ),
                   ),
                   Flexible(
@@ -115,7 +118,9 @@ class _LocationFieldState extends State<LocationField> {
                   options: MapOptions(
                     initialZoom: 18,
                     initialCenter: provider.currentLocation,
-                    interactionOptions: InteractionOptions(flags: InteractiveFlag.pinchZoom | InteractiveFlag.pinchMove),
+                    interactionOptions: InteractionOptions(
+                      flags: InteractiveFlag.pinchZoom | InteractiveFlag.pinchMove | InteractiveFlag.doubleTapDragZoom,
+                    ),
                     onPositionChanged: (position, hasGesture) {
                       final center = position.center;
                       widget.latitudeController.text = center.latitude.toStringAsFixed(7);

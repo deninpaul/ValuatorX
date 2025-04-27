@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/home': (context) => const HomeScreen(),
           '/land_rate/add': (context) => const LandRateForm(),
+          '/land_rate/edit': (context) => const LandRateForm(editMode: true),
         },
         debugShowCheckedModeBanner: false,
       ),

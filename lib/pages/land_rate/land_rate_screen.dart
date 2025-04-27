@@ -5,22 +5,24 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/pages/common/cluster_icon.dart';
 import 'package:valuatorx/pages/common/map_actions.dart';
-import 'package:valuatorx/pages/land_rate/components/summary_tile.dart';
+import 'package:valuatorx/pages/land_rate/components/details_view.dart';
+import 'package:valuatorx/pages/common/summary_tile.dart';
 import 'package:valuatorx/pages/common/numbered_marker.dart';
 import 'package:valuatorx/pages/common/pill.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/providers/location_provider.dart';
 import 'package:valuatorx/utils/common_utils.dart';
 
-class LandRate extends StatefulWidget {
-  const LandRate({super.key});
+class LandRateScreen extends StatefulWidget {
+  const LandRateScreen({super.key});
 
   @override
-  State<LandRate> createState() => _LandRateState();
+  State<LandRateScreen> createState() => _LandRateScreenState();
 }
 
-class _LandRateState extends State<LandRate> {
+class _LandRateScreenState extends State<LandRateScreen> {
   final MapController _mapController = MapController();
+
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,7 @@ class _LandRateState extends State<LandRate> {
       final provider = Provider.of<LandRateProvider>(context, listen: false);
       final landProvider = Provider.of<LocationProvider>(context, listen: false);
       provider.getLandRates(context, refresh: provider.landRates.isEmpty);
-      landProvider.goToLocation(_mapController);
+      landProvider.moveToMyLocation(_mapController);
     });
   }
 
@@ -38,6 +40,14 @@ class _LandRateState extends State<LandRate> {
     final colorScheme = theme.colorScheme;
     final provider = Provider.of<LandRateProvider>(context);
     final locationProvider = Provider.of<LocationProvider>(context);
+    final landRates = provider.landRates.reversed.toList();
+
+    viewLandRate(int id) {
+      provider.setSelectedItem(id);
+      final selected = provider.getSelectedLandRate();
+      final itemLocation = LatLng(double.parse(selected.latitude) - 0.005, double.parse(selected.longitude));
+      _mapController.move(itemLocation, 16);
+    }
 
     return Stack(
       children: [
@@ -45,6 +55,7 @@ class _LandRateState extends State<LandRate> {
         FlutterMap(
           mapController: _mapController,
           options: MapOptions(
+            initialZoom: 15,
             initialCenter: locationProvider.currentLocation,
             interactionOptions: InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
           ),
@@ -82,6 +93,7 @@ class _LandRateState extends State<LandRate> {
         DraggableScrollableSheet(
           minChildSize: 0.2,
           initialChildSize: 0.35,
+          maxChildSize: provider.selectedItem == -1 ? 1 : 0.5,
           builder: (context, scrollController) {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -97,17 +109,31 @@ class _LandRateState extends State<LandRate> {
                     child:
                         provider.isLoading
                             ? const Center(child: CircularProgressIndicator())
-                            : ListView.separated(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.only(bottom: 80),
-                              physics: BouncingScrollPhysics(),
-                              controller: scrollController,
-                              itemCount: provider.landRates.length,
-                              itemBuilder:
-                                  (context, index) =>
-                                      SummaryTile(landRate: provider.landRates.reversed.toList()[index]),
-                              separatorBuilder: (context, index) => Divider(),
-                            ),
+                            : (provider.selectedItem == -1
+                                ? ListView.separated(
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.only(bottom: 80),
+                                  physics: BouncingScrollPhysics(),
+                                  controller: scrollController,
+                                  itemCount: provider.landRates.length,
+                                  separatorBuilder: (ctx, index) => Divider(),
+                                  itemBuilder: (ctx, index) {
+                                    final landRate = landRates[index];
+                                    return SummaryTile(
+                                      id: landRate.id,
+                                      title: "${landRate.latitude}° ${landRate.longitude}°",
+                                      subtitle: "${landRate.landRatePerCent}/cent",
+                                      info: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
+                                      tag: "No.: ${landRate.slNo}",
+                                      onTapAction: viewLandRate,
+                                    );
+                                  },
+                                )
+                                : SingleChildScrollView(
+                                  controller: scrollController,
+                                  physics: BouncingScrollPhysics(),
+                                  child: DetailsView(landRate: provider.getSelectedLandRate()),
+                                )),
                   ),
                 ],
               ),

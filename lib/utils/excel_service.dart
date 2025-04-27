@@ -6,26 +6,30 @@ class LandRateService extends _ExcelService {
 }
 
 class _ExcelService {
-  late final String getTableEndpoint;
+  late final String tableRowsEndpoint;
+  late final String tableHeadersEndpoint;
   late final String addTableEndpoint;
+  late final String tableRowEndpoint;
 
   _ExcelService({fileId, tableName}) {
-    getTableEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName";
+    tableRowsEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows";
+    tableHeadersEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/headerRowRange";
     addTableEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/add";
+    tableRowEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
   }
 
   Future<List<Map<String, dynamic>>> getExcelTable({required Client client}) async {
     try {
       // Get field names from excel table
       dynamic fieldResponseBody = {};
-      var response = await client.get(Uri.parse("$getTableEndpoint/headerRowRange"));
+      var response = await client.get(Uri.parse(tableHeadersEndpoint));
       if (response.statusCode == 200) {
         fieldResponseBody = jsonDecode(response.body);
       }
 
       // Get values/rows from excel table
       dynamic rowResponseBody = {};
-      response = await client.get(Uri.parse("$getTableEndpoint/rows"));
+      response = await client.get(Uri.parse(tableRowsEndpoint));
       if (response.statusCode == 200) {
         rowResponseBody = jsonDecode(response.body);
       }
@@ -44,10 +48,37 @@ class _ExcelService {
         }),
       );
       if (response.statusCode != 201) {
-        throw Exception("Error adding to Excel Table. ${response.statusCode} ${response.toString()}");
+        throw Exception("Error adding to Excel Table. ${response.statusCode} ${response.body}");
       }
     } catch (e) {
       throw Exception("Error adding to Excel table: $e");
+    }
+  }
+
+  updateExcelTableRow({required Client client, required int index, required List values}) async {
+    try {
+      final response = await client.patch(
+        Uri.parse(tableRowEndpoint.replaceAll("_ID_", index.toString())),
+        body: jsonEncode({
+          "values": [values],
+        }),
+      );
+      if (response.statusCode != 200) {
+        throw Exception("Error updating Excel Table row. ${response.statusCode} ${response.body}");
+      }
+    } catch (e) {
+      throw Exception("Error updating Excel table row: $e");
+    }
+  }
+
+  deleteExcelTableRow({required Client client, required int index}) async {
+    try {
+      final response = await client.delete(Uri.parse(tableRowEndpoint.replaceAll("_ID_", index.toString())));
+      if (response.statusCode != 204) {
+        throw Exception("Error deleting Excel Table row. ${response.statusCode} ${response.body}");
+      }
+    } catch (e) {
+      throw Exception("Error deleting Excel table row: $e");
     }
   }
 

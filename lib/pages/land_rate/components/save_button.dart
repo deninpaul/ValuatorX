@@ -10,7 +10,7 @@ class SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final provider = Provider.of<LandRateProvider>(context, listen: false);
+    final provider = Provider.of<LandRateProvider>(context, listen: true);
 
     return TextButton(
       onPressed: () async {
@@ -19,7 +19,6 @@ class SaveButton extends StatelessWidget {
           Navigator.of(context).pop();
         }
       },
-    
       style: TextButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
         backgroundColor: theme.colorScheme.primary,

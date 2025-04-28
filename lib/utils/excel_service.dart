@@ -5,6 +5,10 @@ class LandRateService extends _ExcelService {
   LandRateService() : super(fileId: "01OTD6NSLEWCWDOWM7WBAYNYM5RMPDACQR", tableName: "LandRate");
 }
 
+class ValuationService extends _ExcelService {
+  ValuationService() : super(fileId: "01OTD6NSIJ4LY4ONM7ZVD3B2CK4MAL5TLC", tableName: "ValuationReport");
+}
+
 class _ExcelService {
   late final String tableRowsEndpoint;
   late final String tableHeadersEndpoint;

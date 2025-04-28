@@ -6,8 +6,10 @@ class Pill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 16),
+      alignment: Alignment.center,
       child: Container(
         width: 32,
         height: 4,

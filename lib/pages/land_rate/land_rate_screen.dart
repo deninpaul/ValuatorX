@@ -41,6 +41,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
     final provider = Provider.of<LandRateProvider>(context);
     final locationProvider = Provider.of<LocationProvider>(context);
     final landRates = provider.landRates.reversed.toList();
+    final dividerColor = theme.dividerColor.withAlpha(64);
 
     viewLandRate(int id) {
       provider.setSelectedItem(id);
@@ -91,9 +92,9 @@ class _LandRateScreenState extends State<LandRateScreen> {
           ],
         ),
         DraggableScrollableSheet(
-          minChildSize: 0.2,
-          initialChildSize: 0.35,
-          maxChildSize: provider.selectedItem == -1 ? 1 : 0.5,
+          minChildSize: 0.19,
+          initialChildSize: 0.36,
+          maxChildSize: provider.selectedItem == -1 ? 1 : 0.475,
           builder: (context, scrollController) {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -109,31 +110,31 @@ class _LandRateScreenState extends State<LandRateScreen> {
                     child:
                         provider.isLoading
                             ? const Center(child: CircularProgressIndicator())
-                            : (provider.selectedItem == -1
-                                ? ListView.separated(
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.only(bottom: 80),
-                                  physics: BouncingScrollPhysics(),
-                                  controller: scrollController,
-                                  itemCount: provider.landRates.length,
-                                  separatorBuilder: (ctx, index) => Divider(),
-                                  itemBuilder: (ctx, index) {
-                                    final landRate = landRates[index];
-                                    return SummaryTile(
-                                      id: landRate.id,
-                                      title: "${landRate.latitude}° ${landRate.longitude}°",
-                                      subtitle: "${landRate.landRatePerCent}/cent",
-                                      info: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
-                                      tag: "No.: ${landRate.slNo}",
-                                      onTapAction: viewLandRate,
-                                    );
-                                  },
-                                )
-                                : SingleChildScrollView(
-                                  controller: scrollController,
-                                  physics: BouncingScrollPhysics(),
-                                  child: DetailsView(landRate: provider.getSelectedLandRate()),
-                                )),
+                            : SingleChildScrollView(
+                              controller: scrollController,
+                              child:
+                                  (provider.selectedItem == -1)
+                                      ? ListView.separated(
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.only(bottom: 80),
+                                        physics: NeverScrollableScrollPhysics(),
+                                        controller: scrollController,
+                                        itemCount: provider.landRates.length,
+                                        separatorBuilder: (ctx, index) => Divider(color: dividerColor),
+                                        itemBuilder: (ctx, index) {
+                                          final landRate = landRates[index];
+                                          return SummaryTile(
+                                            id: landRate.id,
+                                            title: "${landRate.latitude}° ${landRate.longitude}°",
+                                            subtitle: "${landRate.landRatePerCent}/cent",
+                                            info: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
+                                            tag: "No.: ${landRate.slNo}",
+                                            onTapAction: viewLandRate,
+                                          );
+                                        },
+                                      )
+                                      : DetailsView(landRate: provider.getSelectedLandRate()),
+                            ),
                   ),
                 ],
               ),

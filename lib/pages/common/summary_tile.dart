@@ -45,8 +45,8 @@ class SummaryTile extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: colorScheme.onSurface.withAlpha(24),
+                    borderRadius: BorderRadius.circular(8),
+                    color: colorScheme.surfaceContainerHigh,
                   ),
                   child: Center(child: Text(tag, style: textTheme.bodyMedium)),
                 ),

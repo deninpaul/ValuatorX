@@ -5,7 +5,8 @@ import 'package:valuatorx/providers/land_rate_provider.dart';
 class SaveButton extends StatelessWidget {
   final Function onSubmit;
   final GlobalKey<FormState> formKey;
-  const SaveButton({super.key, required this.formKey, required this.onSubmit});
+  final bool enabled;
+  const SaveButton({super.key, required this.formKey, required this.onSubmit, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
@@ -13,15 +14,17 @@ class SaveButton extends StatelessWidget {
     final provider = Provider.of<LandRateProvider>(context, listen: true);
 
     return TextButton(
-      onPressed: () async {
+      onPressed: enabled ? () async {
         if (formKey.currentState!.validate() && !provider.isCreating) {
           await onSubmit();
           Navigator.of(context).pop();
         }
-      },
-      style: TextButton.styleFrom(
+      } : null,
+      style:
+       TextButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
         backgroundColor: theme.colorScheme.primary,
+        disabledBackgroundColor: theme.disabledColor
       ),
       child:
           provider.isCreating

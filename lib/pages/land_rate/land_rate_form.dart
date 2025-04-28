@@ -19,6 +19,7 @@ class _LandRateFormState extends State<LandRateForm> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> controllers = {};
   final List<String> fieldKeys = LandRate.editableFields;
+  bool ready = false;
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _LandRateFormState extends State<LandRateForm> {
       }
       controllers[LandRate.SL_NO]!.text = (provider.generateIndex() + 1).toString();
     }
+    setState(() => ready = true);
   }
 
   submitForm() async {
@@ -79,10 +81,10 @@ class _LandRateFormState extends State<LandRateForm> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
-        title: Text("$modeName Land Rate", style: textTheme.titleLarge),
+        title: Text("$modeName Land Rate", style: textTheme.titleLarge!.copyWith(fontSize: 19)),
         leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         actions: [
-          SaveButton(formKey: _formKey, onSubmit: submitForm),
+          SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready),
           PopupMenuButton(
             offset: const Offset(0, 48),
             itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))],

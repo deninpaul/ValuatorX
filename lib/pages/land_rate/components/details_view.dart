@@ -95,7 +95,7 @@ class ViewTile extends StatelessWidget {
     return Container(
       height: 80,
       width: 200,
-      margin: EdgeInsets.symmetric(vertical: 4),
+      margin: EdgeInsets.symmetric(vertical: 2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

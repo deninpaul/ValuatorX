@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Microsoft Auth Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.red, brightness: Brightness.light),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light),
           visualDensity: VisualDensity.adaptivePlatformDensity,
           useMaterial3: true,
         ),

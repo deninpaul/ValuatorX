@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 12, 0, 32),
-                  child: Image.asset('assets/logo.png', fit: BoxFit.contain, height: 48),
+                  child: Opacity(child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 48), opacity: 0.9,),
                 ),
                 trailing: Expanded(
                   child: Container(

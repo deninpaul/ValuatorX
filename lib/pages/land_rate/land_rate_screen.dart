@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:valuatorx/modals/land_rate.dart';
 import 'package:valuatorx/pages/common/cluster_icon.dart';
 import 'package:valuatorx/pages/common/map_actions.dart';
 import 'package:valuatorx/pages/land_rate/components/details_view.dart';
@@ -29,8 +30,8 @@ class _LandRateScreenState extends State<LandRateScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<LandRateProvider>(context, listen: false);
       final landProvider = Provider.of<LocationProvider>(context, listen: false);
+      if (provider.selectedItem == -1) landProvider.moveToMyLocation(_mapController);
       provider.getLandRates(context, refresh: provider.landRates.isEmpty);
-      landProvider.moveToMyLocation(_mapController);
     });
   }
 
@@ -40,13 +41,16 @@ class _LandRateScreenState extends State<LandRateScreen> {
     final colorScheme = theme.colorScheme;
     final provider = Provider.of<LandRateProvider>(context);
     final locationProvider = Provider.of<LocationProvider>(context);
-    final landRates = provider.landRates.reversed.toList();
     final dividerColor = theme.dividerColor.withAlpha(64);
+
+    getLandRateLocation(LandRate landRate) {
+      return LatLng(double.parse(landRate.latitude) - 0.005, double.parse(landRate.longitude));
+    }
 
     viewLandRate(int id) {
       provider.setSelectedItem(id);
       final selected = provider.getSelectedLandRate();
-      final itemLocation = LatLng(double.parse(selected.latitude) - 0.005, double.parse(selected.longitude));
+      final itemLocation = getLandRateLocation(selected);
       _mapController.move(itemLocation, 16);
     }
 
@@ -57,7 +61,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
           mapController: _mapController,
           options: MapOptions(
             initialZoom: 15,
-            initialCenter: locationProvider.currentLocation,
+            initialCenter: provider.selectedItem == -1 ? locationProvider.currentLocation : getLandRateLocation(provider.getSelectedLandRate()),
             interactionOptions: InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
           ),
           children: [
@@ -122,7 +126,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
                                         itemCount: provider.landRates.length,
                                         separatorBuilder: (ctx, index) => Divider(color: dividerColor),
                                         itemBuilder: (ctx, index) {
-                                          final landRate = landRates[index];
+                                          final landRate = provider.landRates.reversed.toList()[index];
                                           return SummaryTile(
                                             id: landRate.id,
                                             title: "${landRate.latitude}° ${landRate.longitude}°",

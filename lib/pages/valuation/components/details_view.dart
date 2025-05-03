@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/modals/land_rate.dart';
+import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/delete_dialog.dart';
-import 'package:valuatorx/providers/land_rate_provider.dart';
+import 'package:valuatorx/providers/valuation_provider.dart';
 
 class DetailsView extends StatelessWidget {
-  final LandRate landRate;
-  const DetailsView({super.key, required this.landRate});
+  final Valuation valuation;
+  const DetailsView({super.key, required this.valuation});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final provider = Provider.of<LandRateProvider>(context);
+    final provider = Provider.of<ValuationProvider>(context);
 
     onEditAction(int id) {
       provider.setSelectedItem(id);
       Navigator.pushNamed(context, '/land_rate/edit');
     }
 
-    onDeleteAction(LandRate landRate) async {
+    onDeleteAction(Valuation valuation) async {
       final confirmed = await showDialog<bool>(
         context: context,
         builder:
             (ctx) => DeleteDialog(
               onDelete: () async {
-                await provider.deleteLandRate(context, landRate);
+                await provider.deleteValuation(context, valuation);
               },
             ),
       );
@@ -40,38 +40,38 @@ class DetailsView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              spacing: 16,
+              spacing: 12,
               children: [
                 IconButton(onPressed: onBackAction, icon: Icon(Icons.arrow_back_outlined)),
-                Text(landRate.slNo, style: textTheme.bodyLarge),
+                Text(valuation.reportName, style: textTheme.bodyLarge),
               ],
             ),
             Row(
               spacing: 8,
               children: [
-                IconButton(onPressed: () => onEditAction(landRate.id), icon: Icon(Icons.mode_edit_outlined)),
-                IconButton(onPressed: () => onDeleteAction(landRate), icon: Icon(Icons.delete_outline)),
+                IconButton(onPressed: () => onEditAction(valuation.id), icon: Icon(Icons.mode_edit_outlined)),
+                IconButton(onPressed: () => onDeleteAction(valuation), icon: Icon(Icons.delete_outline)),
               ],
             ),
           ],
         ),
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
           child: Wrap(
             alignment: WrapAlignment.spaceBetween,
             children: [
-              ViewTile(title: "Latitude", value: landRate.latitude),
-              ViewTile(title: "Longitude", value: landRate.longitude),
-              ViewTile(title: "Land Rate (per cent)", value: landRate.landRatePerCent),
-              ViewTile(title: "Size of Land / Remarks", value: landRate.landSizeRemarks),
-              ViewTile(title: "Type of Land", value: landRate.landType),
-              ViewTile(title: "Type of Road", value: landRate.road),
-              ViewTile(title: "Date of Visit", value: "${landRate.monthOfVisit} ${landRate.yearOfVisit}"),
+              ViewTile(title: "Latitude", value: valuation.latitude),
+              ViewTile(title: "Longitude", value: valuation.longitude),
+              ViewTile(title: "Land Rate (per cent)", value: valuation.reportName),
+              ViewTile(title: "Size of Land / Remarks", value: valuation.taluk),
+              ViewTile(title: "Type of Road", value: valuation.dateOfInspection),
+              ViewTile(title: "Date of Visit", value: valuation.taluk),
             ],
           ),
         ),

@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: Icon(Icons.home_outlined),
         selectedIcon: Icon(Icons.home),
         createText: "New report",
-        onCreate: () => print("Create report"),
+        onCreate: () => Navigator.pushNamed(context, "/valuation/add"),
         onSearch: (query) => print(query),
         child: Valuations(),
       ),
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "More tools",
         icon: Icon(Icons.more_horiz_outlined),
         selectedIcon: Icon(Icons.more_horiz_rounded),
-        child: Text("Settings Tab"),
+        child: Text("Coming soon"),
       ),
     ];
   }
@@ -98,7 +98,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 12, 0, 32),
-                  child: Opacity(child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 48), opacity: 0.9,),
+                  child: Opacity(
+                    opacity: 0.9,
+                    child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 48),
+                  ),
                 ),
                 trailing: Expanded(
                   child: Container(

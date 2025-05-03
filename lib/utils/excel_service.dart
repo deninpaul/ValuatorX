@@ -6,7 +6,7 @@ class LandRateService extends _ExcelService {
 }
 
 class ValuationService extends _ExcelService {
-  ValuationService() : super(fileId: "01OTD6NSIJ4LY4ONM7ZVD3B2CK4MAL5TLC", tableName: "ValuationReport");
+  ValuationService() : super(fileId: "01OTD6NSIJ4LY4ONM7ZVD3B2CK4MAL5TLC", tableName: "Valuations");
 }
 
 class _ExcelService {

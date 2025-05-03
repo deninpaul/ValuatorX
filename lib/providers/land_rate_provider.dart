@@ -70,6 +70,7 @@ class LandRateProvider extends ChangeNotifier {
       final client = await authProvider.getClient();
       await service.deleteExcelTableRow(client: client, index: landRate.id);
       debugPrint("Land Rate ${landRate.slNo} deleted from Excel table successfully.");
+      await getLandRates(context, refresh: false);
     } catch (e) {
       debugPrint("Failed to delete Land Rate: ${e.toString()}");
     } finally {

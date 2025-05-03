@@ -1,399 +1,598 @@
+// ignore_for_file: constant_identifier_names
+
 class Valuation {
-  final int? id;
-  final String? fullName;
-  final String? dateOfSiteInspection;
-  final String? dateOfReport;
-  final String? bankDetails;
-  final String? typeOfMortage;
-  final String? mortagagorAndAddressesWithPhoneNo;
-  final String? ownerOfLandAndAddressesWithPhoneNo;
-  final String? legalReportReference;
-  final String? surveyNo1;
-  final String? areaOfPlot1;
-  final String? areaOfPlotInCents1;
-  final String? surveyNo2;
-  final String? areaOfPlot2;
-  final String? areaOfPlotInCents2;
-  final String? surveyNo3;
-  final String? areaOfPlot3;
-  final String? areaOfPlotInCents3;
-  final String? surveyNo4;
-  final String? areaOfPlot4;
-  final String? areaOfPlotInCents4;
-  final String? deedRegSroNoDate;
-  final String? villageOfLandSituated;
-  final String? panchayathOfLandSituated;
-  final String? talukOfLandSituated;
-  final String? pocessionCertificateDetails;
-  final String? locationSketchDetails;
-  final String? propertyTaxCertificateDetails;
-  final String? buildingTaxCertificateDetails;
-  final String? tandapperecumfranceRef;
-  final String? boundaryEast;
-  final String? boundarySouth;
-  final String? boundaryWest;
-  final String? boundaryNorth;
-  final String? deedBoundaryEast;
-  final String? deedBoundarySouth;
-  final String? deepBoundaryWest;
-  final String? deedBoundaryNorth;
-  final String? shapeOfLand;
-  final String? topographicalConditionsOfLand;
-  final String? plotLandmark;
-  final String? classificationOfAreaEconomicStatus;
-  final String? classficationOfAreaPopulationDensity;
-  final String? lattitude;
-  final String? longitude;
-  final String? buildingApprovalReference;
-  final String? houseNoDoorNo;
-  final String? electricityConsumerNo;
-  final String? yearOfConstruction;
-  final String? qualityOfConstruction;
-  final String? usageTypeOfBuilding;
-  final String? structuralDetailOfConstruction;
-  final String? plintAreaOfFloorSftBf;
-  final String? replacementRateRsBf;
-  final String? ageYBf;
-  final String? heightMBf;
-  final String? plintAreaOfFloorSftGf;
-  final String? replacementRateRsGf;
-  final String? ageYGf;
-  final String? heightMGf;
-  final String? plintAreaOfFloorSftFf;
-  final String? replacementRateRsFf;
-  final String? ageYFf;
-  final String? heightMFf;
-  final String? plintAreaOfFloorSftSf;
-  final String? replacementRateRsSf;
-  final String? ageYSf;
-  final String? heightMSf;
-  final String? plintAreaOfFloorSftTf;
-  final String? replacementRateRsTf;
-  final String? ageYTf;
-  final String? heightMTf;
-  final String? conditionOfTheBuildingExterior;
-  final String? conditionOfTheBuildingInterior;
-  final String? foundation;
-  final String? basement;
-  final String? rccWorks;
-  final String? wallDetails;
-  final String? wallCeilingFinish;
-  final String? flooringFinish;
-  final String? toiletFinish;
-  final String? joinerydoors;
-  final String? windows;
-  final String? terraceProtection;
-  final String? prevailingMarketRateAtTheLocation;
-  final String? marketRateAppliedToTheSpecificLand;
-  final String? buildingValuePerSft;
-  final String? wellMotorWaterTank;
-  final String? compoundWallGate;
-  final String? externalPavingStonePaving;
-  final String? interiorWorks;
-  final String? kitchenUnitBuiltinwardrobes;
-  final String? panellingWorksDecorativeWorks;
-  final String? feasiblityOfTheCivicAmentitiesLikeSchoolHospitalBusStopMarketEtc;
-  final String? photos;
-  final String? otherDetailsRemarks;
+  final int id;
+  final String reportName;
+  final String dateOfInspection;
+  final String status;
+  final String bankDetails;
+  final String ownerDetails;
+  final String propertyPossessionAddress;
+  final String surveyNo1;
+  final String area1;
+  final String surveyNo2;
+  final String area2;
+  final String surveyNo3;
+  final String area3;
+  final String surveyNo4;
+  final String area4;
+  final String village;
+  final String taluk;
+  final String landCategory;
+  final String eastActual;
+  final String eastDeed;
+  final String southActual;
+  final String southDeed;
+  final String westActual;
+  final String westDeed;
+  final String northActual;
+  final String northDeed;
+  final String legalReportReference;
+  final String buildingApprovalReference;
+  final String deedRegDetails;
+  final String possessionCertificateDetails;
+  final String locationSketchDetails;
+  final String propertyTaxCertificateDetails;
+  final String buildingTaxCertificateDetails;
+  final String latitude;
+  final String longitude;
+  final String encumbranceReference;
+  final String topographyAndShape;
+  final String houseNumber;
+  final String panchayath;
+  final String electricityConsumerNo;
+  final String ksebDivision;
+  final String yearOfConstruction;
+  final String qualityOfConstruction;
+  final String buildingType;
+  final String constructionType;
+  final String plinthAreaGF;
+  final String replacementRateGF;
+  final String heightGF;
+  final String ageGF;
+  final String plinthAreaFF;
+  final String replacementRateFF;
+  final String heightFF;
+  final String ageFF;
+  final String plinthAreaSF;
+  final String replacementRateSF;
+  final String heightSF;
+  final String ageSF;
+  final String plinthAreaTF;
+  final String replacementRateTF;
+  final String heightTF;
+  final String ageTF;
+  final String buildingCategory;
+  final String exteriorCondition;
+  final String interiorCondition;
+  final String foundationAndBasement;
+  final String rccWorks;
+  final String wallDetails;
+  final String flooring;
+  final String joinery;
+  final String windows;
+  final String roofing;
+  final String landMarketRate;
+  final String buildingUnitRate;
+  final String classificationArea1;
+  final String classificationArea2;
+  final String propertyLandmark;
+  final String roadDetails;
+  final String mainJunction;
+  final String nearbyInstitutions;
+  final String nearbyTown;
+  final String photos;
+  final String remarks;
 
   Valuation({
-    this.id,
-    this.fullName,
-    this.dateOfSiteInspection,
-    this.dateOfReport,
-    this.bankDetails,
-    this.typeOfMortage,
-    this.mortagagorAndAddressesWithPhoneNo,
-    this.ownerOfLandAndAddressesWithPhoneNo,
-    this.legalReportReference,
-    this.surveyNo1,
-    this.areaOfPlot1,
-    this.areaOfPlotInCents1,
-    this.surveyNo2,
-    this.areaOfPlot2,
-    this.areaOfPlotInCents2,
-    this.surveyNo3,
-    this.areaOfPlot3,
-    this.areaOfPlotInCents3,
-    this.surveyNo4,
-    this.areaOfPlot4,
-    this.areaOfPlotInCents4,
-    this.deedRegSroNoDate,
-    this.villageOfLandSituated,
-    this.panchayathOfLandSituated,
-    this.talukOfLandSituated,
-    this.pocessionCertificateDetails,
-    this.locationSketchDetails,
-    this.propertyTaxCertificateDetails,
-    this.buildingTaxCertificateDetails,
-    this.tandapperecumfranceRef,
-    this.boundaryEast,
-    this.boundarySouth,
-    this.boundaryWest,
-    this.boundaryNorth,
-    this.deedBoundaryEast,
-    this.deedBoundarySouth,
-    this.deepBoundaryWest,
-    this.deedBoundaryNorth,
-    this.shapeOfLand,
-    this.topographicalConditionsOfLand,
-    this.plotLandmark,
-    this.classificationOfAreaEconomicStatus,
-    this.classficationOfAreaPopulationDensity,
-    this.lattitude,
-    this.longitude,
-    this.buildingApprovalReference,
-    this.houseNoDoorNo,
-    this.electricityConsumerNo,
-    this.yearOfConstruction,
-    this.qualityOfConstruction,
-    this.usageTypeOfBuilding,
-    this.structuralDetailOfConstruction,
-    this.plintAreaOfFloorSftBf,
-    this.replacementRateRsBf,
-    this.ageYBf,
-    this.heightMBf,
-    this.plintAreaOfFloorSftGf,
-    this.replacementRateRsGf,
-    this.ageYGf,
-    this.heightMGf,
-    this.plintAreaOfFloorSftFf,
-    this.replacementRateRsFf,
-    this.ageYFf,
-    this.heightMFf,
-    this.plintAreaOfFloorSftSf,
-    this.replacementRateRsSf,
-    this.ageYSf,
-    this.heightMSf,
-    this.plintAreaOfFloorSftTf,
-    this.replacementRateRsTf,
-    this.ageYTf,
-    this.heightMTf,
-    this.conditionOfTheBuildingExterior,
-    this.conditionOfTheBuildingInterior,
-    this.foundation,
-    this.basement,
-    this.rccWorks,
-    this.wallDetails,
-    this.wallCeilingFinish,
-    this.flooringFinish,
-    this.toiletFinish,
-    this.joinerydoors,
-    this.windows,
-    this.terraceProtection,
-    this.prevailingMarketRateAtTheLocation,
-    this.marketRateAppliedToTheSpecificLand,
-    this.buildingValuePerSft,
-    this.wellMotorWaterTank,
-    this.compoundWallGate,
-    this.externalPavingStonePaving,
-    this.interiorWorks,
-    this.kitchenUnitBuiltinwardrobes,
-    this.panellingWorksDecorativeWorks,
-    this.feasiblityOfTheCivicAmentitiesLikeSchoolHospitalBusStopMarketEtc,
-    this.photos,
-    this.otherDetailsRemarks,
+    required this.id,
+    required this.reportName,
+    required this.dateOfInspection,
+    required this.status,
+    required this.bankDetails,
+    required this.ownerDetails,
+    required this.propertyPossessionAddress,
+    required this.surveyNo1,
+    required this.area1,
+    required this.surveyNo2,
+    required this.area2,
+    required this.surveyNo3,
+    required this.area3,
+    required this.surveyNo4,
+    required this.area4,
+    required this.village,
+    required this.taluk,
+    required this.landCategory,
+    required this.eastActual,
+    required this.eastDeed,
+    required this.southActual,
+    required this.southDeed,
+    required this.westActual,
+    required this.westDeed,
+    required this.northActual,
+    required this.northDeed,
+    required this.legalReportReference,
+    required this.buildingApprovalReference,
+    required this.deedRegDetails,
+    required this.possessionCertificateDetails,
+    required this.locationSketchDetails,
+    required this.propertyTaxCertificateDetails,
+    required this.buildingTaxCertificateDetails,
+    required this.latitude,
+    required this.longitude,
+    required this.encumbranceReference,
+    required this.topographyAndShape,
+    required this.houseNumber,
+    required this.panchayath,
+    required this.electricityConsumerNo,
+    required this.ksebDivision,
+    required this.yearOfConstruction,
+    required this.qualityOfConstruction,
+    required this.buildingType,
+    required this.constructionType,
+    required this.plinthAreaGF,
+    required this.replacementRateGF,
+    required this.heightGF,
+    required this.ageGF,
+    required this.plinthAreaFF,
+    required this.replacementRateFF,
+    required this.heightFF,
+    required this.ageFF,
+    required this.plinthAreaSF,
+    required this.replacementRateSF,
+    required this.heightSF,
+    required this.ageSF,
+    required this.plinthAreaTF,
+    required this.replacementRateTF,
+    required this.heightTF,
+    required this.ageTF,
+    required this.buildingCategory,
+    required this.exteriorCondition,
+    required this.interiorCondition,
+    required this.foundationAndBasement,
+    required this.rccWorks,
+    required this.wallDetails,
+    required this.flooring,
+    required this.joinery,
+    required this.windows,
+    required this.roofing,
+    required this.landMarketRate,
+    required this.buildingUnitRate,
+    required this.classificationArea1,
+    required this.classificationArea2,
+    required this.propertyLandmark,
+    required this.roadDetails,
+    required this.mainJunction,
+    required this.nearbyInstitutions,
+    required this.nearbyTown,
+    required this.photos,
+    required this.remarks,
   });
+
+  static const String ID = "id";
+  static const String REPORT_NAME = "Report Name";
+  static const String DATE_OF_INSPECTION = "Date of Inspection";
+  static const String STATUS = "Status";
+  static const String BANK_BRANCH_VALUATION_TEAM_DETAILS = "Bank/ Branch/ Valuation Team Details";
+  static const String NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO = "Name of the owner(s) and addresses with Phone No.";
+  static const String PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS = "Property Possession Name/Postal Address`";
+  static const String SURVEY_NO_RE_SY_NO_1 = "Survey No./ Re. Sy. No. - 1";
+  static const String AREA_IN_ARE_1 = "Area (in Are) - 1";
+  static const String SURVEY_NO_RE_SY_NO_2 = "Survey No./ Re. Sy. No. - 2";
+  static const String AREA_IN_ARE_2 = "Area (in Are) - 2";
+  static const String SURVEY_NO_RE_SY_NO_3 = "Survey No./ Re. Sy. No. - 3";
+  static const String AREA_IN_ARE_3 = "Area (in Are) - 3";
+  static const String SURVEY_NO_RE_SY_NO_4 = "Survey No./ Re. Sy. No. - 4";
+  static const String AREA_IN_ARE_4 = "Area (in Are) - 4";
+  static const String VILLAGE = "Village";
+  static const String TALUK = "Taluk";
+  static const String LAND_CATEGORY = "Land Category";
+  static const String EAST_ACTUALS = "East - Actuals";
+  static const String EAST_AS_PER_DEED = "East - As per Deed";
+  static const String SOUTH_ACTUALS = "South - Actuals";
+  static const String SOUTH_AS_PER_DEED = "South - As per Deed";
+  static const String WEST_ACTUALS = "West - Actuals";
+  static const String WEST_AS_PER_DEED = "West - As per Deed";
+  static const String NORTH_ACTUALS = "North - Actuals";
+  static const String NORTH_AS_PER_DEED = "North - As per Deed";
+  static const String LEGAL_REPORT_REFERENCE = "Legal Report Reference";
+  static const String BUILDING_APPROVAL_REFERENCE = "Building Approval Reference";
+  static const String DEED_REG_SRO_NO_DATE = "Deed Reg. SRO No. & Date";
+  static const String POCCESSION_CERTIFICATE_DETAILS = "Poccession Certificate Details";
+  static const String LOCATION_SKETCH_DETAILS = "Location Sketch Details";
+  static const String PROPERTY_TAX_CERTICATE_DETAILS = "Property Tax Certicate Details";
+  static const String BUILDING_TAX_CERTIFICATE_DETAILS = "Building Tax Certificate Details";
+  static const String LATTITUDE = "Lattitude";
+  static const String LONGITUDE = "Longitude";
+  static const String TANDAPPERENCUMFRANCE_REF = "Tandapper/Encumfrance Ref.";
+  static const String LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND = "Level of land with topographical conditions/ Shape of land";
+  static const String HOUSE_NO_DOOR_NO = "House No./ Door No.";
+  static const String PANCHAYATH = "Panchayath";
+  static const String ELECTRICITY_CONSUMER_NO = "Electricity Consumer no.";
+  static const String KSEB_DIVISION = "KSEB Division";
+  static const String YEAR_OF_CONSTRUCTION = "Year of Construction";
+  static const String QUALITY_OF_CONSTRUCTION = "Quality of Construction";
+  static const String TYPE_OF_BUILDING = "Type of Building";
+  static const String TYPE_OF_CONSTRUCTION = "Type of Construction";
+  static const String PLINT_AREA_GF = "Plint area - GF";
+  static const String REPLACEMENT_RATE_GF = "Replacement Rate - GF";
+  static const String HEIGHT_GF = "Height - GF";
+  static const String AGE_GF = "Age- GF";
+  static const String PLINTH_AREA_FF = "Plinth area - FF";
+  static const String REPLACEMENT_RATE_FF = "Replacement Rate - FF";
+  static const String HEIGHT_FF = "Height - FF";
+  static const String AGE_FF = "Age - FF";
+  static const String PLINTH_AREA_SF = "Plinth area - SF";
+  static const String REPLACEMENT_RATE_SF = "Replacement Rate - SF";
+  static const String HEIGHT_SF = "Height - SF";
+  static const String AGE_SF = "Age -SF";
+  static const String PLINTH_AREA_TF = "Plinth area - TF";
+  static const String REPLACEMENT_RATE_TF = "Replacement Rate - TF";
+  static const String HEIGHT_TF = "Height - TF";
+  static const String AGE_TF = "Age - TF";
+  static const String BUILDING_TYPE = "Building Type";
+  static const String CONDITION_OF_BUILDING_EXTERIOR = "Condition of Building - Exterior";
+  static const String CONDITION_OF_BUILDING_INTERIOR = "Condition of Building -Interior";
+  static const String FOUNDATION_BASEMENT = "Foundation & Basement";
+  static const String RCC_WORLS = "RCC worls";
+  static const String WALL_DETAILS = "Wall Details";
+  static const String FLOORING = "Flooring";
+  static const String JOINERYDOORS = "Joinery/Doors";
+  static const String WINDOWS = "Windows";
+  static const String WPROOF_TRUSS = "WP/Roof Truss";
+  static const String PREVAILING_LAND_MARKET_RATE = "Prevailing Land Market Rate";
+  static const String BUILDING_VALUATION_UNIT_RATE = "Building Valuation Unit Rate";
+  static const String CLASSIFICATION_OF_AREA_1 = "Classification of area - 1";
+  static const String CLASSIFICATION_OF_AREA_2 = "Classification of Area - 2";
+  static const String LANDMARK_OF_THE_PROPERTY = "Landmark of the Property";
+  static const String ROAD_DETAILS = "Road Details";
+  static const String MAIN_JUNCTION = "Main Junction";
+  static const String INSTITITUIONRELIGIOUS_GOVT_OFFICES = "Instituition/Religious/ Govt Offices";
+  static const String NEARBY_TOWN = "Nearby Town";
+  static const String PHOTOS = "Photos";
+  static const String REMARKS = "Remarks";
 
   factory Valuation.fromJson(Map<String, dynamic> json) {
     return Valuation(
-      id: json["ID"],
-      fullName: json["Full name"],
-      dateOfSiteInspection: json["Date of Site Inspection"],
-      dateOfReport: json["Date of Report"],
-      bankDetails: json["Bank Details"],
-      typeOfMortage: json["Type of Mortage"],
-      mortagagorAndAddressesWithPhoneNo: json["Mortagagor and addresses with Phone No."],
-      ownerOfLandAndAddressesWithPhoneNo: json["Owner of Land and addresses with Phone No."],
-      legalReportReference: json["Legal Report Reference"],
-      surveyNo1: json["Survey No. - 1"],
-      areaOfPlot1: json["Area of plot - 1"],
-      areaOfPlotInCents1: json["Area of plot in cents - 1"],
-      surveyNo2: json["Survey No. - 2"],
-      areaOfPlot2: json["Area of plot - 2"],
-      areaOfPlotInCents2: json["Area of plot in cents - 2"],
-      surveyNo3: json["Survey No. - 3"],
-      areaOfPlot3: json["Area of plot - 3"],
-      areaOfPlotInCents3: json["Area of plot in cents - 3"],
-      surveyNo4: json["Survey No. - 4"],
-      areaOfPlot4: json["Area of plot - 4"],
-      areaOfPlotInCents4: json["Area of plot in cents - 4"],
-      deedRegSroNoDate: json["Deed Reg. SRO No. & Date"],
-      villageOfLandSituated: json["Village of Land situated"],
-      panchayathOfLandSituated: json["Panchayath of Land situated"],
-      talukOfLandSituated: json["Taluk of Land situated"],
-      pocessionCertificateDetails: json["Pocession Certificate Details"],
-      locationSketchDetails: json["Location Sketch Details"],
-      propertyTaxCertificateDetails: json["Property Tax Certificate Details"],
-      buildingTaxCertificateDetails: json["Building Tax Certificate Details"],
-      tandapperecumfranceRef: json["Tandapper/Ecumfrance Ref."],
-      boundaryEast: json["Boundary - East"],
-      boundarySouth: json["Boundary - South"],
-      boundaryWest: json["Boundary - West"],
-      boundaryNorth: json["Boundary - North"],
-      deedBoundaryEast: json["Deed Boundary - East"],
-      deedBoundarySouth: json["Deed Boundary - South"],
-      deepBoundaryWest: json["Deep Boundary - West"],
-      deedBoundaryNorth: json["Deed Boundary - North"],
-      shapeOfLand: json["Shape of land"],
-      topographicalConditionsOfLand: json["Topographical Conditions of Land"],
-      plotLandmark: json["Plot Landmark"],
-      classificationOfAreaEconomicStatus: json["Classification of area - Economic Status"],
-      classficationOfAreaPopulationDensity: json["Classfication of area - Population density"],
-      lattitude: json["Lattitude"],
-      longitude: json["Longitude"],
-      buildingApprovalReference: json["Building Approval Reference"],
-      houseNoDoorNo: json["House No./ Door No."],
-      electricityConsumerNo: json["Electricity Consumer No."],
-      yearOfConstruction: json["Year of Construction"],
-      qualityOfConstruction: json["Quality of Construction"],
-      usageTypeOfBuilding: json["Usage type of Building"],
-      structuralDetailOfConstruction: json["Structural Detail of construction:"],
-      plintAreaOfFloorSftBf: json["Plint area of floor (SFT) - BF"],
-      replacementRateRsBf: json["Replacement rate (Rs.) - BF"],
-      ageYBf: json["Age (Y) - BF"],
-      heightMBf: json["Height (M) - BF"],
-      plintAreaOfFloorSftGf: json["Plint area of floor (SFT) - GF"],
-      replacementRateRsGf: json["Replacement rate (Rs.) - GF"],
-      ageYGf: json["Age (Y) - GF"],
-      heightMGf: json["Height (M) - GF"],
-      plintAreaOfFloorSftFf: json["Plint area of floor (SFT) - FF"],
-      replacementRateRsFf: json["Replacement rate (Rs.) - FF"],
-      ageYFf: json["Age (Y) - FF"],
-      heightMFf: json["Height (M) - FF"],
-      plintAreaOfFloorSftSf: json["Plint area of floor (SFT) - SF"],
-      replacementRateRsSf: json["Replacement rate (Rs.) - SF"],
-      ageYSf: json["Age (Y) - SF"],
-      heightMSf: json["Height (M) - SF"],
-      plintAreaOfFloorSftTf: json["Plint area of floor (SFT) - TF"],
-      replacementRateRsTf: json["Replacement rate (Rs.) - TF"],
-      ageYTf: json["Age (Y) - TF"],
-      heightMTf: json["Height (M) - TF"],
-      conditionOfTheBuildingExterior: json["Condition of the Building - Exterior"],
-      conditionOfTheBuildingInterior: json["Condition of the Building - Interior"],
-      foundation: json["Foundation"],
-      basement: json["Basement"],
-      rccWorks: json["RCC works"],
-      wallDetails: json["Wall Details"],
-      wallCeilingFinish: json["Wall & Ceiling Finish"],
-      flooringFinish: json["Flooring Finish"],
-      toiletFinish: json["Toilet Finish"],
-      joinerydoors: json["Joinery/Doors"],
-      windows: json["Windows"],
-      terraceProtection: json["Terrace Protection"],
-      prevailingMarketRateAtTheLocation: json["Prevailing Market rate at the Location"],
-      marketRateAppliedToTheSpecificLand: json["Market Rate applied to the Specific Land"],
-      buildingValuePerSft: json["Building Value per Sft"],
-      wellMotorWaterTank: json["Well + Motor + Water Tank"],
-      compoundWallGate: json["Compound Wall + Gate"],
-      externalPavingStonePaving: json["External Paving/ Stone Paving"],
-      interiorWorks: json["Interior Works"],
-      kitchenUnitBuiltinwardrobes: json["Kitchen Unit + Built-in-wardrobes"],
-      panellingWorksDecorativeWorks: json["Panelling works & Decorative works"],
-      feasiblityOfTheCivicAmentitiesLikeSchoolHospitalBusStopMarketEtc: json["Feasiblity of the Civic Amentities like School hospital, Bus stop, Market, etc"],
-      photos: json["Photos"],
-      otherDetailsRemarks: json["Other Details & Remarks"],
+      id: json[ID],
+      reportName: json[REPORT_NAME].toString(),
+      dateOfInspection: json[DATE_OF_INSPECTION].toString(),
+      status: json[STATUS].toString(),
+      bankDetails: json[BANK_BRANCH_VALUATION_TEAM_DETAILS].toString(),
+      ownerDetails: json[NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO].toString(),
+      propertyPossessionAddress: json[PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS].toString(),
+      surveyNo1: json[SURVEY_NO_RE_SY_NO_1].toString(),
+      area1: json[AREA_IN_ARE_1].toString(),
+      surveyNo2: json[SURVEY_NO_RE_SY_NO_2].toString(),
+      area2: json[AREA_IN_ARE_2].toString(),
+      surveyNo3: json[SURVEY_NO_RE_SY_NO_3].toString(),
+      area3: json[AREA_IN_ARE_3].toString(),
+      surveyNo4: json[SURVEY_NO_RE_SY_NO_4].toString(),
+      area4: json[AREA_IN_ARE_4].toString(),
+      village: json[VILLAGE].toString(),
+      taluk: json[TALUK].toString(),
+      landCategory: json[LAND_CATEGORY].toString(),
+      eastActual: json[EAST_ACTUALS].toString(),
+      eastDeed: json[EAST_AS_PER_DEED].toString(),
+      southActual: json[SOUTH_ACTUALS].toString(),
+      southDeed: json[SOUTH_AS_PER_DEED].toString(),
+      westActual: json[WEST_ACTUALS].toString(),
+      westDeed: json[WEST_AS_PER_DEED].toString(),
+      northActual: json[NORTH_ACTUALS].toString(),
+      northDeed: json[NORTH_AS_PER_DEED].toString(),
+      legalReportReference: json[LEGAL_REPORT_REFERENCE].toString(),
+      buildingApprovalReference: json[BUILDING_APPROVAL_REFERENCE].toString(),
+      deedRegDetails: json[DEED_REG_SRO_NO_DATE].toString(),
+      possessionCertificateDetails: json[POCCESSION_CERTIFICATE_DETAILS].toString(),
+      locationSketchDetails: json[LOCATION_SKETCH_DETAILS].toString(),
+      propertyTaxCertificateDetails: json[PROPERTY_TAX_CERTICATE_DETAILS].toString(),
+      buildingTaxCertificateDetails: json[BUILDING_TAX_CERTIFICATE_DETAILS].toString(),
+      latitude: json[LATTITUDE].toString(),
+      longitude: json[LONGITUDE].toString(),
+      encumbranceReference: json[TANDAPPERENCUMFRANCE_REF].toString(),
+      topographyAndShape: json[LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND].toString(),
+      houseNumber: json[HOUSE_NO_DOOR_NO].toString(),
+      panchayath: json[PANCHAYATH].toString(),
+      electricityConsumerNo: json[ELECTRICITY_CONSUMER_NO].toString(),
+      ksebDivision: json[KSEB_DIVISION].toString(),
+      yearOfConstruction: json[YEAR_OF_CONSTRUCTION].toString(),
+      qualityOfConstruction: json[QUALITY_OF_CONSTRUCTION].toString(),
+      buildingType: json[TYPE_OF_BUILDING].toString(),
+      constructionType: json[TYPE_OF_CONSTRUCTION].toString(),
+      plinthAreaGF: json[PLINT_AREA_GF].toString(),
+      replacementRateGF: json[REPLACEMENT_RATE_GF].toString(),
+      heightGF: json[HEIGHT_GF].toString(),
+      ageGF: json[AGE_GF].toString(),
+      plinthAreaFF: json[PLINTH_AREA_FF].toString(),
+      replacementRateFF: json[REPLACEMENT_RATE_FF].toString(),
+      heightFF: json[HEIGHT_FF].toString(),
+      ageFF: json[AGE_FF].toString(),
+      plinthAreaSF: json[PLINTH_AREA_SF].toString(),
+      replacementRateSF: json[REPLACEMENT_RATE_SF].toString(),
+      heightSF: json[HEIGHT_SF].toString(),
+      ageSF: json[AGE_SF].toString(),
+      plinthAreaTF: json[PLINTH_AREA_TF].toString(),
+      replacementRateTF: json[REPLACEMENT_RATE_TF].toString(),
+      heightTF: json[HEIGHT_TF].toString(),
+      ageTF: json[AGE_TF].toString(),
+      buildingCategory: json[BUILDING_TYPE].toString(),
+      exteriorCondition: json[CONDITION_OF_BUILDING_EXTERIOR].toString(),
+      interiorCondition: json[CONDITION_OF_BUILDING_INTERIOR].toString(),
+      foundationAndBasement: json[FOUNDATION_BASEMENT].toString(),
+      rccWorks: json[RCC_WORLS].toString(),
+      wallDetails: json[WALL_DETAILS].toString(),
+      flooring: json[FLOORING].toString(),
+      joinery: json[JOINERYDOORS].toString(),
+      windows: json[WINDOWS].toString(),
+      roofing: json[WPROOF_TRUSS].toString(),
+      landMarketRate: json[PREVAILING_LAND_MARKET_RATE].toString(),
+      buildingUnitRate: json[BUILDING_VALUATION_UNIT_RATE].toString(),
+      classificationArea1: json[CLASSIFICATION_OF_AREA_1].toString(),
+      classificationArea2: json[CLASSIFICATION_OF_AREA_2].toString(),
+      propertyLandmark: json[LANDMARK_OF_THE_PROPERTY].toString(),
+      roadDetails: json[ROAD_DETAILS].toString(),
+      mainJunction: json[MAIN_JUNCTION].toString(),
+      nearbyInstitutions: json[INSTITITUIONRELIGIOUS_GOVT_OFFICES].toString(),
+      nearbyTown: json[NEARBY_TOWN].toString(),
+      photos: json[PHOTOS].toString(),
+      remarks: json[REMARKS].toString(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "ID": id,
-      "Full name": fullName,
-      "Date of Site Inspection": dateOfSiteInspection,
-      "Date of Report": dateOfReport,
-      "Bank Details": bankDetails,
-      "Type of Mortage": typeOfMortage,
-      "Mortagagor and addresses with Phone No.": mortagagorAndAddressesWithPhoneNo,
-      "Owner of Land and addresses with Phone No.": ownerOfLandAndAddressesWithPhoneNo,
-      "Legal Report Reference": legalReportReference,
-      "Survey No. - 1": surveyNo1,
-      "Area of plot - 1": areaOfPlot1,
-      "Area of plot in cents - 1": areaOfPlotInCents1,
-      "Survey No. - 2": surveyNo2,
-      "Area of plot - 2": areaOfPlot2,
-      "Area of plot in cents - 2": areaOfPlotInCents2,
-      "Survey No. - 3": surveyNo3,
-      "Area of plot - 3": areaOfPlot3,
-      "Area of plot in cents - 3": areaOfPlotInCents3,
-      "Survey No. - 4": surveyNo4,
-      "Area of plot - 4": areaOfPlot4,
-      "Area of plot in cents - 4": areaOfPlotInCents4,
-      "Deed Reg. SRO No. & Date": deedRegSroNoDate,
-      "Village of Land situated": villageOfLandSituated,
-      "Panchayath of Land situated": panchayathOfLandSituated,
-      "Taluk of Land situated": talukOfLandSituated,
-      "Pocession Certificate Details": pocessionCertificateDetails,
-      "Location Sketch Details": locationSketchDetails,
-      "Property Tax Certificate Details": propertyTaxCertificateDetails,
-      "Building Tax Certificate Details": buildingTaxCertificateDetails,
-      "Tandapper/Ecumfrance Ref.": tandapperecumfranceRef,
-      "Boundary - East": boundaryEast,
-      "Boundary - South": boundarySouth,
-      "Boundary - West": boundaryWest,
-      "Boundary - North": boundaryNorth,
-      "Deed Boundary - East": deedBoundaryEast,
-      "Deed Boundary - South": deedBoundarySouth,
-      "Deep Boundary - West": deepBoundaryWest,
-      "Deed Boundary - North": deedBoundaryNorth,
-      "Shape of land": shapeOfLand,
-      "Topographical Conditions of Land": topographicalConditionsOfLand,
-      "Plot Landmark": plotLandmark,
-      "Classification of area - Economic Status": classificationOfAreaEconomicStatus,
-      "Classfication of area - Population density": classficationOfAreaPopulationDensity,
-      "Lattitude": lattitude,
-      "Longitude": longitude,
-      "Building Approval Reference": buildingApprovalReference,
-      "House No./ Door No.": houseNoDoorNo,
-      "Electricity Consumer No.": electricityConsumerNo,
-      "Year of Construction": yearOfConstruction,
-      "Quality of Construction": qualityOfConstruction,
-      "Usage type of Building": usageTypeOfBuilding,
-      "Structural Detail of construction:": structuralDetailOfConstruction,
-      "Plint area of floor (SFT) - BF": plintAreaOfFloorSftBf,
-      "Replacement rate (Rs.) - BF": replacementRateRsBf,
-      "Age (Y) - BF": ageYBf,
-      "Height (M) - BF": heightMBf,
-      "Plint area of floor (SFT) - GF": plintAreaOfFloorSftGf,
-      "Replacement rate (Rs.) - GF": replacementRateRsGf,
-      "Age (Y) - GF": ageYGf,
-      "Height (M) - GF": heightMGf,
-      "Plint area of floor (SFT) - FF": plintAreaOfFloorSftFf,
-      "Replacement rate (Rs.) - FF": replacementRateRsFf,
-      "Age (Y) - FF": ageYFf,
-      "Height (M) - FF": heightMFf,
-      "Plint area of floor (SFT) - SF": plintAreaOfFloorSftSf,
-      "Replacement rate (Rs.) - SF": replacementRateRsSf,
-      "Age (Y) - SF": ageYSf,
-      "Height (M) - SF": heightMSf,
-      "Plint area of floor (SFT) - TF": plintAreaOfFloorSftTf,
-      "Replacement rate (Rs.) - TF": replacementRateRsTf,
-      "Age (Y) - TF": ageYTf,
-      "Height (M) - TF": heightMTf,
-      "Condition of the Building - Exterior": conditionOfTheBuildingExterior,
-      "Condition of the Building - Interior": conditionOfTheBuildingInterior,
-      "Foundation": foundation,
-      "Basement": basement,
-      "RCC works": rccWorks,
-      "Wall Details": wallDetails,
-      "Wall & Ceiling Finish": wallCeilingFinish,
-      "Flooring Finish": flooringFinish,
-      "Toilet Finish": toiletFinish,
-      "Joinery/Doors": joinerydoors,
-      "Windows": windows,
-      "Terrace Protection": terraceProtection,
-      "Prevailing Market rate at the Location": prevailingMarketRateAtTheLocation,
-      "Market Rate applied to the Specific Land": marketRateAppliedToTheSpecificLand,
-      "Building Value per Sft": buildingValuePerSft,
-      "Well + Motor + Water Tank": wellMotorWaterTank,
-      "Compound Wall + Gate": compoundWallGate,
-      "External Paving/ Stone Paving": externalPavingStonePaving,
-      "Interior Works": interiorWorks,
-      "Kitchen Unit + Built-in-wardrobes": kitchenUnitBuiltinwardrobes,
-      "Panelling works & Decorative works": panellingWorksDecorativeWorks,
-      "Feasiblity of the Civic Amentities like School hospital, Bus stop, Market, etc": feasiblityOfTheCivicAmentitiesLikeSchoolHospitalBusStopMarketEtc,
-      "Photos": photos,
-      "Other Details & Remarks": otherDetailsRemarks,
+      REPORT_NAME: reportName,
+    DATE_OF_INSPECTION: dateOfInspection,
+    STATUS: status,
+    BANK_BRANCH_VALUATION_TEAM_DETAILS: bankDetails,
+    NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO: ownerDetails,
+    PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS: propertyPossessionAddress,
+    SURVEY_NO_RE_SY_NO_1: surveyNo1,
+    AREA_IN_ARE_1: area1,
+    SURVEY_NO_RE_SY_NO_2: surveyNo2,
+    AREA_IN_ARE_2: area2,
+    SURVEY_NO_RE_SY_NO_3: surveyNo3,
+    AREA_IN_ARE_3: area3,
+    SURVEY_NO_RE_SY_NO_4: surveyNo4,
+    AREA_IN_ARE_4: area4,
+    VILLAGE: village,
+    TALUK: taluk,
+    LAND_CATEGORY: landCategory,
+    EAST_ACTUALS: eastActual,
+    EAST_AS_PER_DEED: eastDeed,
+    SOUTH_ACTUALS: southActual,
+    SOUTH_AS_PER_DEED: southDeed,
+    WEST_ACTUALS: westActual,
+    WEST_AS_PER_DEED: westDeed,
+    NORTH_ACTUALS: northActual,
+    NORTH_AS_PER_DEED: northDeed,
+    LEGAL_REPORT_REFERENCE: legalReportReference,
+    BUILDING_APPROVAL_REFERENCE: buildingApprovalReference,
+    DEED_REG_SRO_NO_DATE: deedRegDetails,
+    POCCESSION_CERTIFICATE_DETAILS: possessionCertificateDetails,
+    LOCATION_SKETCH_DETAILS: locationSketchDetails,
+    PROPERTY_TAX_CERTICATE_DETAILS: propertyTaxCertificateDetails,
+    BUILDING_TAX_CERTIFICATE_DETAILS: buildingTaxCertificateDetails,
+    LATTITUDE: latitude,
+    LONGITUDE: longitude,
+    TANDAPPERENCUMFRANCE_REF: encumbranceReference,
+    LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND: topographyAndShape,
+    HOUSE_NO_DOOR_NO: houseNumber,
+    PANCHAYATH: panchayath,
+    ELECTRICITY_CONSUMER_NO: electricityConsumerNo,
+    KSEB_DIVISION: ksebDivision,
+    YEAR_OF_CONSTRUCTION: yearOfConstruction,
+    QUALITY_OF_CONSTRUCTION: constructionType,
+    TYPE_OF_BUILDING: buildingType,
+    TYPE_OF_CONSTRUCTION: constructionType,
+    PLINT_AREA_GF: plinthAreaGF,
+    REPLACEMENT_RATE_GF: replacementRateGF,
+    HEIGHT_GF: heightGF,
+    AGE_GF: ageGF,
+    PLINTH_AREA_FF: plinthAreaFF,
+    REPLACEMENT_RATE_FF: replacementRateFF,
+    HEIGHT_FF: heightFF,
+    AGE_FF: ageFF,
+    PLINTH_AREA_SF: plinthAreaSF,
+    REPLACEMENT_RATE_SF: replacementRateSF,
+    HEIGHT_SF: heightSF,
+    AGE_SF: ageSF,
+    PLINTH_AREA_TF: plinthAreaTF,
+    REPLACEMENT_RATE_TF: replacementRateTF,
+    HEIGHT_TF: heightTF,
+    AGE_TF: ageTF,
+    BUILDING_TYPE: buildingType,
+    CONDITION_OF_BUILDING_EXTERIOR: exteriorCondition,
+    CONDITION_OF_BUILDING_INTERIOR: interiorCondition,
+    FOUNDATION_BASEMENT: foundationAndBasement,
+    RCC_WORLS: rccWorks,
+    WALL_DETAILS: wallDetails,
+    FLOORING: flooring,
+    JOINERYDOORS: joinery,
+    WINDOWS: windows,
+    WPROOF_TRUSS: roofing,
+    PREVAILING_LAND_MARKET_RATE: landMarketRate,
+    BUILDING_VALUATION_UNIT_RATE: buildingUnitRate,
+    CLASSIFICATION_OF_AREA_1: classificationArea1,
+    CLASSIFICATION_OF_AREA_2: classificationArea2,
+    LANDMARK_OF_THE_PROPERTY: landMarketRate,
+    ROAD_DETAILS: roadDetails,
+    MAIN_JUNCTION: mainJunction,
+    INSTITITUIONRELIGIOUS_GOVT_OFFICES: nearbyInstitutions,
+    NEARBY_TOWN: nearbyTown,
+    PHOTOS: photos,
+    REMARKS: remarks,
     };
   }
+
+  List<String?> toList() {
+    return [
+      reportName,
+      dateOfInspection,
+      status,
+      bankDetails,
+      ownerDetails,
+      propertyPossessionAddress,
+      surveyNo1,
+      area1,
+      surveyNo2,
+      area2,
+      surveyNo3,
+      area3,
+      surveyNo4,
+      area4,
+      village,
+      taluk,
+      landCategory,
+      eastActual,
+      eastDeed,
+      southActual,
+      southDeed,
+      westActual,
+      westDeed,
+      northActual,
+      northDeed,
+      legalReportReference,
+      buildingApprovalReference,
+      deedRegDetails,
+      possessionCertificateDetails,
+      locationSketchDetails,
+      propertyTaxCertificateDetails,
+      buildingTaxCertificateDetails,
+      latitude,
+      longitude,
+      encumbranceReference,
+      topographyAndShape,
+      houseNumber,
+      panchayath,
+      electricityConsumerNo,
+      ksebDivision,
+      yearOfConstruction,
+      qualityOfConstruction,
+      buildingType,
+      constructionType,
+      plinthAreaGF,
+      replacementRateGF,
+      heightGF,
+      ageGF,
+      plinthAreaFF,
+      replacementRateFF,
+      heightFF,
+      ageFF,
+      plinthAreaSF,
+      replacementRateSF,
+      heightSF,
+      ageSF,
+      plinthAreaTF,
+      replacementRateTF,
+      heightTF,
+      ageTF,
+      buildingCategory,
+      exteriorCondition,
+      interiorCondition,
+      foundationAndBasement,
+      rccWorks,
+      wallDetails,
+      flooring,
+      joinery,
+      windows,
+      roofing,
+      landMarketRate,
+      buildingUnitRate,
+      classificationArea1,
+      classificationArea2,
+      propertyLandmark,
+      roadDetails,
+      mainJunction,
+      nearbyInstitutions,
+      nearbyTown,
+      photos,
+      remarks,
+    ];
+  }
+
+    static const editableFields = [
+    ID,
+    REPORT_NAME,
+    DATE_OF_INSPECTION,
+    STATUS,
+    BANK_BRANCH_VALUATION_TEAM_DETAILS,
+    NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO,
+    PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS,
+    SURVEY_NO_RE_SY_NO_1,
+    AREA_IN_ARE_1,
+    SURVEY_NO_RE_SY_NO_2,
+    AREA_IN_ARE_2,
+    SURVEY_NO_RE_SY_NO_3,
+    AREA_IN_ARE_3,
+    SURVEY_NO_RE_SY_NO_4,
+    AREA_IN_ARE_4,
+    VILLAGE,
+    TALUK,
+    LAND_CATEGORY,
+    EAST_ACTUALS,
+    EAST_AS_PER_DEED,
+    SOUTH_ACTUALS,
+    SOUTH_AS_PER_DEED,
+    WEST_ACTUALS,
+    WEST_AS_PER_DEED,
+    NORTH_ACTUALS,
+    NORTH_AS_PER_DEED,
+    LEGAL_REPORT_REFERENCE,
+    BUILDING_APPROVAL_REFERENCE,
+    DEED_REG_SRO_NO_DATE,
+    POCCESSION_CERTIFICATE_DETAILS,
+    LOCATION_SKETCH_DETAILS,
+    PROPERTY_TAX_CERTICATE_DETAILS,
+    BUILDING_TAX_CERTIFICATE_DETAILS,
+    LATTITUDE,
+    LONGITUDE,
+    TANDAPPERENCUMFRANCE_REF,
+    LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND,
+    HOUSE_NO_DOOR_NO,
+    PANCHAYATH,
+    ELECTRICITY_CONSUMER_NO,
+    KSEB_DIVISION,
+    YEAR_OF_CONSTRUCTION,
+    QUALITY_OF_CONSTRUCTION,
+    TYPE_OF_BUILDING,
+    TYPE_OF_CONSTRUCTION,
+    PLINT_AREA_GF,
+    REPLACEMENT_RATE_GF,
+    HEIGHT_GF,
+    AGE_GF,
+    PLINTH_AREA_FF,
+    REPLACEMENT_RATE_FF,
+    HEIGHT_FF,
+    AGE_FF,
+    PLINTH_AREA_SF,
+    REPLACEMENT_RATE_SF,
+    HEIGHT_SF,
+    AGE_SF,
+    PLINTH_AREA_TF,
+    REPLACEMENT_RATE_TF,
+    HEIGHT_TF,
+    AGE_TF,
+    BUILDING_TYPE,
+    CONDITION_OF_BUILDING_EXTERIOR,
+    CONDITION_OF_BUILDING_INTERIOR,
+    FOUNDATION_BASEMENT,
+    RCC_WORLS,
+    WALL_DETAILS,
+    FLOORING,
+    JOINERYDOORS,
+    WINDOWS,
+    WPROOF_TRUSS,
+    PREVAILING_LAND_MARKET_RATE,
+    BUILDING_VALUATION_UNIT_RATE,
+    CLASSIFICATION_OF_AREA_1,
+    CLASSIFICATION_OF_AREA_2,
+    LANDMARK_OF_THE_PROPERTY,
+    ROAD_DETAILS,
+    MAIN_JUNCTION,
+    INSTITITUIONRELIGIOUS_GOVT_OFFICES,
+    NEARBY_TOWN,
+    PHOTOS,
+    REMARKS,
+  ];
 }

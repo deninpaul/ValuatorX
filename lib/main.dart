@@ -4,10 +4,12 @@ import 'package:valuatorx/pages/home_screen.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/pages/login/login_screen.dart';
 import 'package:valuatorx/pages/splash_screen/splash_screen.dart';
+import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/providers/location_provider.dart';
+import 'package:valuatorx/providers/valuation_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LandRateProvider()),
         ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ChangeNotifierProvider(create: (_) => ValuationProvider()),
       ],
       child: MaterialApp(
         title: 'Microsoft Auth Demo',
@@ -40,6 +43,8 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const HomeScreen(),
           '/land_rate/add': (context) => const LandRateForm(),
           '/land_rate/edit': (context) => const LandRateForm(editMode: true),
+          '/valuation/add': (context) => const ValuationForm(),
+          '/valuation/edit': (context) => const ValuationForm(editMode: true),
         },
         debugShowCheckedModeBanner: false,
       ),

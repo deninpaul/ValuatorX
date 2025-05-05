@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 class LocationProvider extends ChangeNotifier {
   bool isLoading = false;
   LatLng currentLocation = LatLng(0, 0);
+  bool isEmpty = true;
 
   moveToMyLocation(MapController controller) async {
     try {
@@ -13,6 +14,7 @@ class LocationProvider extends ChangeNotifier {
       currentLocation = await getCurrentPosition();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.move(currentLocation, 15.2);
+        isEmpty = false;
       });
     } catch (e) {
       debugPrint(e.toString());

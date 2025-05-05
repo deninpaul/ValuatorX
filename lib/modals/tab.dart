@@ -6,7 +6,7 @@ class TabItem {
   final Icon icon;
   final Icon selectedIcon;
   final String? createText;
-  final VoidCallback? onCreate;
+  final Widget? createPage;
   final ValueChanged<String>? onSearch;
   final Widget child;
 
@@ -16,7 +16,7 @@ class TabItem {
     required this.icon,
     required this.selectedIcon,
     this.createText,
-    this.onCreate,
+    this.createPage,
     this.onSearch,
     required this.child,
   });

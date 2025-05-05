@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/pages/common/map_actions.dart';
+import 'package:valuatorx/pages/common/map/map_wrapper.dart';
 import 'package:valuatorx/providers/location_provider.dart';
-import 'package:valuatorx/utils/common_utils.dart';
 
 class LocationField extends StatefulWidget {
   final TextEditingController latitudeController;
@@ -32,16 +31,18 @@ class _LocationFieldState extends State<LocationField> {
       if (!longitudeFocusNode.hasFocus) _onLongitudeChanged(widget.longitudeController.text);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = Provider.of<LocationProvider>(context, listen: false);
-      final latitudeValue = widget.latitudeController.text;
-      final longitudeValue = widget.longitudeController.text;
-      if (latitudeValue.isNotEmpty && longitudeValue.isNotEmpty) {
-        _mapController.move(LatLng(double.parse(latitudeValue), double.parse(longitudeValue)), 18);
-      } else {
-        if (provider.currentLocation.latitude == 0) provider.moveToMyLocation(_mapController);
-        widget.latitudeController.text = provider.currentLocation.latitude.toString();
-        widget.longitudeController.text = provider.currentLocation.longitude.toString();
-      }
+      Future.delayed(Duration(milliseconds: 100), () {
+        final provider = Provider.of<LocationProvider>(context, listen: false);
+        final latitudeValue = widget.latitudeController.text;
+        final longitudeValue = widget.longitudeController.text;
+        if (latitudeValue.isNotEmpty && longitudeValue.isNotEmpty) {
+          _mapController.move(LatLng(double.parse(latitudeValue), double.parse(longitudeValue)), 18);
+        } else {
+          if (provider.currentLocation.latitude == 0) provider.moveToMyLocation(_mapController);
+          widget.latitudeController.text = provider.currentLocation.latitude.toString();
+          widget.longitudeController.text = provider.currentLocation.longitude.toString();
+        }
+      });
     });
   }
 
@@ -67,10 +68,15 @@ class _LocationFieldState extends State<LocationField> {
     }
   }
 
+  _onPositionChanged(MapCamera position, bool hasGesture) {
+    final center = position.center;
+    widget.latitudeController.text = center.latitude.toStringAsFixed(7);
+    widget.longitudeController.text = center.longitude.toStringAsFixed(7);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LocationProvider>(context);
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,41 +115,17 @@ class _LocationFieldState extends State<LocationField> {
                   ),
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 240,
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
-                child: FlutterMap(
+                child: MapWrapper(
+                  borderRadius: 24,
                   mapController: _mapController,
-                  options: MapOptions(
-                    initialZoom: 18,
-                    initialCenter: provider.currentLocation,
-                    interactionOptions: InteractionOptions(
-                      flags: InteractiveFlag.pinchZoom | InteractiveFlag.pinchMove | InteractiveFlag.doubleTapDragZoom,
-                    ),
-                    onPositionChanged: (position, hasGesture) {
-                      final center = position.center;
-                      widget.latitudeController.text = center.latitude.toStringAsFixed(7);
-                      widget.longitudeController.text = center.longitude.toStringAsFixed(7);
-                    },
+                  provider: provider,
+                  enableCenterMarker: true,
+                  onPositionChanged: _onPositionChanged,
+                  interactionOptions: InteractionOptions(
+                    flags: InteractiveFlag.pinchZoom | InteractiveFlag.pinchMove | InteractiveFlag.doubleTapDragZoom,
                   ),
-                  children: [
-                    ...baseMapLayers(context),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: provider.currentLocation,
-                          child: Icon(Icons.my_location, color: Colors.blue, size: 28),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(bottom: 24),
-                      child: Icon(Icons.location_pin, color: colorScheme.primary, size: 36), // Fixed center marker
-                    ),
-                    MapActions(controller: _mapController, locationProvider: provider),
-                  ],
                 ),
               ),
             ],

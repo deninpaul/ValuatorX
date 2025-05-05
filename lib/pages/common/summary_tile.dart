@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
 class SummaryTile extends StatelessWidget {
@@ -30,6 +31,7 @@ class SummaryTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         title: Text(title, style: textTheme.bodyLarge),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Text(subtitle, style: textTheme.bodyLarge!.copyWith(color: labelColor)),

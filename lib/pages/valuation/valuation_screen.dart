@@ -1,8 +1,12 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:valuatorx/pages/common/expandable_list.dart';
+import 'package:valuatorx/pages/common/header.dart';
 import 'package:valuatorx/pages/common/summary_tile.dart';
 import 'package:valuatorx/pages/valuation/components/details_view.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
+import 'package:valuatorx/utils/common_utils.dart';
 
 class Valuations extends StatefulWidget {
   const Valuations({super.key});
@@ -24,6 +28,7 @@ class _ValuationsState extends State<Valuations> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
     final dividerColor = theme.dividerColor.withAlpha(64);
 
@@ -31,34 +36,34 @@ class _ValuationsState extends State<Valuations> {
       provider.setSelectedItem(id);
     }
 
-    return Container(
-      height: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: provider.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-            child:
-                (provider.selectedItem == -1)
-                    ? ListView.separated(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(bottom: 80, top: 12),
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: provider.valuations.length,
-                      separatorBuilder: (ctx, index) => Divider(color: dividerColor),
-                      itemBuilder: (ctx, index) {
-                        final valuation = provider.valuations.reversed.toList()[index];
-                        return SummaryTile(
-                          id: valuation.id,
-                          title: valuation.reportName,
-                          subtitle: "${valuation.village}, ${valuation.taluk}",
-                          info: valuation.dateOfInspection,
-                          tag: valuation.status,
-                          onTapAction: viewValuation,
-                        );
-                      },
-                    )
-                    : DetailsView(valuation: provider.getSelectedValuation()),
-          ),
+    return PageTransitionSwitcher(
+      reverse: provider.selectedItem == -1,
+      transitionBuilder: defaultTransition(colorScheme.surfaceContainer),
+      child:
+          provider.selectedItem == -1
+              ? ListView(
+                key: const ValueKey('list'),
+                children: [
+                  Header(name: "Land Rate", onSearch: (val) => print(val)),
+                  SizedBox(height: 16),
+                  ExpandableList(
+                    items: provider.valuations,
+                    isLoading: provider.isLoading,
+                    itemBuilder: (ctx, valuation, index) {
+                      return SummaryTile(
+                        id: valuation.id,
+                        title: valuation.reportName,
+                        subtitle: "${valuation.village}, ${valuation.taluk}",
+                        info: valuation.dateOfInspection,
+                        tag: valuation.status,
+                        onTapAction: viewValuation,
+                      );
+                    },
+                  ),
+                  SizedBox(height: 32),
+                ],
+              )
+              : DetailsView(valuation: provider.getSelectedValuation()),
     );
   }
 }

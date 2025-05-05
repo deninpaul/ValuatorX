@@ -5,7 +5,6 @@ import 'package:valuatorx/providers/location_provider.dart';
 class MapActions extends StatelessWidget {
   final LocationProvider locationProvider;
   final MapController controller;
-
   const MapActions({super.key, required this.controller, required this.locationProvider});
 
   @override

@@ -3,10 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/tab.dart';
 import 'package:valuatorx/pages/common/create_button.dart';
-import 'package:valuatorx/pages/common/header.dart';
+import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_screen.dart';
+import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/pages/valuation/valuation_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
+import 'package:animations/animations.dart';
+import 'package:valuatorx/utils/common_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
+  int previousIndex = 0;
   bool showLeading = false;
   bool showTrailing = false;
   double groupAlignment = -1.0;
@@ -35,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: Icon(Icons.home_outlined),
         selectedIcon: Icon(Icons.home),
         createText: "New report",
-        onCreate: () => Navigator.pushNamed(context, "/valuation/add"),
+        createPage: ValuationForm(),
         onSearch: (query) => print(query),
         child: Valuations(),
       ),
@@ -45,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: Icon(Icons.map_outlined),
         selectedIcon: Icon(Icons.map),
         createText: "Add data",
-        onCreate: () => Navigator.pushNamed(context, "/land_rate/add"),
+        createPage: LandRateForm(),
         onSearch: (query) => print(query),
         child: LandRateScreen(),
       ),
@@ -93,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 labelType: NavigationRailLabelType.all,
                 backgroundColor: colorScheme.surfaceContainer,
                 onDestinationSelected: (int index) {
+                  setState(() => previousIndex = selectedIndex);
                   setState(() => selectedIndex = index);
                   clearSearch();
                 },
@@ -130,22 +135,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Expanded(
                 child: Container(
+                  height: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   color: colorScheme.surfaceContainer,
-                  child: Column(
-                    children: [
-                      Header(item: tabs[selectedIndex], searchController: searchController),
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.fromLTRB(8, 8, 12, 12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            color: colorScheme.surface,
-                          ),
-                          clipBehavior: Clip.hardEdge,
-                          child: Center(child: tabs[selectedIndex].child),
-                        ),
-                      ),
-                    ],
+                  child: PageTransitionSwitcher(
+                    reverse: previousIndex > selectedIndex,
+                    transitionBuilder: defaultTransition(
+                      colorScheme.surfaceContainer,
+                      orientation: SharedAxisTransitionType.vertical,
+                    ),
+                    child: tabs[selectedIndex].child,
                   ),
                 ),
               ),

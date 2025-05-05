@@ -34,7 +34,9 @@ class DetailsView extends StatelessWidget {
     }
 
     onBackAction() {
-      provider.setSelectedItem(-1);
+      Future.microtask(() {
+        provider.setSelectedItem(-1);
+      });
     }
 
     return Column(

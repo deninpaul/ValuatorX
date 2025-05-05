@@ -6,6 +6,7 @@ import 'package:valuatorx/pages/common/fields/dropdown_field.dart';
 import 'package:valuatorx/pages/common/fields/location_field.dart';
 import 'package:valuatorx/pages/land_rate/components/save_button.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
+import 'package:valuatorx/utils/common_utils.dart';
 
 class LandRateForm extends StatefulWidget {
   final bool editMode;
@@ -46,7 +47,7 @@ class _LandRateFormState extends State<LandRateForm> {
       final landRateToEdit = provider.getSelectedLandRate();
       final values = landRateToEdit.toJson();
       for (final key in fieldKeys) {
-        setState(() => controllers[key]!.text = values[key]);
+        controllers[key]!.text = values[key];
       }
     } else {
       if (provider.landRates.isEmpty) {
@@ -81,7 +82,7 @@ class _LandRateFormState extends State<LandRateForm> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
-        title: Text("$modeName Land Rate", style: textTheme.titleLarge!.copyWith(fontSize: 19)),
+        title: Text("$modeName Land Rate", style: headerTheme),
         leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         actions: [
           SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready),

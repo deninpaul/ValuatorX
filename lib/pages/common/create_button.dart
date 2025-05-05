@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:valuatorx/modals/tab.dart';
 
@@ -9,14 +10,24 @@ class CreateButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
 
-    return (item.onCreate != null && item.createText != null)
+    return (item.createPage != null)
         ? Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 16, 24),
-          child: FloatingActionButton.extended(
-            onPressed: item.onCreate,
-            icon: const Icon(Icons.add),
-            label: Text("${item.createText}", style: textTheme.bodyMedium),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: OpenContainer(
+            transitionType: ContainerTransitionType.fade,
+            openBuilder: (context, _) => item.createPage ?? Center(),
+            closedColor: colorScheme.primaryContainer,
+            closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            closedElevation: 6,
+            closedBuilder:
+                (context, openContainer) => FloatingActionButton.extended(
+                  onPressed: openContainer,
+                  icon: const Icon(Icons.add),
+                  elevation: 0,
+                  label: Text("${item.createText}", style: textTheme.bodyMedium),
+                ),
           ),
         )
         : SizedBox();

@@ -82,23 +82,31 @@ class LandRateProvider extends ChangeNotifier {
     return landRates.isEmpty ? -1 : landRates.last.id + 1;
   }
 
-  void setSelectedItem(int value) {
+  void setSelectedItem(int value, {bool notify = true}) {
     selectedItem = value;
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
-  void setLoading(bool value) {
+  void setLoading(bool value, {bool notify = true}) {
     isLoading = value;
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
-  void setCreating(bool value) {
+  void setCreating(bool value, {bool notify = true}) {
     isCreating = value;
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
-  void setDeleting(bool value) {
+  void setDeleting(bool value, {bool notify = true}) {
     isDeleting = value;
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 }

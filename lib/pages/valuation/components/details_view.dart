@@ -15,7 +15,7 @@ class DetailsView extends StatelessWidget {
 
     onEditAction(int id) {
       provider.setSelectedItem(id);
-      Navigator.pushNamed(context, '/land_rate/edit');
+      Navigator.pushNamed(context, '/valuation/edit');
     }
 
     onDeleteAction(Valuation valuation) async {
@@ -62,7 +62,7 @@ class DetailsView extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
           child: Wrap(
             alignment: WrapAlignment.spaceBetween,
             children: [
@@ -92,16 +92,15 @@ class ViewTile extends StatelessWidget {
     final valueFormated = value.trim().isEmpty ? "-" : value;
 
     return Container(
-      height: 80,
-      width: 200,
-      margin: EdgeInsets.symmetric(vertical: 2),
+      width: 210,
+      margin: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         spacing: 8,
         children: [
           Text(title, style: textTheme.bodyMedium!.copyWith(color: labelColor)),
-          Text(valueFormated, style: textTheme.bodyLarge),
+          Text(valueFormated, style: textTheme.bodyLarge,),
         ],
       ),
     );

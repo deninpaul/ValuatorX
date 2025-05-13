@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:valuatorx/modals/valuation.dart';
-import 'package:valuatorx/pages/common/fields/area_field.dart';
-import 'package:valuatorx/pages/common/fields/basic_field.dart';
-import 'package:valuatorx/pages/common/fields/table_field.dart';
+import 'package:valuatorx/pages/common/field/area_field.dart';
+import 'package:valuatorx/pages/common/field/basic_field.dart';
+import 'package:valuatorx/pages/common/field/table_field.dart';
 import 'package:valuatorx/pages/land_rate/components/save_button.dart';
 import 'package:valuatorx/utils/common_utils.dart';
 

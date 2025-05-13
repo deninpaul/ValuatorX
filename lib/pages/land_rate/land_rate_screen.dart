@@ -5,13 +5,15 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/land_rate.dart';
+import 'package:valuatorx/pages/common/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/map/cluster_icon.dart';
-import 'package:valuatorx/pages/common/header.dart';
+import 'package:valuatorx/pages/common/header/search_header.dart';
 import 'package:valuatorx/pages/common/map/map_wrapper.dart';
 import 'package:valuatorx/pages/common/summary_tile.dart';
 import 'package:valuatorx/pages/common/map/numbered_marker.dart';
 import 'package:valuatorx/pages/land_rate/components/details_view.dart';
+import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/providers/location_provider.dart';
 import 'package:valuatorx/utils/common_utils.dart';
@@ -50,73 +52,78 @@ class _LandRateScreenState extends State<LandRateScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final provider = Provider.of<LandRateProvider>(context);
-    final locationProvider = Provider.of<LocationProvider>(context);
+    final isHomePage = provider.selectedItem == -1;
 
     viewLandRate(int id) {
       provider.setSelectedItem(id);
     }
 
     return PageTransitionSwitcher(
-      reverse: provider.selectedItem == -1,
+      reverse: isHomePage,
       transitionBuilder: defaultTransition(colorScheme.surfaceContainer),
       child:
-          provider.selectedItem == -1
-              ? ListView(
-                key: const ValueKey('list'),
-                children: [
-                  Header(name: "Land Rate", onSearch: (val) => print(val)),
-                  SizedBox(height: 16),
-                  Container(
-                    height: MediaQuery.of(context).size.height / 1.75,
-                    clipBehavior: Clip.hardEdge,
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
-                    child: MapWrapper(
-                      mapController: _mapController,
-                      provider: locationProvider,
-                      enableCenterMarker: false,
-                      children: [
-                        MarkerClusterLayerWidget(
-                          options: MarkerClusterLayerOptions(
-                            size: Size(64, 64),
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.all(50),
-                            builder: (context, markers) => ClusterIcon(text: markers.length),
-                            markers: [
-                              ...provider.landRates.map((rate) {
-                                return Marker(
-                                  width: 56,
-                                  height: 40,
-                                  point: LatLng(
-                                    double.tryParse(rate.latitude) ?? 0,
-                                    double.tryParse(rate.longitude) ?? 0,
-                                  ),
-                                  child: NumberedMarker(text: rate.slNo),
-                                );
-                              }),
-                            ],
-                          ),
+          isHomePage
+              ? Scaffold(
+                backgroundColor: colorScheme.surfaceContainer,
+                floatingActionButton: CreateButton(createPage: LandRateForm(), label: "Add rate"),
+                body: RefreshIndicator(
+                  onRefresh: () => provider.getLandRates(context),
+                  child: ListView(
+                    key: const ValueKey('list'),
+                    children: [
+                      SearchHeader(name: "Land Rate", onSearch: (val) => debugPrint(val)),
+                      SizedBox(height: 16),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 1.75,
+                        clipBehavior: Clip.hardEdge,
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
+                        child: MapWrapper(
+                          mapController: _mapController,
+                          children: [
+                            MarkerClusterLayerWidget(
+                              options: MarkerClusterLayerOptions(
+                                size: Size(64, 64),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(50),
+                                builder: (context, markers) => ClusterIcon(text: markers.length),
+                                markers: [
+                                  ...provider.landRates.map((rate) {
+                                    return Marker(
+                                      width: 56,
+                                      height: 40,
+                                      point: LatLng(
+                                        double.tryParse(rate.latitude) ?? 0,
+                                        double.tryParse(rate.longitude) ?? 0,
+                                      ),
+                                      child: NumberedMarker(text: rate.slNo),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 16),
+                      ExpandableList<LandRate>(
+                        items: provider.landRates.reversed.toList(),
+                        isLoading: provider.isLoading,
+                        itemBuilder: (ctx, landRate, index) {
+                          return SummaryTile(
+                            onTapAction: viewLandRate,
+                            id: landRate.id,
+                            title: "${landRate.latitude}° ${landRate.longitude}°",
+                            subtitle: "${landRate.landRatePerCent}/cent",
+                            info: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
+                            tag: "No.: ${landRate.slNo}",
+                          );
+                        },
+                      ),
+                      SizedBox(height: 32),
+                    ],
                   ),
-                  SizedBox(height: 16),
-                  ExpandableList<LandRate>(
-                    items: provider.landRates.reversed.toList(),
-                    isLoading: provider.isLoading,
-                    itemBuilder: (ctx, landRate, index) {
-                      return SummaryTile(
-                        onTapAction: viewLandRate,
-                        id: landRate.id,
-                        title: "${landRate.latitude}° ${landRate.longitude}°",
-                        subtitle: "${landRate.landRatePerCent}/cent",
-                        info: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
-                        tag: "No.: ${landRate.slNo}",
-                      );
-                    },
-                  ),
-                  SizedBox(height: 32),
-                ],
+                ),
               )
               : DetailsView(landRate: provider.getSelectedLandRate(), key: const ValueKey('details')),
     );

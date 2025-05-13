@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
+import 'package:valuatorx/pages/common/action_button.dart';
 import 'package:valuatorx/pages/common/delete_dialog.dart';
+import 'package:valuatorx/pages/common/header/actions_header.dart';
+import 'package:valuatorx/pages/common/header/title_header.dart';
+import 'package:valuatorx/pages/common/view/view_tile.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
 
 class DetailsView extends StatelessWidget {
@@ -10,15 +14,15 @@ class DetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
 
-    onEditAction(int id) {
-      provider.setSelectedItem(id);
+    onEditAction() {
+      provider.setSelectedItem(valuation.id);
       Navigator.pushNamed(context, '/valuation/edit');
     }
 
-    onDeleteAction(Valuation valuation) async {
+    onDeleteAction() async {
       final confirmed = await showDialog<bool>(
         context: context,
         builder:
@@ -37,70 +41,38 @@ class DetailsView extends StatelessWidget {
       provider.setSelectedItem(-1);
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              spacing: 12,
-              children: [
-                IconButton(onPressed: onBackAction, icon: Icon(Icons.arrow_back_outlined)),
-                Text(valuation.reportName, style: textTheme.bodyLarge),
-              ],
-            ),
-            Row(
-              spacing: 8,
-              children: [
-                IconButton(onPressed: () => onEditAction(valuation.id), icon: Icon(Icons.mode_edit_outlined)),
-                IconButton(onPressed: () => onDeleteAction(valuation), icon: Icon(Icons.delete_outline)),
-              ],
-            ),
-          ],
-        ),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-          child: Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            children: [
-              ViewTile(title: "Latitude", value: valuation.latitude),
-              ViewTile(title: "Longitude", value: valuation.longitude),
-              ViewTile(title: "Land Rate (per cent)", value: valuation.reportName),
-              ViewTile(title: "Size of Land / Remarks", value: valuation.taluk),
-              ViewTile(title: "Type of Road", value: valuation.dateOfInspection),
-              ViewTile(title: "Date of Visit", value: valuation.taluk),
+    return Scaffold(
+      backgroundColor: colorScheme.surfaceContainer,
+      body: CustomScrollView(
+        slivers: [
+          TitleHeader(title: valuation.reportName, onBackPressed: onBackAction),
+          ActionsHeader(
+            actions: [
+              ActionButton(icon: Icons.edit_outlined, label: "Edit", onPressed: onEditAction),
+              ActionButton(icon: Icons.delete_outlined, label: "Delete", onPressed: onDeleteAction),
+              ActionButton(icon: Icons.public_rounded, label: "Open in Maps", onPressed: () {}),
             ],
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class ViewTile extends StatelessWidget {
-  const ViewTile({super.key, required this.title, required this.value});
-  final String title;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final labelColor = Theme.of(context).colorScheme.onSurface.withAlpha(160);
-    final valueFormated = value.trim().isEmpty ? "-" : value;
-
-    return Container(
-      width: 210,
-      margin: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        spacing: 8,
-        children: [
-          Text(title, style: textTheme.bodyMedium!.copyWith(color: labelColor)),
-          Text(valueFormated, style: textTheme.bodyLarge,),
+          SliverToBoxAdapter(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 16,
+                children: [
+                  ViewTile(title: "Latitude", value: valuation.latitude),
+                  ViewTile(title: "Longitude", value: valuation.longitude),
+                  ViewTile(title: "Land Rate (per cent)", value: valuation.reportName),
+                  ViewTile(title: "Size of Land / Remarks", value: valuation.taluk),
+                  ViewTile(title: "Type of Road", value: valuation.dateOfInspection),
+                  ViewTile(title: "Date of Visit", value: valuation.taluk),
+                  SizedBox(height: 600),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

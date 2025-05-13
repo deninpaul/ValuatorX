@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:valuatorx/providers/land_rate_provider.dart';
 
 class SaveButton extends StatelessWidget {
   final Function onSubmit;
   final GlobalKey<FormState> formKey;
   final bool enabled;
-  const SaveButton({super.key, required this.formKey, required this.onSubmit, this.enabled = true});
+  final bool creating;
+  const SaveButton({super.key, required this.formKey, required this.onSubmit, this.enabled = true, this.creating = false});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final provider = Provider.of<LandRateProvider>(context, listen: true);
 
     return TextButton(
       onPressed: enabled ? () async {
-        if (formKey.currentState!.validate() && !provider.isCreating) {
+        if (formKey.currentState!.validate() && !creating) {
           await onSubmit();
           Navigator.of(context).pop();
         }
@@ -27,7 +25,7 @@ class SaveButton extends StatelessWidget {
         disabledBackgroundColor: theme.disabledColor
       ),
       child:
-          provider.isCreating
+          creating
               ? Container(
                 margin: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 width: 20,

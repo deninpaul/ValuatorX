@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
-import 'package:valuatorx/pages/common/map/map_actions.dart';
+import 'package:provider/provider.dart';
+import 'package:valuatorx/pages/common/map/map_action_button.dart';
 import 'package:valuatorx/providers/location_provider.dart';
 
 class MapWrapper extends StatelessWidget {
   final List<Widget> children;
+  final List<MapActionButton> actions;
   final MapController mapController;
-  final LocationProvider provider;
   final double borderRadius;
   final bool enableCenterMarker;
   final InteractionOptions interactionOptions;
@@ -16,10 +17,10 @@ class MapWrapper extends StatelessWidget {
   const MapWrapper({
     super.key,
     required this.mapController,
-    required this.provider,
-    required this.enableCenterMarker,
     this.borderRadius = 24,
     this.children = const [],
+    this.actions = const [],
+    this.enableCenterMarker = false,
     this.interactionOptions = const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
     this.onPositionChanged = _defaultOnPositionChanged,
   });
@@ -29,6 +30,7 @@ class MapWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final LocationProvider provider = Provider.of<LocationProvider>(context);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
@@ -59,10 +61,24 @@ class MapWrapper extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 24),
               child: Icon(Icons.location_pin, color: colorScheme.primary, size: 36), // Fixed center marker
             ),
-          MapActions(controller: mapController, locationProvider: provider),
+          Container(
+            alignment: AlignmentDirectional.topEnd,
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 16,
+              children: [
+                MapActionButton(
+                  onPressed: () => provider.moveToMyLocation(mapController),
+                  icon: Icons.gps_fixed,
+                  isLoading: provider.isLoading,
+                ),
+                ...actions,
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
-

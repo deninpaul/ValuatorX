@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Header extends StatelessWidget {
+class SearchHeader extends StatelessWidget {
   final ValueChanged<String>? onSearch;
   final String name;
-  const Header({super.key, this.onSearch, required this.name});
+  const SearchHeader({super.key, this.onSearch, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class Header extends StatelessWidget {
             ),
           ),
         const SizedBox(width: 8),
-        IconButton( onPressed: () {}, icon: const Icon(Icons.filter_list)),
+        IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list)),
       ],
     );
   }

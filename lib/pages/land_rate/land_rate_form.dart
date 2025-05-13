@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/land_rate.dart';
-import 'package:valuatorx/pages/common/fields/basic_field.dart';
-import 'package:valuatorx/pages/common/fields/dropdown_field.dart';
-import 'package:valuatorx/pages/common/fields/location_field.dart';
+import 'package:valuatorx/pages/common/field/basic_field.dart';
+import 'package:valuatorx/pages/common/field/dropdown_field.dart';
+import 'package:valuatorx/pages/common/field/location_field.dart';
 import 'package:valuatorx/pages/land_rate/components/save_button.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/utils/common_utils.dart';
@@ -73,11 +73,10 @@ class _LandRateFormState extends State<LandRateForm> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 600;
     final modeName = widget.editMode ? "Edit" : "New";
+    final provider = Provider.of<LandRateProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +84,7 @@ class _LandRateFormState extends State<LandRateForm> {
         title: Text("$modeName Land Rate", style: headerTheme),
         leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         actions: [
-          SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready),
+          SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready, creating: provider.isCreating),
           PopupMenuButton(
             offset: const Offset(0, 48),
             itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))],

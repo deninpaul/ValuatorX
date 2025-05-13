@@ -53,7 +53,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
     final bool showViewMoreButton = itemsToShow < widget.items.length;
 
     return Container(
-      constraints: BoxConstraints(minHeight: 600),
+      constraints: BoxConstraints(minHeight: 640),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
       child: Column(

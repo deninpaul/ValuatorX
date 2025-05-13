@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/tab.dart';
-import 'package:valuatorx/pages/common/create_button.dart';
-import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_screen.dart';
-import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/pages/valuation/valuation_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:animations/animations.dart';
@@ -38,9 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "Valuation Reports",
         icon: Icon(Icons.home_outlined),
         selectedIcon: Icon(Icons.home),
-        createText: "New report",
-        createPage: ValuationForm(),
-        onSearch: (query) => print(query),
         child: Valuations(),
       ),
       TabItem(
@@ -48,9 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "Land Rate Data",
         icon: Icon(Icons.map_outlined),
         selectedIcon: Icon(Icons.map),
-        createText: "Add data",
-        createPage: LandRateForm(),
-        onSearch: (query) => print(query),
         child: LandRateScreen(),
       ),
       TabItem(
@@ -87,7 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
         statusBarIconBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        floatingActionButton: CreateButton(item: tabs[selectedIndex]),
         body: SafeArea(
           child: Row(
             children: <Widget>[

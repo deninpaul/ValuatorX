@@ -8,9 +8,9 @@ import 'package:valuatorx/pages/common/header/title_header.dart';
 import 'package:valuatorx/pages/common/view/view_tile.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
 
-class DetailsView extends StatelessWidget {
+class ValuationDetails extends StatelessWidget {
   final Valuation valuation;
-  const DetailsView({super.key, required this.valuation});
+  const ValuationDetails({super.key, required this.valuation});
 
   @override
   Widget build(BuildContext context) {

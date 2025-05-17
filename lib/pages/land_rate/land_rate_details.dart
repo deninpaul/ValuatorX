@@ -11,9 +11,9 @@ import 'package:valuatorx/pages/common/view/location_view.dart';
 import 'package:valuatorx/pages/common/view/view_tile.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 
-class DetailsView extends StatelessWidget {
+class LandRateDetails extends StatelessWidget {
   final LandRate landRate;
-  const DetailsView({super.key, required this.landRate});
+  const LandRateDetails({super.key, required this.landRate});
 
   @override
   Widget build(BuildContext context) {

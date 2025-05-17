@@ -5,7 +5,7 @@ import 'package:valuatorx/pages/common/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
 import 'package:valuatorx/pages/common/summary_tile.dart';
-import 'package:valuatorx/pages/valuation/components/details_view.dart';
+import 'package:valuatorx/pages/valuation/valuation_details.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
 import 'package:valuatorx/utils/common_utils.dart';
@@ -78,7 +78,7 @@ class _ValuationsState extends State<Valuations> {
                   ),
                 ),
               )
-              : DetailsView(valuation: provider.getSelectedValuation()),
+              : ValuationDetails(valuation: provider.getSelectedValuation()),
     );
   }
 }

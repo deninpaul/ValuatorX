@@ -4,7 +4,7 @@ import 'package:valuatorx/modals/land_rate.dart';
 import 'package:valuatorx/pages/common/field/basic_field.dart';
 import 'package:valuatorx/pages/common/field/dropdown_field.dart';
 import 'package:valuatorx/pages/common/field/location_field.dart';
-import 'package:valuatorx/pages/land_rate/components/save_button.dart';
+import 'package:valuatorx/pages/common/save_button.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/utils/common_utils.dart';
 

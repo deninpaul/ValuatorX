@@ -12,7 +12,7 @@ import 'package:valuatorx/pages/common/header/search_header.dart';
 import 'package:valuatorx/pages/common/map/map_wrapper.dart';
 import 'package:valuatorx/pages/common/summary_tile.dart';
 import 'package:valuatorx/pages/common/map/numbered_marker.dart';
-import 'package:valuatorx/pages/land_rate/components/details_view.dart';
+import 'package:valuatorx/pages/land_rate/land_rate_details.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/providers/location_provider.dart';
@@ -125,7 +125,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
                   ),
                 ),
               )
-              : DetailsView(landRate: provider.getSelectedLandRate(), key: const ValueKey('details')),
+              : LandRateDetails(landRate: provider.getSelectedLandRate(), key: const ValueKey('details')),
     );
   }
 }

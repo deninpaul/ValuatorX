@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
+import 'package:flutter_map_cache/flutter_map_cache.dart';
+import 'package:http_cache_hive_store/http_cache_hive_store.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/pages/common/map/map_action_button.dart';
 import 'package:valuatorx/providers/location_provider.dart';
 
-class MapWrapper extends StatelessWidget {
+class MapWrapper extends StatefulWidget {
   final List<Widget> children;
   final List<MapActionButton> actions;
   final MapController mapController;
@@ -28,57 +30,77 @@ class MapWrapper extends StatelessWidget {
   static void _defaultOnPositionChanged(MapCamera cam, bool hasGesture) {}
 
   @override
+  State<MapWrapper> createState() => _MapWrapperState();
+}
+
+class _MapWrapperState extends State<MapWrapper> {
+  String cachePath = "";
+
+  @override
+  void initState() {
+    getCachePath();
+    super.initState();
+  }
+
+  getCachePath() async {
+    final cacheDirectory = await getTemporaryDirectory();
+    setState(() => cachePath = cacheDirectory.path);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final LocationProvider provider = Provider.of<LocationProvider>(context);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: FlutterMap(
-        mapController: mapController,
-        options: MapOptions(
-          initialCenter: provider.currentLocation,
-          interactionOptions: interactionOptions,
-          backgroundColor: colorScheme.surface,
-          onPositionChanged: onPositionChanged,
-          initialZoom: 15,
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://api.maptiler.com/maps/bright-v2/{z}/{x}/{y}.png?key=cnscXQAGGIRCXm0KVoTo',
-            userAgentPackageName: 'com.example.valuatorx',
-            tileProvider: CancellableNetworkTileProvider(),
-          ),
-          ...children,
-          MarkerLayer(
-            markers: [
-              Marker(point: provider.currentLocation, child: Icon(Icons.my_location, color: Colors.blue, size: 28)),
+    return cachePath.isNotEmpty
+        ? ClipRRect(
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          child: FlutterMap(
+            mapController: widget.mapController,
+            options: MapOptions(
+              initialCenter: provider.currentLocation,
+              interactionOptions: widget.interactionOptions,
+              backgroundColor: colorScheme.surface,
+              onPositionChanged: widget.onPositionChanged,
+              initialZoom: 15,
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://api.maptiler.com/maps/bright-v2/{z}/{x}/{y}.png?key=TuYo6WbyTRwcTXZfInOZ',
+                userAgentPackageName: 'com.example.valuatorx',
+                tileProvider: CachedTileProvider(store: HiveCacheStore(cachePath, hiveBoxName: "mapCache")),
+              ),
+              ...widget.children,
+              MarkerLayer(
+                markers: [
+                  Marker(point: provider.currentLocation, child: Icon(Icons.my_location, color: Colors.blue, size: 28)),
+                ],
+              ),
+              if (widget.enableCenterMarker)
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(bottom: 24),
+                  child: Icon(Icons.location_pin, color: colorScheme.primary, size: 36), // Fixed center marker
+                ),
+              Container(
+                alignment: AlignmentDirectional.topEnd,
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 16,
+                  children: [
+                    MapActionButton(
+                      onPressed: () => provider.moveToMyLocation(widget.mapController),
+                      icon: Icons.gps_fixed,
+                      isLoading: provider.isLoading,
+                    ),
+                    ...widget.actions,
+                  ],
+                ),
+              ),
             ],
           ),
-          if (enableCenterMarker)
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(bottom: 24),
-              child: Icon(Icons.location_pin, color: colorScheme.primary, size: 36), // Fixed center marker
-            ),
-          Container(
-            alignment: AlignmentDirectional.topEnd,
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 16,
-              children: [
-                MapActionButton(
-                  onPressed: () => provider.moveToMyLocation(mapController),
-                  icon: Icons.gps_fixed,
-                  isLoading: provider.isLoading,
-                ),
-                ...actions,
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        )
+        : Center(child: CircularProgressIndicator());
   }
 }

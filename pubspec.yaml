@@ -11,9 +11,9 @@ dependencies:
   flutter_dotenv: ^5.2.1
   flutter_map: ^7.0.2
   flutter_map_cache: ^2.0.0
-  flutter_map_cancellable_tile_provider: ^3.0.2
   flutter_map_marker_cluster: ^1.4.0
   geolocator: ^11.0.0
+  http_cache_hive_store: ^5.0.0
   latlong2: ^0.9.1
   oauth2: ^2.0.1
   provider: ^6.1.4

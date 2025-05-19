@@ -16,7 +16,6 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
       pinned: true,
       expandedHeight: expandedHeight,
       backgroundColor: colorScheme.surfaceContainer,
-      shadowColor: colorScheme.surfaceContainer,
       surfaceTintColor: colorScheme.surfaceContainer,
       scrolledUnderElevation: 0,
       leading: IconButton(onPressed: onBackPressed, icon: Icon(Icons.arrow_back_outlined)),

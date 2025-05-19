@@ -48,10 +48,7 @@ class _LocationFieldState extends State<LocationField> {
 
   _onLatitudeChanged(String value) {
     try {
-      _mapController.move(
-        LatLng(double.parse(value), _mapController.camera.center.longitude),
-        _mapController.camera.zoom,
-      );
+      _mapController.move(LatLng(double.parse(value), _mapController.camera.center.longitude), _mapController.camera.zoom);
     } catch (e) {
       _mapController.move(_mapController.camera.center, _mapController.camera.zoom);
     }
@@ -59,10 +56,7 @@ class _LocationFieldState extends State<LocationField> {
 
   _onLongitudeChanged(String value) {
     try {
-      _mapController.move(
-        LatLng(_mapController.camera.center.latitude, double.parse(value)),
-        _mapController.camera.zoom,
-      );
+      _mapController.move(LatLng(_mapController.camera.center.latitude, double.parse(value)), _mapController.camera.zoom);
     } catch (e) {
       _mapController.move(_mapController.camera.center, _mapController.camera.zoom);
     }
@@ -122,9 +116,7 @@ class _LocationFieldState extends State<LocationField> {
                   mapController: _mapController,
                   enableCenterMarker: true,
                   onPositionChanged: _onPositionChanged,
-                  interactionOptions: InteractionOptions(
-                    flags: InteractiveFlag.pinchZoom | InteractiveFlag.pinchMove | InteractiveFlag.doubleTapDragZoom,
-                  ),
+                  interactionOptions: InteractionOptions(flags: InteractiveFlag.pinchZoom | InteractiveFlag.pinchMove | InteractiveFlag.doubleTapDragZoom),
                 ),
               ),
             ],

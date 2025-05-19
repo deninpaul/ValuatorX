@@ -5,7 +5,7 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/land_rate.dart';
-import 'package:valuatorx/pages/common/create_button.dart';
+import 'package:valuatorx/pages/common/button/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/map/cluster_icon.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
@@ -92,10 +92,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
                                     return Marker(
                                       width: 56,
                                       height: 40,
-                                      point: LatLng(
-                                        double.tryParse(rate.latitude) ?? 0,
-                                        double.tryParse(rate.longitude) ?? 0,
-                                      ),
+                                      point: LatLng(double.tryParse(rate.latitude) ?? 0, double.tryParse(rate.longitude) ?? 0),
                                       child: NumberedMarker(text: rate.slNo),
                                     );
                                   }),

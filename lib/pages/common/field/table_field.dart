@@ -3,10 +3,19 @@ import 'package:flutter/material.dart';
 class TableField extends StatefulWidget {
   final int minRows;
   final String title;
+  final IconData icon;
   final TextInputType keyboardType;
   final List<List<TextEditingController>> controllers;
   final List<List<String>> fieldNames;
-  const TableField({super.key, required this.title, this.minRows = 1, this.keyboardType = TextInputType.text ,required this.controllers, required this.fieldNames});
+  const TableField({
+    super.key,
+    required this.title,
+    required this.icon,
+    this.minRows = 1,
+    this.keyboardType = TextInputType.text,
+    required this.controllers,
+    required this.fieldNames,
+  });
 
   @override
   State<TableField> createState() => _TableFieldState();
@@ -34,7 +43,7 @@ class _TableFieldState extends State<TableField> {
         Row(
           spacing: 24,
           children: [
-            const Icon(Icons.aspect_ratio_outlined),
+            Icon(widget.icon),
             Text(widget.title, style: textTheme.bodyLarge!.copyWith(fontSize: 16)),
           ],
         ),

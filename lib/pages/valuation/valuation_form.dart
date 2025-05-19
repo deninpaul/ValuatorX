@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/field/area_field.dart';
 import 'package:valuatorx/pages/common/field/basic_field.dart';
 import 'package:valuatorx/pages/common/field/table_field.dart';
-import 'package:valuatorx/pages/common/save_button.dart';
+import 'package:valuatorx/pages/common/button/save_button.dart';
+import 'package:valuatorx/providers/valuation_provider.dart';
 import 'package:valuatorx/utils/common_utils.dart';
 
 class ValuationForm extends StatefulWidget {
@@ -29,6 +31,9 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     for (final key in fieldKeys) {
       controllers[key] = TextEditingController();
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      populateForm();
+    });
   }
 
   @override
@@ -38,6 +43,18 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     }
     _tabController.dispose();
     super.dispose();
+  }
+
+  populateForm() async {
+    final provider = Provider.of<ValuationProvider>(context, listen: false);
+    if (widget.editMode) {
+      final valuationToEdit = provider.getSelectedValuation();
+      final values = valuationToEdit.toJson();
+      for (final key in fieldKeys) {
+        controllers[key]!.text = values[key];
+      }
+    }
+    setState(() => ready = true);
   }
 
   submitForm() async {
@@ -57,7 +74,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 600;
     final modeName = widget.editMode ? "Edit" : "New";
-    final formPadding = EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: 24);
+    final formPadding = EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: 32);
 
     return Scaffold(
       appBar: AppBar(
@@ -114,6 +131,36 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                     controller: controllers[Valuation.PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS]!,
                     icon: Icons.work_outline_outlined,
                   ),
+                  AreaField(
+                    name: Valuation.POCCESSION_CERTIFICATE_DETAILS,
+                    controller: controllers[Valuation.POCCESSION_CERTIFICATE_DETAILS]!,
+                    icon: Icons.article_outlined,
+                  ),
+                  AreaField(
+                    name: Valuation.DEED_REG_SRO_NO_DATE,
+                    controller: controllers[Valuation.DEED_REG_SRO_NO_DATE]!,
+                    icon: Icons.assignment_ind_outlined,
+                  ),
+                  AreaField(
+                    name: Valuation.LEGAL_REPORT_REFERENCE,
+                    controller: controllers[Valuation.LEGAL_REPORT_REFERENCE]!,
+                    icon: Icons.policy_outlined,
+                  ),
+                  AreaField(
+                    name: Valuation.BUILDING_APPROVAL_REFERENCE,
+                    controller: controllers[Valuation.BUILDING_APPROVAL_REFERENCE]!,
+                    icon: Icons.verified_user_outlined,
+                  ),
+                  AreaField(
+                    name: Valuation.PROPERTY_TAX_CERTICATE_DETAILS,
+                    controller: controllers[Valuation.PROPERTY_TAX_CERTICATE_DETAILS]!,
+                    icon: Icons.approval_outlined,
+                  ),
+                  AreaField(
+                    name: Valuation.BUILDING_TAX_CERTIFICATE_DETAILS,
+                    controller: controllers[Valuation.BUILDING_TAX_CERTIFICATE_DETAILS]!,
+                    icon: Icons.account_balance_outlined,
+                  ),
                 ],
               ),
             ),
@@ -125,6 +172,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                 children: [
                   TableField(
                     title: "Property Area",
+                    icon: Icons.straighten_outlined,
                     keyboardType: TextInputType.numberWithOptions(),
                     controllers: [
                       [controllers[Valuation.SURVEY_NO_RE_SY_NO_1]!, controllers[Valuation.AREA_IN_ARE_1]!],
@@ -141,6 +189,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                   ),
                   TableField(
                     title: "Property Boundaries",
+                    icon: Icons.aspect_ratio_outlined,
                     minRows: 4,
                     controllers: [
                       [controllers[Valuation.EAST_ACTUALS]!, controllers[Valuation.EAST_AS_PER_DEED]!],

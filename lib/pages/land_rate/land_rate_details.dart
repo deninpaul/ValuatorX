@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:valuatorx/modals/land_rate.dart';
-import 'package:valuatorx/pages/common/action_button.dart';
+import 'package:valuatorx/pages/common/button/action_button.dart';
 import 'package:valuatorx/pages/common/delete_dialog.dart';
 import 'package:valuatorx/pages/common/header/actions_header.dart';
 import 'package:valuatorx/pages/common/header/title_header.dart';
@@ -56,59 +56,69 @@ class LandRateDetails extends StatelessWidget {
       }
     }
 
-    return Scaffold(
-      backgroundColor: colorScheme.surfaceContainer,
-      body: CustomScrollView(
-        slivers: [
-          TitleHeader(title: landRate.slNo, onBackPressed: onBackAction),
-          ActionsHeader(
-            actions: [
-              ActionButton(icon: Icons.edit_outlined, label: "Edit", onPressed: onEditAction),
-              ActionButton(icon: Icons.delete_outlined, label: "Delete", onPressed: onDeleteAction),
-              ActionButton(icon: Icons.public_rounded, label: "Open in Maps", onPressed: onOpenMapAction),
-            ],
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                spacing: 16,
-                children: [
-                  LocationViewTile(
-                    mapController: mapController,
-                    latitude: landRate.latitude,
-                    longitude: landRate.longitude,
-                    label: landRate.slNo,
-                  ),
-                  Row(
-                    spacing: 16,
-                    children: [
-                      Expanded(child: ViewTile(title: "Latitude", value: landRate.latitude, icon: Icons.location_on_outlined),),
-                      Expanded(child: ViewTile(title: "Longitude", value: landRate.longitude)),
-                    ],
-                  ),
-                  ViewTile(title: "Land Rate (per cent)", value: landRate.landRatePerCent, icon: Icons.paid_outlined),
-                  ViewTile(
-                    title: "Size of Land / Remarks",
-                    value: landRate.landSizeRemarks,
-                    icon: Icons.straighten_outlined,
-                  ),
-                  ViewTile(title: "Type of Land", value: landRate.landType, icon: Icons.landscape_outlined),
-                  ViewTile(title: "Type of Road", value: landRate.road, icon: Icons.traffic_outlined),
-                  ViewTile(
-                    title: "Date of Visit",
-                    value: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
-                    icon: Icons.calendar_today_outlined,
-                  ),
-                  SizedBox(height: 80),
-                ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) => onBackAction(),
+      child: Scaffold(
+        backgroundColor: colorScheme.surfaceContainer,
+        body: CustomScrollView(
+          slivers: [
+            TitleHeader(title: landRate.slNo, onBackPressed: onBackAction),
+            ActionsHeader(
+              actions: [
+                ActionButton(icon: Icons.edit_outlined, label: "Edit", onPressed: onEditAction),
+                ActionButton(icon: Icons.delete_outlined, label: "Delete", onPressed: onDeleteAction),
+                ActionButton(icon: Icons.public_rounded, label: "Open in Maps", onPressed: onOpenMapAction),
+              ],
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 16,
+                  children: [
+                    LocationViewTile(
+                      mapController: mapController,
+                      latitude: landRate.latitude,
+                      longitude: landRate.longitude,
+                      label: landRate.slNo,
+                    ),
+                    Row(
+                      spacing: 16,
+                      children: [
+                        Expanded(
+                          child: ViewTile(
+                            title: "Latitude",
+                            value: landRate.latitude,
+                            icon: Icons.location_on_outlined,
+                          ),
+                        ),
+                        Expanded(child: ViewTile(title: "Longitude", value: landRate.longitude)),
+                      ],
+                    ),
+                    ViewTile(title: "Land Rate (per cent)", value: landRate.landRatePerCent, icon: Icons.paid_outlined),
+                    ViewTile(
+                      title: "Size of Land / Remarks",
+                      value: landRate.landSizeRemarks,
+                      icon: Icons.straighten_outlined,
+                    ),
+                    ViewTile(title: "Type of Land", value: landRate.landType, icon: Icons.landscape_outlined),
+                    ViewTile(title: "Type of Road", value: landRate.road, icon: Icons.traffic_outlined),
+                    ViewTile(
+                      title: "Date of Visit",
+                      value: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
+                      icon: Icons.calendar_today_outlined,
+                    ),
+                    SizedBox(height: 80),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

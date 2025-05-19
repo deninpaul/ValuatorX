@@ -7,14 +7,7 @@ class DropdownField extends StatelessWidget {
   final String name;
   final bool required;
 
-  const DropdownField({
-    super.key,
-    required this.name,
-    required this.controller,
-    required this.options,
-    this.icon,
-    this.required = false,
-  });
+  const DropdownField({super.key, required this.name, required this.controller, required this.options, this.icon, this.required = false});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +21,7 @@ class DropdownField extends StatelessWidget {
             value: controller.text.isEmpty ? null : controller.text,
             items:
                 options.map((option) {
-                  return DropdownMenuItem<String>(value: option, child: Text(option, style: textTheme.bodyLarge,));
+                  return DropdownMenuItem<String>(value: option, child: Text(option, style: textTheme.bodyLarge));
                 }).toList(),
             onChanged: (newValue) {
               if (newValue != null) controller.text = newValue;

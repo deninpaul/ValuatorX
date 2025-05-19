@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:valuatorx/pages/common/action_button.dart';
+import 'package:valuatorx/pages/common/button/action_button.dart';
 
 class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
   final List<ActionButton> actions;
@@ -10,7 +10,7 @@ class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
   const ActionsHeader({
     super.key,
     required this.actions,
-    this.expandedHeight = 148,
+    this.expandedHeight = 150,
     this.collapsedHeight = 56,
     this.pinned = false,
   });
@@ -28,7 +28,7 @@ class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.only(bottom: 8),
+          padding: EdgeInsets.only(bottom: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

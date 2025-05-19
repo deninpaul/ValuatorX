@@ -26,37 +26,50 @@ class SummaryTile extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final labelColor = colorScheme.onSurface.withAlpha(160);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        title: Text(title, style: textTheme.bodyLarge),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Text(subtitle, style: textTheme.bodyLarge!.copyWith(color: labelColor)),
-        ),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(info, style: textTheme.bodyMedium!.copyWith(color: labelColor)),
-            Row(
-              mainAxisSize: MainAxisSize.min,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => onTapAction(id),
+        borderRadius: BorderRadius.circular(24),
+        splashColor: colorScheme.surfaceContainer,
+        highlightColor: colorScheme.surfaceContainer,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+            child: Row(
+              spacing: 24,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: colorScheme.surfaceContainerHigh,
+                Expanded(
+                  child: Column(
+                    spacing: 4,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: textTheme.bodyLarge),
+                      Text(subtitle, style: textTheme.bodyLarge!.copyWith(color: labelColor)),
+                    ],
                   ),
-                  child: Center(child: Text(tag, style: textTheme.bodyMedium)),
+                ),
+                Column(
+                  spacing: 6,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(info, style: textTheme.bodyMedium!.copyWith(color: labelColor)),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(28),
+                        color: colorScheme.surfaceContainerHigh,
+                      ),
+                      child: Text(tag, style: textTheme.bodyMedium),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-        onTap: () => onTapAction(id),
-        contentPadding: EdgeInsets.symmetric(horizontal: 0),
       ),
     );
   }

@@ -1,9 +1,10 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/pages/common/create_button.dart';
+import 'package:valuatorx/pages/common/button/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
+import 'package:valuatorx/pages/common/info_tile.dart';
 import 'package:valuatorx/pages/common/summary_tile.dart';
 import 'package:valuatorx/pages/valuation/valuation_details.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
@@ -39,6 +40,8 @@ class _ValuationsState extends State<Valuations> {
     final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
     final isHomePage = provider.selectedItem == -1;
+    final total = provider.valuations.length.toString().padLeft(2, '0');;
+    final inProgress = provider.valuations.where((r) => r.status == "In Progress").length.toString().padLeft(2, '0');;
 
     viewValuation(int id) {
       provider.setSelectedItem(id);
@@ -57,7 +60,15 @@ class _ValuationsState extends State<Valuations> {
                   child: ListView(
                     key: const ValueKey('list'),
                     children: [
-                      SearchHeader(name: "Land Rate", onSearch: (val) => print(val)),
+                      SearchHeader(name: "Land Rate", onSearch: (val) => debugPrint(val)),
+                      SizedBox(height: 16),
+                      Row(
+                        spacing: 20,
+                        children: [
+                          Expanded(child: InfoTile(icon: Icons.view_carousel_rounded, title: "Total reports", value: total)),
+                          Expanded(child: InfoTile(icon: Icons.timelapse_rounded, title: "In progress", value: inProgress)),
+                        ],
+                      ),
                       SizedBox(height: 16),
                       ExpandableList(
                         items: provider.valuations,
@@ -73,7 +84,6 @@ class _ValuationsState extends State<Valuations> {
                           );
                         },
                       ),
-                      SizedBox(height: 32),
                     ],
                   ),
                 ),

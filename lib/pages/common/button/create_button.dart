@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CreateButton extends StatelessWidget {
   final Widget createPage;
   final String label;
-  
+
   const CreateButton({super.key, required this.createPage, required this.label});
 
   @override

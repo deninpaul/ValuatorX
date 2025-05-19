@@ -42,7 +42,8 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final dividerColor = theme.dividerColor.withAlpha(64);
+    final divider = Divider(color: theme.dividerColor.withAlpha(64), indent: 24, endIndent: 24);
+    final minHeight = MediaQuery.of(context).size.height - 240;
 
     final int itemsToShow =
         widget.items.isEmpty
@@ -53,8 +54,8 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
     final bool showViewMoreButton = itemsToShow < widget.items.length;
 
     return Container(
-      constraints: BoxConstraints(minHeight: 640),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      constraints: BoxConstraints(minHeight: minHeight),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -65,7 +66,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(vertical: 12),
               itemCount: widget.skeletonCount,
-              separatorBuilder: (ctx, index) => Divider(color: dividerColor),
+              separatorBuilder: (ctx, index) => divider,
               itemBuilder: (context, index) => SkeletonListTile(),
             )
           else
@@ -74,16 +75,13 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 12),
               itemCount: itemsToShow,
-              separatorBuilder: (ctx, index) => Divider(color: dividerColor),
+              separatorBuilder: (ctx, index) => divider,
               itemBuilder: (context, index) {
                 return widget.itemBuilder(context, widget.items[index], index);
               },
             ),
           if (showViewMoreButton && !widget.isLoading)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 0),
-              child: TextButton(onPressed: _loadMore, child: Text('View More')),
-            )
+            Padding(padding: const EdgeInsets.only(bottom: 0), child: TextButton(onPressed: _loadMore, child: Text('View More')))
           else
             SizedBox(height: 24),
         ],
@@ -104,7 +102,7 @@ class SkeletonListTile extends StatelessWidget {
       baseColor: colorScheme.surfaceContainerHigh,
       highlightColor: colorScheme.surfaceContainer,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
         child: ListTile(
           contentPadding: const EdgeInsets.all(0),
           title: Container(

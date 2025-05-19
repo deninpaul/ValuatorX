@@ -27,7 +27,7 @@ class SearchHeader extends StatelessWidget {
             ),
           ),
         const SizedBox(width: 8),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list)),
+        IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert_outlined)),
       ],
     );
   }

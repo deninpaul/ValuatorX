@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:valuatorx/pages/common/field/tag.dart';
 
 class SummaryTile extends StatelessWidget {
   final int id;
@@ -56,14 +57,7 @@ class SummaryTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(info, style: textTheme.bodyMedium!.copyWith(color: labelColor)),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(28),
-                        color: colorScheme.surfaceContainerHigh,
-                      ),
-                      child: Text(tag, style: textTheme.bodyMedium),
-                    ),
+                    Tag(text: tag)
                   ],
                 ),
               ],

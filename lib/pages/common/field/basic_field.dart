@@ -6,6 +6,7 @@ class BasicField extends StatelessWidget {
   final String name;
   final bool required;
   final bool enabled;
+  final String focusField;
   final TextInputType type;
   const BasicField({
     super.key,
@@ -15,6 +16,7 @@ class BasicField extends StatelessWidget {
     this.type = TextInputType.text,
     this.required = false,
     this.enabled = true,
+    this.focusField = ""
   });
 
   @override
@@ -27,6 +29,7 @@ class BasicField extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             enabled: enabled,
+            autofocus: name == focusField,
             textInputAction: TextInputAction.next,
             keyboardType: type,
             decoration: InputDecoration(labelText: name, border: const OutlineInputBorder()),

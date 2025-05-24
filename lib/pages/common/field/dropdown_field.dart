@@ -6,8 +6,17 @@ class DropdownField extends StatelessWidget {
   final IconData? icon;
   final String name;
   final bool required;
+  final String focusField;
 
-  const DropdownField({super.key, required this.name, required this.controller, required this.options, this.icon, this.required = false});
+  const DropdownField({
+    super.key,
+    required this.name,
+    required this.controller,
+    required this.options,
+    this.icon,
+    this.required = false,
+    this.focusField = "",
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +27,7 @@ class DropdownField extends StatelessWidget {
         if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(icon, size: 24)),
         Expanded(
           child: DropdownButtonFormField<String>(
+            autofocus: name == focusField,
             value: controller.text.isEmpty ? null : controller.text,
             items:
                 options.map((option) {

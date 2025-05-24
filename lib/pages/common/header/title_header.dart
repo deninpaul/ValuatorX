@@ -4,8 +4,9 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback onBackPressed;
   final double expandedHeight;
+  final List<Widget> actions;
 
-  const TitleHeader({super.key, required this.title, required this.onBackPressed, this.expandedHeight = 96});
+  const TitleHeader({super.key, required this.title, required this.onBackPressed, this.expandedHeight = 100, this.actions = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: colorScheme.surfaceContainer,
       scrolledUnderElevation: 0,
       leading: IconButton(onPressed: onBackPressed, icon: Icon(Icons.arrow_back_outlined)),
+      actions: actions,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         expandedTitleScale: 1.35,
@@ -26,12 +28,7 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
           width: MediaQuery.of(context).size.width * 0.35,
           padding: const EdgeInsets.only(top: 16.0),
           alignment: Alignment.bottomCenter,
-          child: Text(
-            title,
-            style: textTheme.bodyLarge,
-            overflow: TextOverflow.ellipsis,
-            textWidthBasis: TextWidthBasis.longestLine,
-          ),
+          child: Text(title, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, textWidthBasis: TextWidthBasis.longestLine),
         ),
       ),
     );

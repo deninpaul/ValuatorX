@@ -9,6 +9,7 @@ import 'package:valuatorx/pages/common/header/actions_header.dart';
 import 'package:valuatorx/pages/common/header/title_header.dart';
 import 'package:valuatorx/pages/common/view/location_view.dart';
 import 'package:valuatorx/pages/common/view/view_tile.dart';
+import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 
 class LandRateDetails extends StatelessWidget {
@@ -21,9 +22,9 @@ class LandRateDetails extends StatelessWidget {
     final provider = Provider.of<LandRateProvider>(context);
     final MapController mapController = MapController();
 
-    onEditAction() {
+    onEditAction({String fieldName = ""}) {
       provider.setSelectedItem(landRate.id);
-      Navigator.pushNamed(context, '/land_rate/edit');
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LandRateForm(editMode: true, focusField: fieldName)));
     }
 
     onDeleteAction() async {
@@ -48,9 +49,7 @@ class LandRateDetails extends StatelessWidget {
     }
 
     onOpenMapAction() async {
-      final url = Uri.parse(
-        'https://www.google.com/maps/search/?api=1&query=${landRate.latitude},${landRate.longitude}',
-      );
+      final url = Uri.parse('https://www.google.com/maps/search/?api=1&query=${landRate.latitude},${landRate.longitude}');
       if (!await launchUrl(url)) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not launch Google Maps')));
       }
@@ -94,23 +93,31 @@ class LandRateDetails extends StatelessWidget {
                             title: "Latitude",
                             value: landRate.latitude,
                             icon: Icons.location_on_outlined,
+                            onPressed: onEditAction,
                           ),
                         ),
-                        Expanded(child: ViewTile(title: "Longitude", value: landRate.longitude)),
+                        Expanded(child: ViewTile(title: "Longitude", value: landRate.longitude, onPressed: onEditAction)),
                       ],
                     ),
-                    ViewTile(title: "Land Rate (per cent)", value: landRate.landRatePerCent, icon: Icons.paid_outlined),
                     ViewTile(
-                      title: "Size of Land / Remarks",
+                      title: LandRate.LAND_RATE_PER_CENT,
+                      value: landRate.landRatePerCent,
+                      icon: Icons.paid_outlined,
+                      onPressed: onEditAction,
+                    ),
+                    ViewTile(
+                      title: LandRate.LAND_SIZE_REMARKS,
                       value: landRate.landSizeRemarks,
                       icon: Icons.straighten_outlined,
+                      onPressed: onEditAction,
                     ),
-                    ViewTile(title: "Type of Land", value: landRate.landType, icon: Icons.landscape_outlined),
-                    ViewTile(title: "Type of Road", value: landRate.road, icon: Icons.traffic_outlined),
+                    ViewTile(title: LandRate.LAND_TYPE, value: landRate.landType, icon: Icons.landscape_outlined, onPressed: onEditAction),
+                    ViewTile(title: LandRate.ROAD, value: landRate.road, icon: Icons.traffic_outlined, onPressed: onEditAction),
                     ViewTile(
                       title: "Date of Visit",
                       value: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
                       icon: Icons.calendar_today_outlined,
+                      onPressed: onEditAction,
                     ),
                     SizedBox(height: 80),
                   ],

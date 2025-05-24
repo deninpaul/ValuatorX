@@ -8,7 +8,8 @@ import 'package:valuatorx/providers/location_provider.dart';
 class LocationField extends StatefulWidget {
   final TextEditingController latitudeController;
   final TextEditingController longitudeController;
-  const LocationField({super.key, required this.latitudeController, required this.longitudeController});
+  final String focusField;
+  const LocationField({super.key, required this.latitudeController, required this.longitudeController, this.focusField = ""});
 
   @override
   State<LocationField> createState() => _LocationFieldState();
@@ -91,6 +92,7 @@ class _LocationFieldState extends State<LocationField> {
                       focusNode: latitudeFocusNode,
                       onFieldSubmitted: _onLatitudeChanged,
                       textInputAction: TextInputAction.next,
+                      autofocus: "Latitude" == widget.focusField,
                       keyboardType: TextInputType.numberWithOptions(decimal: true, signed: true),
                       enabled: !provider.isLoading,
                       decoration: InputDecoration(labelText: 'Latitude', border: OutlineInputBorder()),
@@ -100,6 +102,7 @@ class _LocationFieldState extends State<LocationField> {
                     child: TextFormField(
                       controller: widget.longitudeController,
                       focusNode: longitudeFocusNode,
+                      autofocus: "Longitude" == widget.focusField,
                       onFieldSubmitted: _onLongitudeChanged,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.numberWithOptions(decimal: true, signed: true),

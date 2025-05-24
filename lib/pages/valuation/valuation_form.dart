@@ -10,7 +10,9 @@ import 'package:valuatorx/utils/common_utils.dart';
 
 class ValuationForm extends StatefulWidget {
   final bool editMode;
-  const ValuationForm({super.key, this.editMode = false});
+  final String focusField;
+  final int focusTabIndex;
+  const ValuationForm({super.key, this.editMode = false, this.focusField = "", this.focusTabIndex = 0});
 
   @override
   State<ValuationForm> createState() => _ValuationFormState();
@@ -27,7 +29,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: tabs.length, vsync: this);
+    _tabController = TabController(length: tabs.length, vsync: this, initialIndex: widget.focusTabIndex);
     for (final key in fieldKeys) {
       controllers[key] = TextEditingController();
     }
@@ -109,57 +111,68 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                     name: Valuation.REPORT_NAME,
                     controller: controllers[Valuation.REPORT_NAME]!,
                     icon: Icons.person_outline,
+                    focusField: widget.focusField,
                   ),
                   BasicField(
                     name: Valuation.DATE_OF_INSPECTION,
                     controller: controllers[Valuation.DATE_OF_INSPECTION]!,
                     icon: Icons.calendar_today_outlined,
+                    focusField: widget.focusField,
                   ),
                   Divider(),
                   BasicField(
                     name: Valuation.BANK_BRANCH_VALUATION_TEAM_DETAILS,
                     controller: controllers[Valuation.BANK_BRANCH_VALUATION_TEAM_DETAILS]!,
                     icon: Icons.business_outlined,
+                    focusField: widget.focusField,
                   ),
                   AreaField(
                     name: Valuation.NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO,
                     controller: controllers[Valuation.NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO]!,
                     icon: Icons.group_outlined,
+                    focusField: widget.focusField,
                   ),
                   AreaField(
                     name: Valuation.PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS,
                     controller: controllers[Valuation.PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS]!,
                     icon: Icons.work_outline_outlined,
+                    focusField: widget.focusField,
                   ),
                   AreaField(
                     name: Valuation.POCCESSION_CERTIFICATE_DETAILS,
                     controller: controllers[Valuation.POCCESSION_CERTIFICATE_DETAILS]!,
                     icon: Icons.article_outlined,
+                    focusField: widget.focusField,
                   ),
                   AreaField(
                     name: Valuation.DEED_REG_SRO_NO_DATE,
                     controller: controllers[Valuation.DEED_REG_SRO_NO_DATE]!,
                     icon: Icons.assignment_ind_outlined,
+                    focusField: widget.focusField,
                   ),
                   AreaField(
                     name: Valuation.LEGAL_REPORT_REFERENCE,
                     controller: controllers[Valuation.LEGAL_REPORT_REFERENCE]!,
                     icon: Icons.policy_outlined,
+                    focusField: widget.focusField,
                   ),
                   AreaField(
                     name: Valuation.BUILDING_APPROVAL_REFERENCE,
                     controller: controllers[Valuation.BUILDING_APPROVAL_REFERENCE]!,
                     icon: Icons.verified_user_outlined,
+                    focusField: widget.focusField,
                   ),
                   AreaField(
                     name: Valuation.PROPERTY_TAX_CERTICATE_DETAILS,
                     controller: controllers[Valuation.PROPERTY_TAX_CERTICATE_DETAILS]!,
                     icon: Icons.approval_outlined,
+                    focusField: widget.focusField,
                   ),
                   AreaField(
                     name: Valuation.BUILDING_TAX_CERTIFICATE_DETAILS,
                     controller: controllers[Valuation.BUILDING_TAX_CERTIFICATE_DETAILS]!,
                     icon: Icons.account_balance_outlined,
+                    focusField: widget.focusField,
                   ),
                 ],
               ),

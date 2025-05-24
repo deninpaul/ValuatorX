@@ -6,6 +6,7 @@ class AreaField extends StatelessWidget {
   final String name;
   final bool required;
   final bool enabled;
+  final String focusField;
   const AreaField({
     super.key,
     required this.name,
@@ -13,6 +14,7 @@ class AreaField extends StatelessWidget {
     this.icon,
     this.required = false,
     this.enabled = true,
+    this.focusField = ""
   });
 
   @override
@@ -27,6 +29,7 @@ class AreaField extends StatelessWidget {
             controller: controller,
             enabled: enabled,
             maxLines: 3,
+            autofocus: name == focusField,
             textInputAction: TextInputAction.newline,
             decoration: InputDecoration(labelText: name, alignLabelWithHint: true, border: const OutlineInputBorder()),
             validator: (value) => required && (value == null || value.isEmpty) ? 'Required' : null,

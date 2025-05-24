@@ -10,7 +10,8 @@ import 'package:valuatorx/utils/common_utils.dart';
 
 class LandRateForm extends StatefulWidget {
   final bool editMode;
-  const LandRateForm({super.key, this.editMode = false});
+  final String focusField;
+  const LandRateForm({super.key, this.editMode = false, this.focusField = ""});
 
   @override
   State<LandRateForm> createState() => _LandRateFormState();
@@ -103,20 +104,24 @@ class _LandRateFormState extends State<LandRateForm> {
                 controller: controllers[LandRate.SL_NO]!,
                 icon: Icons.person_outline,
                 enabled: false,
+                focusField: widget.focusField,
               ),
               LocationField(
                 latitudeController: controllers["Lattitude"]!,
                 longitudeController: controllers["Longitude"]!,
+                focusField: widget.focusField,
               ),
               BasicField(
                 name: LandRate.LAND_RATE_PER_CENT,
                 controller: controllers[LandRate.LAND_RATE_PER_CENT]!,
                 icon: Icons.paid_outlined,
+                focusField: widget.focusField,
                 required: true,
               ),
               BasicField(
                 name: LandRate.LAND_SIZE_REMARKS,
                 controller: controllers[LandRate.LAND_SIZE_REMARKS]!,
+                focusField: widget.focusField,
                 icon: Icons.straighten_outlined,
               ),
               DropdownField(
@@ -124,12 +129,14 @@ class _LandRateFormState extends State<LandRateForm> {
                 controller: controllers[LandRate.LAND_TYPE]!,
                 options: LandRate.landTypeOptions,
                 icon: Icons.landscape_outlined,
+                focusField: widget.focusField,
               ),
               DropdownField(
                 name: LandRate.ROAD,
                 controller: controllers[LandRate.ROAD]!,
                 options: LandRate.roadOptions,
                 icon: Icons.traffic_outlined,
+                focusField: widget.focusField,
               ),
               Row(
                 spacing: 24,

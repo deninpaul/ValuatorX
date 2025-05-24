@@ -1,10 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/button/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
-import 'package:valuatorx/pages/common/info_tile.dart';
+import 'package:valuatorx/pages/common/view/info_tile.dart';
 import 'package:valuatorx/pages/common/summary_tile.dart';
 import 'package:valuatorx/pages/valuation/valuation_details.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
@@ -41,7 +42,7 @@ class _ValuationsState extends State<Valuations> {
     final provider = Provider.of<ValuationProvider>(context);
     final isHomePage = provider.selectedItem == -1;
     final total = provider.valuations.length.toString().padLeft(2, '0');;
-    final inProgress = provider.valuations.where((r) => r.status == "In Progress").length.toString().padLeft(2, '0');;
+    final inProgress = provider.valuations.where((r) => r.status == Valuation.statusOptions[0]).length.toString().padLeft(2, '0');;
 
     viewValuation(int id) {
       provider.setSelectedItem(id);

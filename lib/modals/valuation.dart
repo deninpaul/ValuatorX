@@ -4,7 +4,7 @@ class Valuation {
   final int id;
   final String reportName;
   final String dateOfInspection;
-  final String status;
+  String status;
   final String bankDetails;
   final String ownerDetails;
   final String propertyPossessionAddress;
@@ -174,8 +174,7 @@ class Valuation {
   static const String DATE_OF_INSPECTION = "Date of Inspection";
   static const String STATUS = "Status";
   static const String BANK_BRANCH_VALUATION_TEAM_DETAILS = "Bank/ Branch/ Valuation Team Details";
-  static const String NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO =
-      "Name of the owner(s) and addresses with Phone No.";
+  static const String NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO = "Name of the owner(s) and addresses with Phone No.";
   static const String PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS = "Property Possession Name/Postal Address`";
   static const String SURVEY_NO_RE_SY_NO_1 = "Survey No./ Re. Sy. No. - 1";
   static const String AREA_IN_ARE_1 = "Area (in Are) - 1";
@@ -206,8 +205,7 @@ class Valuation {
   static const String LATTITUDE = "Lattitude";
   static const String LONGITUDE = "Longitude";
   static const String TANDAPPERENCUMFRANCE_REF = "Tandapper/Encumfrance Ref.";
-  static const String LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND =
-      "Level of land with topographical conditions/ Shape of land";
+  static const String LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND = "Level of land with topographical conditions/ Shape of land";
   static const String HOUSE_NO_DOOR_NO = "House No./ Door No.";
   static const String PANCHAYATH = "Panchayath";
   static const String ELECTRICITY_CONSUMER_NO = "Electricity Consumer no.";
@@ -595,5 +593,11 @@ class Valuation {
     NEARBY_TOWN,
     PHOTOS,
     REMARKS,
+  ];
+
+  static const statusOptions = [
+    "In progress",
+    "Completed",
+    "Backlog",
   ];
 }

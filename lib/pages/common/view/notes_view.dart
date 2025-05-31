@@ -19,43 +19,51 @@ class NotesViewer extends StatelessWidget {
     } catch (e) {
       doc = Document()..insert(0, value);
     }
-    final QuillController controller = QuillController(document: doc, selection: const TextSelection.collapsed(offset: 0), readOnly: true);
+
+    final controller = QuillController(document: doc, selection: const TextSelection.collapsed(offset: 0), readOnly: true);
+
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Material(
       borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.hardEdge,
-      child: InkWell(
-        onTap: () => onPressed != null ? onPressed!(fieldName: title, fieldTab: tabIndex) : () {},
-        splashColor: colorScheme.surfaceContainerHigh,
-        highlightColor: colorScheme.surfaceContainerHigh,
-        child: IgnorePointer(
-          child: QuillEditor.basic(
-            controller: controller,
-            config: QuillEditorConfig(
-              placeholder: "No notes",
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-              scrollable: false,
-              customStyles: DefaultStyles(
-                paragraph: DefaultTextBlockStyle(
-                  textTheme.bodyLarge!,
-                  const HorizontalSpacing(0, 0),
-                  const VerticalSpacing(8, 8), // More space between paragraphs
-                  const VerticalSpacing(0, 0),
-                  null,
-                ),
-                placeHolder: DefaultTextBlockStyle(
-                  textTheme.bodyLarge!.copyWith(color: colorScheme.outline),
-                  HorizontalSpacing.zero,
-                  VerticalSpacing.zero,
-                  VerticalSpacing.zero,
-                  null,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: InkWell(
+              onTap: () => onPressed?.call(fieldName: title, fieldTab: tabIndex),
+              splashColor: colorScheme.surfaceContainerHigh,
+              highlightColor: colorScheme.surfaceContainerHigh,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+            child: QuillEditor.basic(
+              controller: controller,
+              config: QuillEditorConfig(
+                placeholder: "No notes",
+                scrollable: false,
+                customStyles: DefaultStyles(
+                  paragraph: DefaultTextBlockStyle(
+                    textTheme.bodyLarge!,
+                    const HorizontalSpacing(0, 0),
+                    const VerticalSpacing(8, 8),
+                    const VerticalSpacing(0, 0),
+                    null,
+                  ),
+                  placeHolder: DefaultTextBlockStyle(
+                    textTheme.bodyLarge!.copyWith(color: colorScheme.outline),
+                    HorizontalSpacing.zero,
+                    VerticalSpacing.zero,
+                    VerticalSpacing.zero,
+                    null,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

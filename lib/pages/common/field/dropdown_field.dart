@@ -105,10 +105,13 @@ class _CustomOptionDialogState extends State<CustomOptionDialog> {
       title: const Text('Enter custom option'),
       content: Padding(
         padding: const EdgeInsets.only(top: 16),
-        child: TextField(
-          controller: _controller,
-          decoration: InputDecoration(labelText: widget.label, border: const OutlineInputBorder()),
-          autofocus: true,
+        child: SizedBox(
+          width: 320,
+          child: TextField(
+            controller: _controller,
+            decoration: InputDecoration(labelText: widget.label, border: const OutlineInputBorder()),
+            autofocus: true,
+          ),
         ),
       ),
       actions: [

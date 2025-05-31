@@ -27,7 +27,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   final List<String> fieldKeys = Valuation.editableFields;
   final List<String> tabs = ["General Details", "Land Details", "Building Details", "Notes", "Photo"];
   late TabController _tabController;
-  bool ready = true;
+  bool ready = false;
 
   @override
   void initState() {
@@ -428,7 +428,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: NotesField(controller: controllers[Valuation.REMARKS]!),
+              child: ready ? NotesField(controller: controllers[Valuation.REMARKS]!) : CircularProgressIndicator(),
             ),
             Text("Biii"),
           ],

@@ -232,9 +232,9 @@ class Valuation {
   static const String AGE_TF = "TF - Age";
   static const String BUILDING_TYPE = "Building Type";
   static const String CONDITION_OF_BUILDING_EXTERIOR = "Condition of Building - Exterior";
-  static const String CONDITION_OF_BUILDING_INTERIOR = "Condition of Building -Interior";
+  static const String CONDITION_OF_BUILDING_INTERIOR = "Condition of Building - Interior";
   static const String FOUNDATION_BASEMENT = "Foundation & Basement";
-  static const String RCC_WORLS = "RCC worls";
+  static const String RCC_WORKS = "RCC works";
   static const String WALL_DETAILS = "Wall Details";
   static const String FLOORING = "Flooring";
   static const String JOINERYDOORS = "Joinery/Doors";
@@ -319,7 +319,7 @@ class Valuation {
       exteriorCondition: json[CONDITION_OF_BUILDING_EXTERIOR].toString(),
       interiorCondition: json[CONDITION_OF_BUILDING_INTERIOR].toString(),
       foundationAndBasement: json[FOUNDATION_BASEMENT].toString(),
-      rccWorks: json[RCC_WORLS].toString(),
+      rccWorks: json[RCC_WORKS].toString(),
       wallDetails: json[WALL_DETAILS].toString(),
       flooring: json[FLOORING].toString(),
       joinery: json[JOINERYDOORS].toString(),
@@ -382,7 +382,7 @@ class Valuation {
       ELECTRICITY_CONSUMER_NO: electricityConsumerNo,
       KSEB_DIVISION: ksebDivision,
       YEAR_OF_CONSTRUCTION: yearOfConstruction,
-      QUALITY_OF_CONSTRUCTION: constructionType,
+      QUALITY_OF_CONSTRUCTION: qualityOfConstruction,
       TYPE_OF_BUILDING: buildingType,
       TYPE_OF_CONSTRUCTION: constructionType,
       PLINT_AREA_GF: plinthAreaGF,
@@ -405,7 +405,7 @@ class Valuation {
       CONDITION_OF_BUILDING_EXTERIOR: exteriorCondition,
       CONDITION_OF_BUILDING_INTERIOR: interiorCondition,
       FOUNDATION_BASEMENT: foundationAndBasement,
-      RCC_WORLS: rccWorks,
+      RCC_WORKS: rccWorks,
       WALL_DETAILS: wallDetails,
       FLOORING: flooring,
       JOINERYDOORS: joinery,
@@ -415,7 +415,7 @@ class Valuation {
       BUILDING_VALUATION_UNIT_RATE: buildingUnitRate,
       CLASSIFICATION_OF_AREA_1: classificationArea1,
       CLASSIFICATION_OF_AREA_2: classificationArea2,
-      LANDMARK_OF_THE_PROPERTY: landMarketRate,
+      LANDMARK_OF_THE_PROPERTY: propertyLandmark,
       ROAD_DETAILS: roadDetails,
       MAIN_JUNCTION: mainJunction,
       INSTITITUIONRELIGIOUS_GOVT_OFFICES: nearbyInstitutions,
@@ -576,7 +576,7 @@ class Valuation {
     CONDITION_OF_BUILDING_EXTERIOR,
     CONDITION_OF_BUILDING_INTERIOR,
     FOUNDATION_BASEMENT,
-    RCC_WORLS,
+    RCC_WORKS,
     WALL_DETAILS,
     FLOORING,
     JOINERYDOORS,
@@ -599,5 +599,43 @@ class Valuation {
     "In progress",
     "Completed",
     "Backlog",
+  ];
+
+    static const buildingTypeOptions = [
+    "Residential",
+    "Commercial",
+    "Industrial",
+    "-",
+  ];
+
+  static const constructionTypeOptions = [
+    "Loan bearing",
+    "RCC",
+    "Steel Frame",
+    "-",
+  ];
+
+  static const qualityOfConstructionOptions = [
+    "Excellent",
+    "Good",
+    "Normal",
+    "Poor",
+    "-",
+  ];
+
+  static const exteriorConditionOptions = [
+    "Excellent",
+    "Good",
+    "Normal",
+    "Poor",
+    "-",
+  ];
+
+  static const interiorConditionOptions = [
+    "Excellent",
+    "Good",
+    "Normal",
+    "Poor",
+    "-",
   ];
 }

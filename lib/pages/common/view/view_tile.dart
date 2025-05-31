@@ -4,12 +4,10 @@ class ViewTile extends StatelessWidget {
   final String title;
   final String value;
   final IconData? icon;
-  final Function onPressed;
+  final Function({String fieldName, int fieldTab})? onPressed;
   final int tabIndex;
 
-  const ViewTile({super.key, required this.title, required this.value, this.icon, this.tabIndex = 0, this.onPressed = _defaultOnPressed});
-
-  static void _defaultOnPressed() {}
+  const ViewTile({super.key, required this.title, required this.value, this.icon, this.tabIndex = 0, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class ViewTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () => onPressed(fieldName: title, fieldTab: tabIndex),
+        onTap: () => onPressed != null ? onPressed!(fieldName: title, fieldTab: tabIndex) : () {},
         splashColor: colorScheme.surfaceContainerHigh,
         highlightColor: colorScheme.surfaceContainerHigh,
         child: Padding(
@@ -30,7 +28,7 @@ class ViewTile extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              icon != null ? Padding(padding: const EdgeInsets.only(top: 16, right: 24), child: Icon(icon)) : SizedBox(width: 16),
+              icon != null ? Padding(padding: const EdgeInsets.only(top: 16, right: 24), child: Icon(icon)) : SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

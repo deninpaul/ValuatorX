@@ -4,18 +4,26 @@ import 'package:latlong2/latlong.dart';
 import 'package:valuatorx/pages/common/map/map_action_button.dart';
 import 'package:valuatorx/pages/common/map/map_wrapper.dart';
 import 'package:valuatorx/pages/common/map/numbered_marker.dart';
+import 'package:valuatorx/pages/common/view/group_view.dart';
+import 'package:valuatorx/pages/common/view/view_tile.dart';
 
 class LocationViewTile extends StatelessWidget {
   final MapController mapController;
   final String latitude;
   final String longitude;
   final String label;
+  final int tabIndex;
+  final IconData icon;
+  final Function({String fieldName, int fieldTab})? onPressed;
   const LocationViewTile({
     super.key,
     required this.mapController,
     required this.latitude,
     required this.longitude,
     required this.label,
+    this.icon = Icons.location_on_outlined,
+    this.onPressed,
+    this.tabIndex = 0,
   });
 
   resetLocation(LatLng location) {
@@ -29,23 +37,40 @@ class LocationViewTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final location = LatLng(double.parse(latitude), double.parse(longitude));
 
-    return Container(
-      height: 280,
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(32)),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onPanDown: (_) {},
-        child: MapWrapper(
-          mapController: mapController,
-          center: location,
-          zoom: 18,
-          actions: [MapActionButton(onPressed: () => resetLocation(location), icon: Icons.replay)],
+    return GroupViewWrapper(
+      title: "Location",
+      icon: icon,
+      spacing: 8,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 12, left: 8),
+          child: Container(
+            height: 280,
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(32)),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanDown: (_) {},
+              child: MapWrapper(
+                mapController: mapController,
+                center: location,
+                zoom: 18,
+                actions: [MapActionButton(onPressed: () => resetLocation(location), icon: Icons.replay)],
+                children: [
+                  MarkerLayer(markers: [Marker(point: location, width: 56, height: 40, child: NumberedMarker(text: label))]),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Row(
+          spacing: 16,
           children: [
-            MarkerLayer(markers: [Marker(point: location, width: 56, height: 40, child: NumberedMarker(text: label))]),
+            Expanded(child: ViewTile(title: "Latitude", value: latitude, onPressed: onPressed, tabIndex: tabIndex)),
+            Expanded(child: ViewTile(title: "Longitude", value: longitude, onPressed: onPressed, tabIndex: tabIndex)),
           ],
         ),
-      ),
+      ],
     );
   }
 }

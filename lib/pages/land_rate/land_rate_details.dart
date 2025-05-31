@@ -22,7 +22,7 @@ class LandRateDetails extends StatelessWidget {
     final provider = Provider.of<LandRateProvider>(context);
     final MapController mapController = MapController();
 
-    onEditAction({String fieldName = ""}) {
+    onEditAction({String fieldName = "",  int fieldTab = 0}) {
       provider.setSelectedItem(landRate.id);
       Navigator.push(context, MaterialPageRoute(builder: (context) => LandRateForm(editMode: true, focusField: fieldName)));
     }
@@ -83,21 +83,8 @@ class LandRateDetails extends StatelessWidget {
                       mapController: mapController,
                       latitude: landRate.latitude,
                       longitude: landRate.longitude,
+                      onPressed: onEditAction,
                       label: landRate.slNo,
-                    ),
-                    Row(
-                      spacing: 16,
-                      children: [
-                        Expanded(
-                          child: ViewTile(
-                            title: "Latitude",
-                            value: landRate.latitude,
-                            icon: Icons.location_on_outlined,
-                            onPressed: onEditAction,
-                          ),
-                        ),
-                        Expanded(child: ViewTile(title: "Longitude", value: landRate.longitude, onPressed: onEditAction)),
-                      ],
                     ),
                     ViewTile(
                       title: LandRate.LAND_RATE_PER_CENT,

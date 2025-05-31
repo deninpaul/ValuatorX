@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/pages/home_screen.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
@@ -36,7 +37,6 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           useMaterial3: true,
         ),
-        initialRoute: '/',
         routes: {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginScreen(),
@@ -44,7 +44,9 @@ class MyApp extends StatelessWidget {
           '/land_rate/edit': (context) => const LandRateForm(editMode: true),
           '/valuation/edit': (context) => const ValuationForm(editMode: true),
         },
+        initialRoute: '/',
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [FlutterQuillLocalizations.delegate],
       ),
     );
   }

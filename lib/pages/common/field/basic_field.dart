@@ -6,6 +6,7 @@ class BasicField extends StatelessWidget {
   final String name;
   final bool required;
   final bool enabled;
+  final bool isChild;
   final String focusField;
   final TextInputType type;
   const BasicField({
@@ -15,8 +16,9 @@ class BasicField extends StatelessWidget {
     this.icon,
     this.type = TextInputType.text,
     this.required = false,
+    this.isChild = false,
     this.enabled = true,
-    this.focusField = ""
+    this.focusField = "",
   });
 
   @override
@@ -24,6 +26,7 @@ class BasicField extends StatelessWidget {
     return Row(
       spacing: 24,
       children: [
+        if (isChild) SizedBox(width: 24),
         if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(icon, size: 24)),
         Expanded(
           child: TextFormField(

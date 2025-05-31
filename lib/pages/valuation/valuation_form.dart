@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/field/area_field.dart';
 import 'package:valuatorx/pages/common/field/basic_field.dart';
+import 'package:valuatorx/pages/common/field/dropdown_field.dart';
+import 'package:valuatorx/pages/common/field/location_field.dart';
+import 'package:valuatorx/pages/common/field/notes_field.dart';
 import 'package:valuatorx/pages/common/field/table_field.dart';
 import 'package:valuatorx/pages/common/button/save_button.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
@@ -79,22 +82,16 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     final formPadding = EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: 32);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: 80,
         title: Text("$modeName Valuation Report", style: headerTheme),
         leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         actions: [
           SaveButton(formKey: _formKey, onSubmit: () {}, enabled: ready),
-          PopupMenuButton(
-            offset: const Offset(0, 48),
-            itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))],
-          ),
+          PopupMenuButton(offset: const Offset(0, 48), itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))]),
         ],
-        bottom: TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          tabs: tabs.map((tab) => Tab(text: tab)).toList(),
-        ),
+        bottom: TabBar(controller: _tabController, isScrollable: true, tabs: tabs.map((tab) => Tab(text: tab)).toList()),
       ),
       body: Form(
         key: _formKey,
@@ -183,9 +180,42 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                 spacing: 24,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  BasicField(
+                    name: Valuation.VILLAGE,
+                    controller: controllers[Valuation.VILLAGE]!,
+                    focusField: widget.focusField,
+                    icon: Icons.cottage_outlined,
+                  ),
+                  BasicField(
+                    name: Valuation.TALUK,
+                    controller: controllers[Valuation.TALUK]!,
+                    focusField: widget.focusField,
+                    isChild: true,
+                  ),
+                  BasicField(
+                    name: Valuation.PANCHAYATH,
+                    controller: controllers[Valuation.PANCHAYATH]!,
+                    icon: Icons.account_balance_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.KSEB_DIVISION,
+                    controller: controllers[Valuation.KSEB_DIVISION]!,
+                    focusField: widget.focusField,
+                    isChild: true,
+                  ),
+                  LocationField(
+                    latitudeController: controllers[Valuation.LATTITUDE]!,
+                    longitudeController: controllers[Valuation.LONGITUDE]!,
+                    focusField: widget.focusField,
+                    icon: Icons.gps_fixed_outlined,
+                  ),
+                  Divider(),
                   TableField(
                     title: "Property Area",
                     icon: Icons.straighten_outlined,
+                    focusField: widget.focusField,
+                    minRows: 2,
                     keyboardType: TextInputType.numberWithOptions(),
                     controllers: [
                       [controllers[Valuation.SURVEY_NO_RE_SY_NO_1]!, controllers[Valuation.AREA_IN_ARE_1]!],
@@ -203,6 +233,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                   TableField(
                     title: "Property Boundaries",
                     icon: Icons.aspect_ratio_outlined,
+                    focusField: widget.focusField,
                     minRows: 4,
                     controllers: [
                       [controllers[Valuation.EAST_ACTUALS]!, controllers[Valuation.EAST_AS_PER_DEED]!],
@@ -217,11 +248,188 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                       [Valuation.NORTH_ACTUALS, Valuation.NORTH_AS_PER_DEED],
                     ],
                   ),
+                  BasicField(
+                    name: Valuation.LANDMARK_OF_THE_PROPERTY,
+                    controller: controllers[Valuation.LANDMARK_OF_THE_PROPERTY]!,
+                    icon: Icons.flag_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  Divider(),
+                  TableField(
+                    title: "Feasability of Civic amenities",
+                    icon: Icons.holiday_village_outlined,
+                    focusField: widget.focusField,
+                    minRows: 4,
+                    controllers: [
+                      [controllers[Valuation.ROAD_DETAILS]!],
+                      [controllers[Valuation.MAIN_JUNCTION]!],
+                      [controllers[Valuation.INSTITITUIONRELIGIOUS_GOVT_OFFICES]!],
+                      [controllers[Valuation.NEARBY_TOWN]!],
+                    ],
+                    fieldNames: [
+                      [Valuation.ROAD_DETAILS],
+                      [Valuation.MAIN_JUNCTION],
+                      [Valuation.INSTITITUIONRELIGIOUS_GOVT_OFFICES],
+                      [Valuation.NEARBY_TOWN],
+                    ],
+                  ),
+                  AreaField(
+                    name: Valuation.LOCATION_SKETCH_DETAILS,
+                    controller: controllers[Valuation.LOCATION_SKETCH_DETAILS]!,
+                    icon: Icons.edit_location_alt_outlined,
+                    focusField: widget.focusField,
+                  ),
                 ],
               ),
             ),
-            Text("Boo"),
-            Text("Baa"),
+            SingleChildScrollView(
+              padding: formPadding,
+              child: Column(
+                spacing: 24,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BasicField(
+                    name: Valuation.HOUSE_NO_DOOR_NO,
+                    controller: controllers[Valuation.HOUSE_NO_DOOR_NO]!,
+                    icon: Icons.sensor_door_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.ELECTRICITY_CONSUMER_NO,
+                    controller: controllers[Valuation.ELECTRICITY_CONSUMER_NO]!,
+                    icon: Icons.lightbulb_outline,
+                    focusField: widget.focusField,
+                  ),
+                  TableField(
+                    title: "Floor measurements",
+                    icon: Icons.straighten_outlined,
+                    focusField: widget.focusField,
+                    minRows: 2,
+                    controllers: [
+                      [
+                        controllers[Valuation.PLINT_AREA_GF]!,
+                        controllers[Valuation.HEIGHT_GF]!,
+                        controllers[Valuation.AGE_GF]!,
+                        controllers[Valuation.REPLACEMENT_RATE_GF]!,
+                      ],
+                      [
+                        controllers[Valuation.PLINTH_AREA_FF]!,
+                        controllers[Valuation.HEIGHT_FF]!,
+                        controllers[Valuation.AGE_FF]!,
+                        controllers[Valuation.REPLACEMENT_RATE_FF]!,
+                      ],
+                      [
+                        controllers[Valuation.PLINTH_AREA_SF]!,
+                        controllers[Valuation.HEIGHT_SF]!,
+                        controllers[Valuation.AGE_SF]!,
+                        controllers[Valuation.REPLACEMENT_RATE_SF]!,
+                      ],
+                      [
+                        controllers[Valuation.PLINTH_AREA_TF]!,
+                        controllers[Valuation.HEIGHT_TF]!,
+                        controllers[Valuation.AGE_TF]!,
+                        controllers[Valuation.REPLACEMENT_RATE_TF]!,
+                      ],
+                    ],
+                    fieldNames: [
+                      [Valuation.PLINT_AREA_GF, Valuation.HEIGHT_GF, Valuation.AGE_GF, Valuation.REPLACEMENT_RATE_GF],
+                      [Valuation.PLINTH_AREA_FF, Valuation.HEIGHT_FF, Valuation.AGE_FF, Valuation.REPLACEMENT_RATE_FF],
+                      [Valuation.PLINTH_AREA_SF, Valuation.HEIGHT_SF, Valuation.AGE_SF, Valuation.REPLACEMENT_RATE_SF],
+                      [Valuation.PLINTH_AREA_TF, Valuation.HEIGHT_TF, Valuation.AGE_TF, Valuation.REPLACEMENT_RATE_TF],
+                    ],
+                  ),
+                  Divider(),
+                  DropdownField(
+                    name: Valuation.TYPE_OF_BUILDING,
+                    controller: controllers[Valuation.TYPE_OF_BUILDING]!,
+                    options: Valuation.buildingTypeOptions,
+                    icon: Icons.domain_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.YEAR_OF_CONSTRUCTION,
+                    controller: controllers[Valuation.YEAR_OF_CONSTRUCTION]!,
+                    focusField: widget.focusField,
+                    isChild: true,
+                  ),
+                  DropdownField(
+                    name: Valuation.TYPE_OF_CONSTRUCTION,
+                    controller: controllers[Valuation.TYPE_OF_CONSTRUCTION]!,
+                    options: Valuation.constructionTypeOptions,
+                    icon: Icons.factory_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  DropdownField(
+                    name: Valuation.QUALITY_OF_CONSTRUCTION,
+                    controller: controllers[Valuation.QUALITY_OF_CONSTRUCTION]!,
+                    options: Valuation.qualityOfConstructionOptions,
+                    focusField: widget.focusField,
+                    isChild: true,
+                  ),
+                  DropdownField(
+                    name: Valuation.CONDITION_OF_BUILDING_EXTERIOR,
+                    controller: controllers[Valuation.CONDITION_OF_BUILDING_EXTERIOR]!,
+                    options: Valuation.exteriorConditionOptions,
+                    icon: Icons.verified_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  DropdownField(
+                    name: Valuation.CONDITION_OF_BUILDING_INTERIOR,
+                    controller: controllers[Valuation.CONDITION_OF_BUILDING_INTERIOR]!,
+                    options: Valuation.interiorConditionOptions,
+                    focusField: widget.focusField,
+                    isChild: true,
+                  ),
+                  Divider(),
+                  BasicField(
+                    name: Valuation.FOUNDATION_BASEMENT,
+                    controller: controllers[Valuation.FOUNDATION_BASEMENT]!,
+                    icon: Icons.foundation_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.RCC_WORKS,
+                    controller: controllers[Valuation.RCC_WORKS]!,
+                    icon: Icons.grid_3x3_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.WALL_DETAILS,
+                    controller: controllers[Valuation.WALL_DETAILS]!,
+                    icon: Icons.width_full_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.FLOORING,
+                    controller: controllers[Valuation.FLOORING]!,
+                    icon: Icons.dashboard_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.JOINERYDOORS,
+                    controller: controllers[Valuation.JOINERYDOORS]!,
+                    icon: Icons.sensor_door_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.WINDOWS,
+                    controller: controllers[Valuation.WINDOWS]!,
+                    icon: Icons.window_outlined,
+                    focusField: widget.focusField,
+                  ),
+                  BasicField(
+                    name: Valuation.WPROOF_TRUSS,
+                    controller: controllers[Valuation.WPROOF_TRUSS]!,
+                    icon: Icons.gite_outlined,
+                    focusField: widget.focusField,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: NotesField(controller: controllers[Valuation.REMARKS]!),
+            ),
             Text("Biii"),
           ],
         ),

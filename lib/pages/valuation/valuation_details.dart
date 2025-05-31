@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/button/action_button.dart';
@@ -6,6 +7,8 @@ import 'package:valuatorx/pages/common/delete_dialog.dart';
 import 'package:valuatorx/pages/common/field/tag.dart';
 import 'package:valuatorx/pages/common/header/actions_header.dart';
 import 'package:valuatorx/pages/common/header/title_header.dart';
+import 'package:valuatorx/pages/common/view/location_view.dart';
+import 'package:valuatorx/pages/common/view/notes_view.dart';
 import 'package:valuatorx/pages/common/view/table_view.dart';
 import 'package:valuatorx/pages/common/view/view_tile.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
@@ -21,8 +24,9 @@ class ValuationDetails extends StatefulWidget {
 
 class _ValuationDetailsState extends State<ValuationDetails> with TickerProviderStateMixin {
   final List<String> tabs = ["General Details", "Land Details", "Building Details", "Notes", "Photo"];
-  late TabController tabController;
   final TextEditingController tagController = TextEditingController();
+  final MapController mapController = MapController();
+  late TabController tabController;
 
   @override
   void initState() {
@@ -43,7 +47,10 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
 
     onEditAction({String fieldName = "", int fieldTab = 0}) {
       provider.setSelectedItem(widget.valuation.id);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ValuationForm(editMode: true, focusField: fieldName, focusTabIndex: fieldTab,)));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ValuationForm(editMode: true, focusField: fieldName, focusTabIndex: fieldTab)),
+      );
     }
 
     onDeleteAction() async {
@@ -139,7 +146,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     ViewTile(
                       title: Valuation.PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS,
                       value: widget.valuation.propertyPossessionAddress,
-                      icon: Icons.work_outline_outlined,
+                      icon: Icons.inbox_outlined,
                       onPressed: onEditAction,
                       tabIndex: 0,
                     ),
@@ -193,9 +200,59 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                 child: Column(
                   spacing: 16,
                   children: [
+                    Row(
+                      spacing: 16,
+                      children: [
+                        Expanded(
+                          child: ViewTile(
+                            title: Valuation.VILLAGE,
+                            value: widget.valuation.village,
+                            icon: Icons.cottage_outlined,
+                            onPressed: onEditAction,
+                            tabIndex: 1,
+                          ),
+                        ),
+                        Expanded(
+                          child: ViewTile(title: Valuation.TALUK, value: widget.valuation.taluk, onPressed: onEditAction, tabIndex: 1),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      spacing: 16,
+                      children: [
+                        Expanded(
+                          child: ViewTile(
+                            title: Valuation.PANCHAYATH,
+                            value: widget.valuation.panchayath,
+                            icon: Icons.account_balance_outlined,
+                            onPressed: onEditAction,
+                            tabIndex: 1,
+                          ),
+                        ),
+                        Expanded(
+                          child: ViewTile(
+                            title: Valuation.KSEB_DIVISION,
+                            value: widget.valuation.ksebDivision,
+                            onPressed: onEditAction,
+                            tabIndex: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    LocationViewTile(
+                      mapController: mapController,
+                      latitude: widget.valuation.latitude,
+                      longitude: widget.valuation.longitude,
+                      onPressed: onEditAction,
+                      icon: Icons.gps_fixed_outlined,
+                      tabIndex: 1,
+                      label: "",
+                    ),
                     TableViewTile(
                       title: "Property Area",
                       icon: Icons.straighten_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 1,
                       minRows: 2,
                       values: [
                         [widget.valuation.surveyNo1, widget.valuation.area1],
@@ -211,8 +268,10 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                       ],
                     ),
                     TableViewTile(
-                      title: "Property Area",
-                      icon: Icons.straighten_outlined,
+                      title: "Property Boundaries",
+                      icon: Icons.aspect_ratio_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 1,
                       values: [
                         [widget.valuation.eastActual, widget.valuation.eastDeed],
                         [widget.valuation.southActual, widget.valuation.southDeed],
@@ -227,15 +286,229 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                       ],
                     ),
                     ViewTile(
-                      title: Valuation.BANK_BRANCH_VALUATION_TEAM_DETAILS,
-                      value: widget.valuation.bankDetails,
-                      icon: Icons.business_outlined,
+                      title: Valuation.LANDMARK_OF_THE_PROPERTY,
+                      value: widget.valuation.propertyLandmark,
+                      icon: Icons.flag_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 1,
+                    ),
+                    TableViewTile(
+                      title: "Feasability of Civic amenities",
+                      icon: Icons.holiday_village_outlined,
+                      values: [
+                        [widget.valuation.roadDetails],
+                        [widget.valuation.mainJunction],
+                        [widget.valuation.nearbyInstitutions],
+                        [widget.valuation.nearbyTown],
+                      ],
+                      fieldNames: [
+                        [Valuation.ROAD_DETAILS],
+                        [Valuation.MAIN_JUNCTION],
+                        [Valuation.INSTITITUIONRELIGIOUS_GOVT_OFFICES],
+                        [Valuation.NEARBY_TOWN],
+                      ],
+                      minRows: 4,
+                      onPressed: onEditAction,
+                      tabIndex: 1,
+                    ),
+                    ViewTile(
+                      title: Valuation.LOCATION_SKETCH_DETAILS,
+                      value: widget.valuation.locationSketchDetails,
+                      icon: Icons.edit_location_alt_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 1,
                     ),
                   ],
                 ),
               ),
-              Center(child: Text("bar")),
-              Center(child: Text("mafia")),
+              SingleChildScrollView(
+                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                child: Column(
+                  spacing: 16,
+                  children: [
+                    ViewTile(
+                      title: Valuation.HOUSE_NO_DOOR_NO,
+                      value: widget.valuation.houseNumber,
+                      icon: Icons.sensor_door_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.ELECTRICITY_CONSUMER_NO,
+                      value: widget.valuation.electricityConsumerNo,
+                      icon: Icons.lightbulb_outline,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    Row(
+                      spacing: 16,
+                      children: [
+                        Flexible(
+                          flex: 6,
+                          child: ViewTile(
+                            title: Valuation.TYPE_OF_BUILDING,
+                            value: widget.valuation.buildingType,
+                            icon: Icons.domain_outlined,
+                            onPressed: onEditAction,
+                            tabIndex: 2,
+                          ),
+                        ),
+                        Flexible(
+                          flex: 5,
+                          child: ViewTile(
+                            title: Valuation.YEAR_OF_CONSTRUCTION,
+                            value: widget.valuation.yearOfConstruction,
+                            onPressed: onEditAction,
+                            tabIndex: 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableViewTile(
+                      title: "Floor measurements",
+                      icon: Icons.straighten_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                      values: [
+                        [
+                          widget.valuation.plinthAreaGF,
+                          widget.valuation.heightGF,
+                          widget.valuation.ageGF,
+                          widget.valuation.replacementRateGF,
+                        ],
+                        [
+                          widget.valuation.plinthAreaFF,
+                          widget.valuation.heightFF,
+                          widget.valuation.ageFF,
+                          widget.valuation.replacementRateFF,
+                        ],
+                        [
+                          widget.valuation.plinthAreaSF,
+                          widget.valuation.heightSF,
+                          widget.valuation.ageSF,
+                          widget.valuation.replacementRateSF,
+                        ],
+                        [
+                          widget.valuation.plinthAreaTF,
+                          widget.valuation.heightTF,
+                          widget.valuation.ageTF,
+                          widget.valuation.replacementRateTF,
+                        ],
+                      ],
+                      fieldNames: [
+                        [Valuation.PLINT_AREA_GF, Valuation.HEIGHT_GF, Valuation.AGE_GF, Valuation.REPLACEMENT_RATE_GF],
+                        [Valuation.PLINTH_AREA_FF, Valuation.HEIGHT_FF, Valuation.AGE_FF, Valuation.REPLACEMENT_RATE_FF],
+                        [Valuation.PLINTH_AREA_SF, Valuation.HEIGHT_SF, Valuation.AGE_SF, Valuation.REPLACEMENT_RATE_SF],
+                        [Valuation.PLINTH_AREA_TF, Valuation.HEIGHT_TF, Valuation.AGE_TF, Valuation.REPLACEMENT_RATE_TF],
+                      ],
+                    ),
+                    Row(
+                      spacing: 16,
+                      children: [
+                        Flexible(
+                          flex: 6,
+                          child: ViewTile(
+                            title: Valuation.TYPE_OF_CONSTRUCTION,
+                            value: widget.valuation.constructionType,
+                            icon: Icons.factory_outlined,
+                            onPressed: onEditAction,
+                            tabIndex: 2,
+                          ),
+                        ),
+                        Flexible(
+                          flex: 5,
+                          child: ViewTile(
+                            title: Valuation.QUALITY_OF_CONSTRUCTION,
+                            value: widget.valuation.qualityOfConstruction,
+                            onPressed: onEditAction,
+                            tabIndex: 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      spacing: 16,
+                      children: [
+                        Flexible(
+                          flex: 6,
+                          child: ViewTile(
+                            title: Valuation.CONDITION_OF_BUILDING_EXTERIOR,
+                            value: widget.valuation.exteriorCondition,
+                            icon: Icons.verified_outlined,
+                            onPressed: onEditAction,
+                            tabIndex: 2,
+                          ),
+                        ),
+                        Flexible(
+                          flex: 5,
+                          child: ViewTile(
+                            title: Valuation.CONDITION_OF_BUILDING_INTERIOR,
+                            value: widget.valuation.interiorCondition,
+                            onPressed: onEditAction,
+                            tabIndex: 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    ViewTile(
+                      title: Valuation.FOUNDATION_BASEMENT,
+                      value: widget.valuation.foundationAndBasement,
+                      icon: Icons.foundation_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.RCC_WORKS,
+                      value: widget.valuation.rccWorks,
+                      icon: Icons.grid_3x3_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.WALL_DETAILS,
+                      value: widget.valuation.wallDetails,
+                      icon: Icons.width_full_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.FLOORING,
+                      value: widget.valuation.flooring,
+                      icon: Icons.dashboard_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.JOINERYDOORS,
+                      value: widget.valuation.joinery,
+                      icon: Icons.sensor_door_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.WINDOWS,
+                      value: widget.valuation.windows,
+                      icon: Icons.window_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.WPROOF_TRUSS,
+                      value: widget.valuation.roofing,
+                      icon: Icons.gite_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 440),
+                  child: NotesViewer(title: Valuation.REMARKS, value: widget.valuation.remarks, onPressed: onEditAction, tabIndex: 3),
+                ),
+              ),
               Center(child: Text("fack")),
             ],
           ),

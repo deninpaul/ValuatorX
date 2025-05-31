@@ -41,8 +41,8 @@ class _ValuationsState extends State<Valuations> {
     final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
     final isHomePage = provider.selectedItem == -1;
-    final total = provider.valuations.length.toString().padLeft(2, '0');;
-    final inProgress = provider.valuations.where((r) => r.status == Valuation.statusOptions[0]).length.toString().padLeft(2, '0');;
+    final total = provider.valuations.length.toString().padLeft(2, '0');
+    final inProgress = provider.valuations.where((r) => r.status == Valuation.statusOptions[0]).length.toString().padLeft(2, '0');
 
     viewValuation(int id) {
       provider.setSelectedItem(id);

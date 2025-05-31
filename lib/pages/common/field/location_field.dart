@@ -9,7 +9,8 @@ class LocationField extends StatefulWidget {
   final TextEditingController latitudeController;
   final TextEditingController longitudeController;
   final String focusField;
-  const LocationField({super.key, required this.latitudeController, required this.longitudeController, this.focusField = ""});
+  final IconData icon;
+  const LocationField({super.key, required this.latitudeController, required this.longitudeController, this.icon = Icons.location_on_outlined, this.focusField = ""});
 
   @override
   State<LocationField> createState() => _LocationFieldState();
@@ -77,7 +78,7 @@ class _LocationFieldState extends State<LocationField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 24,
       children: [
-        Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(Icons.location_on_outlined, size: 24)),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(widget.icon, size: 24)),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,

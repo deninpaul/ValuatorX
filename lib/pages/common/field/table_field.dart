@@ -7,12 +7,14 @@ class TableField extends StatefulWidget {
   final TextInputType keyboardType;
   final List<List<TextEditingController>> controllers;
   final List<List<String>> fieldNames;
+  final String focusField;
   const TableField({
     super.key,
     required this.title,
     required this.icon,
     this.minRows = 1,
     this.keyboardType = TextInputType.text,
+    this.focusField = "",
     required this.controllers,
     required this.fieldNames,
   });
@@ -44,7 +46,7 @@ class _TableFieldState extends State<TableField> {
           spacing: 24,
           children: [
             Icon(widget.icon),
-            Text(widget.title, style: textTheme.bodyLarge!.copyWith(fontSize: 16)),
+            Text(widget.title, style: textTheme.bodyLarge!.copyWith(fontSize: 16 )),
           ],
         ),
         const SizedBox(height: 16),
@@ -65,17 +67,19 @@ class _TableFieldState extends State<TableField> {
                         children: [
                           removeIcon(rowIndex),
                           ...List.generate(widget.controllers[rowIndex].length, (colIndex) {
+                            final labelText = widget.fieldNames[rowIndex][colIndex];
                             return Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                                 child: ConstrainedBox(
-                                  constraints: const BoxConstraints(minWidth: 150),
+                                  constraints: BoxConstraints(minWidth: 200),
                                   child: TextFormField(
                                     controller: widget.controllers[rowIndex][colIndex],
                                     keyboardType: widget.keyboardType,
+                                    autofocus: labelText == widget.focusField,
                                     decoration: InputDecoration(
                                       border: const OutlineInputBorder(),
-                                      labelText: widget.fieldNames[rowIndex][colIndex],
+                                      labelText: labelText,
                                     ),
                                   ),
                                 ),

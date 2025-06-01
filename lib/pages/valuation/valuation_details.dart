@@ -7,6 +7,7 @@ import 'package:valuatorx/pages/common/delete_dialog.dart';
 import 'package:valuatorx/pages/common/field/tag.dart';
 import 'package:valuatorx/pages/common/header/actions_header.dart';
 import 'package:valuatorx/pages/common/header/title_header.dart';
+import 'package:valuatorx/pages/common/image/image_picker.dart';
 import 'package:valuatorx/pages/common/view/location_view.dart';
 import 'package:valuatorx/pages/common/view/notes_view.dart';
 import 'package:valuatorx/pages/common/view/table_view.dart';
@@ -97,7 +98,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                   actions: [
                     ActionButton(icon: Icons.edit_outlined, label: "Edit", onPressed: onEditAction),
                     ActionButton(icon: Icons.delete_outlined, label: "Delete", onPressed: onDeleteAction),
-                    ActionButton(icon: Icons.note_add_outlined, label: "Generate Report", onPressed: () {}),
+                    ActionButton(icon: Icons.note_add_outlined, label: "Generate\nReport", onPressed: () {}),
                   ],
                 ),
                 SliverAppBar(
@@ -509,7 +510,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                   child: NotesViewer(title: Valuation.REMARKS, value: widget.valuation.remarks, onPressed: onEditAction, tabIndex: 3),
                 ),
               ),
-              Center(child: Text("fack")),
+              Padding(padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20), child: ImagePickerField()),
             ],
           ),
         ),

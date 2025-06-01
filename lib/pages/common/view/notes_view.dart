@@ -42,6 +42,7 @@ class NotesViewer extends StatelessWidget {
             child: QuillEditor.basic(
               controller: controller,
               config: QuillEditorConfig(
+                showCursor: false,
                 placeholder: "No notes",
                 scrollable: false,
                 customStyles: DefaultStyles(

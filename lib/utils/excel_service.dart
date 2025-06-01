@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:oauth2/oauth2.dart';
 
 class LandRateService extends _ExcelService {
@@ -14,12 +15,14 @@ class _ExcelService {
   late final String tableHeadersEndpoint;
   late final String addTableEndpoint;
   late final String tableRowEndpoint;
+  late final String imageUploadEndpoint;
 
   _ExcelService({fileId, tableName}) {
     tableRowsEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows";
     tableHeadersEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/headerRowRange";
     addTableEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/add";
     tableRowEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
+    imageUploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/Documents/Test/Images/_NAME_:/content";
   }
 
   Future<List<Map<String, dynamic>>> getExcelTable({required Client client}) async {
@@ -83,6 +86,17 @@ class _ExcelService {
       }
     } catch (e) {
       throw Exception("Error deleting Excel table row: $e");
+    }
+  }
+
+  uploadImage({required Client client, required String name, required File image}) async {
+    try {
+      final response = await client.put(Uri.parse(imageUploadEndpoint.replaceAll("_NAME_", name)));
+      if (response.statusCode != 200 || response.statusCode != 201) {
+        throw Exception("Error uploading image. ${response.statusCode} ${response.body}");
+      }
+    } catch (e) {
+      throw Exception("Error uploading image: $e");
     }
   }
 

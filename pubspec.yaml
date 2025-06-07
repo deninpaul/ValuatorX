@@ -17,6 +17,7 @@ dependencies:
   geolocator: ^11.0.0
   http_cache_hive_store: ^5.0.0
   image_picker: ^1.1.2
+  intl: ^0.19.0
   latlong2: ^0.9.1
   oauth2: ^2.0.1
   provider: ^6.1.4

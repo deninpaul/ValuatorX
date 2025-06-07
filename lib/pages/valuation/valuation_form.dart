@@ -3,11 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/field/area_field.dart';
 import 'package:valuatorx/pages/common/field/basic_field.dart';
+import 'package:valuatorx/pages/common/field/date_field.dart';
 import 'package:valuatorx/pages/common/field/dropdown_field.dart';
 import 'package:valuatorx/pages/common/field/location_field.dart';
 import 'package:valuatorx/pages/common/field/notes_field.dart';
 import 'package:valuatorx/pages/common/field/table_field.dart';
 import 'package:valuatorx/pages/common/button/save_button.dart';
+import 'package:valuatorx/pages/common/image/image_picker.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
 import 'package:valuatorx/utils/common_utils.dart';
 
@@ -63,15 +65,16 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   }
 
   submitForm() async {
-    // final provider = Provider.of<LandRateProvider>(context, listen: false);
-    // final id = widget.editMode ? provider.getSelectedLandRate().id : provider.generateIndex();
-    // final values = {for (final key in fieldKeys) key: controllers[key]!.text.trim(), "id": id};
-    // final LandRate newLandRate = LandRate.fromJson(values);
-    // if (widget.editMode) {
-    //   await provider.updateLandRate(context, newLandRate);
-    // } else {
-    //   await provider.addLandRate(context, newLandRate);
-    // }
+    final provider = Provider.of<ValuationProvider>(context, listen: false);
+    final id = widget.editMode ? provider.getSelectedValuation().id : provider.generateIndex();
+    final values = {for (final key in fieldKeys) key: controllers[key]!.text.trim(), "id": id};
+    final Valuation newValuation = Valuation.fromJson(values);
+    newValuation.status = Valuation.statusOptions[0];
+    if (widget.editMode) {
+      await provider.updateValuation(context, newValuation);
+    } else {
+      await provider.addValuations(context, newValuation);
+    }
   }
 
   @override
@@ -80,6 +83,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     final isMobile = size.width < 600;
     final modeName = widget.editMode ? "Edit" : "New";
     final formPadding = EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: 32);
+    final provider = Provider.of<ValuationProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -88,7 +92,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
         title: Text("$modeName Valuation Report", style: headerTheme),
         leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         actions: [
-          SaveButton(formKey: _formKey, onSubmit: () {}, enabled: ready),
+          SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready, creating: provider.isCreating),
           PopupMenuButton(offset: const Offset(0, 48), itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))]),
         ],
         bottom: TabBar(controller: _tabController, isScrollable: true, tabs: tabs.map((tab) => Tab(text: tab)).toList()),
@@ -109,12 +113,14 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                     controller: controllers[Valuation.REPORT_NAME]!,
                     icon: Icons.person_outline,
                     focusField: widget.focusField,
+                    required: true,
                   ),
-                  BasicField(
+                  DatePickerField(
                     name: Valuation.DATE_OF_INSPECTION,
                     controller: controllers[Valuation.DATE_OF_INSPECTION]!,
                     icon: Icons.calendar_today_outlined,
                     focusField: widget.focusField,
+                    required: true,
                   ),
                   Divider(),
                   BasicField(
@@ -430,7 +436,10 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               child: ready ? NotesField(controller: controllers[Valuation.REMARKS]!) : CircularProgressIndicator(),
             ),
-            Text("Biii"),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 28, horizontal: 20),
+              child: ImagePickerField(controller: controllers[Valuation.PHOTOS]!, editMode: true),
+            ),
           ],
         ),
       ),

@@ -1,12 +1,12 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageViewer extends StatelessWidget {
-  final File image;
+  final String image;
   final int index;
   final VoidCallback onDelete;
+  final bool editable;
 
-  const ImageViewer({super.key, required this.image, required this.index, required this.onDelete});
+  const ImageViewer({super.key, required this.image, required this.index, required this.onDelete, this.editable = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ImageViewer extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 24),
                   child: InteractiveViewer(
-                    child: ClipRRect(borderRadius: BorderRadius.circular(16), child: Image.file(image, fit: BoxFit.contain)),
+                    child: ClipRRect(borderRadius: BorderRadius.circular(16), child: Image.network(image, fit: BoxFit.contain)),
                   ),
                 ),
               ),
@@ -38,18 +38,19 @@ class ImageViewer extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextButton.icon(
-                      onPressed: onDelete,
-                      icon: const Icon(Icons.delete_outline),
-                      label: const Text('Delete image'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                        backgroundColor: colorScheme.errorContainer,
-                        foregroundColor: colorScheme.error,
-                        textStyle: textTheme.bodyMedium,
+                    if (editable)
+                      TextButton.icon(
+                        onPressed: onDelete,
+                        icon: const Icon(Icons.delete_outline),
+                        label: const Text('Delete image'),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                          backgroundColor: colorScheme.errorContainer,
+                          foregroundColor: colorScheme.error,
+                          textStyle: textTheme.bodyMedium,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 40, child: VerticalDivider()),
+                    if (editable) const SizedBox(height: 40, child: VerticalDivider()),
                     TextButton.icon(
                       onPressed: () => Navigator.of(context).pop(),
                       icon: const Icon(Icons.close),

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:oauth2/oauth2.dart';
 
 class LandRateService extends _ExcelService {
@@ -15,14 +15,16 @@ class _ExcelService {
   late final String tableHeadersEndpoint;
   late final String addTableEndpoint;
   late final String tableRowEndpoint;
-  late final String imageUploadEndpoint;
+  late final String fileUploadEndpoint;
+  late final String fileDownloadEndpoint;
 
   _ExcelService({fileId, tableName}) {
     tableRowsEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows";
     tableHeadersEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/headerRowRange";
     addTableEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/add";
     tableRowEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
-    imageUploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/Documents/Test/Images/_NAME_:/content";
+    fileUploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/Documents/Test/Images/_NAME_:/content";
+    fileDownloadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/_ID_";
   }
 
   Future<List<Map<String, dynamic>>> getExcelTable({required Client client}) async {
@@ -89,21 +91,37 @@ class _ExcelService {
     }
   }
 
-  uploadImage({required Client client, required String name, required File image}) async {
+  uploadFile({required Client client, required String name, required Uint8List file, contentType = "image/jpeg"}) async {
     try {
-      final response = await client.put(Uri.parse(imageUploadEndpoint.replaceAll("_NAME_", name)));
-      if (response.statusCode != 200 || response.statusCode != 201) {
-        throw Exception("Error uploading image. ${response.statusCode} ${response.body}");
+      final response = await client.put(
+        Uri.parse(fileUploadEndpoint.replaceAll("_NAME_", name)),
+        headers: {"Content-Type": contentType},
+        body: file,
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception("Error uploading file $name. ${response.statusCode} ${response.body}");
       }
+      final responseData = json.decode(response.body);
+      return responseData['id'] as String;
     } catch (e) {
-      throw Exception("Error uploading image: $e");
+      throw Exception("Error uploading file $name: $e");
     }
   }
 
-  List<Map<String, dynamic>> _parseTableToJson({
-    required Map<String, dynamic> fieldsData,
-    required Map<String, dynamic> rowsData,
-  }) {
+  getFileDownloadLink({required Client client, required String id}) async {
+    try {
+      final response = await client.get(Uri.parse(fileDownloadEndpoint.replaceAll("_ID_", id)));
+      if (response.statusCode != 200) {
+        throw Exception("Error retrieving download file link $id. ${response.statusCode} ${response.body}");
+      }
+      final responseData = json.decode(response.body);
+      return responseData['@microsoft.graph.downloadUrl'] as String;
+    } catch (e) {
+      throw Exception("Error retrieving download file link $id: $e");
+    }
+  }
+
+  List<Map<String, dynamic>> _parseTableToJson({required Map<String, dynamic> fieldsData, required Map<String, dynamic> rowsData}) {
     final fields = fieldsData["values"][0];
     final rows = rowsData["value"];
 

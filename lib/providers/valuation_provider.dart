@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
@@ -38,7 +40,7 @@ class ValuationProvider extends ChangeNotifier {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      await service.addToExcelTable(client: client, values: valuations.toList());
+      await service.addToExcelTable(client: client, values: newValuation.toList());
       debugPrint("New Valuation added to Excel table successfully.");
       await getValuations(context, refresh: false);
     } catch (e) {
@@ -76,6 +78,36 @@ class ValuationProvider extends ChangeNotifier {
     } finally {
       setDeleting(false);
     }
+  }
+
+  Future<String> uploadImage(BuildContext context, File image) async {
+    String id = "";
+    final fileData = await image.readAsBytes();
+    final fileName = image.path.split('/').last;
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final client = await authProvider.getClient();
+      id = await service.uploadFile(client: client, name: fileName, file: fileData);
+    } catch (e) {
+      debugPrint("Failed to upload image: ${e.toString()}");
+    }
+    return id;
+  }
+
+  Future<List<String>> getImages(BuildContext context, List<String> ids) async {
+    List<String> downloadLinks = [];
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final client = await authProvider.getClient();
+      for (var id in ids) {
+        final String downloadLink = await service.getFileDownloadLink(client: client, id: id);
+        downloadLinks.add(downloadLink);
+      }
+      return downloadLinks;
+    } catch (e) {
+      debugPrint("Failed to download image: ${e.toString()}");
+    }
+    return downloadLinks;
   }
 
   int generateIndex() {

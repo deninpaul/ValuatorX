@@ -72,7 +72,7 @@ class _ValuationsState extends State<Valuations> {
                       ),
                       SizedBox(height: 16),
                       ExpandableList(
-                        items: provider.valuations,
+                        items: provider.valuations.reversed.toList(),
                         isLoading: provider.isLoading,
                         itemBuilder: (ctx, valuation, index) {
                           return SummaryTile(

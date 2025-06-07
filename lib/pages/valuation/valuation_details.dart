@@ -510,7 +510,10 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                   child: NotesViewer(title: Valuation.REMARKS, value: widget.valuation.remarks, onPressed: onEditAction, tabIndex: 3),
                 ),
               ),
-              Padding(padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20), child: ImagePickerField()),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                child: ImagePickerField(editMode: false, value: widget.valuation.photos, onEditAction: () => onEditAction(fieldTab: 4),),
+              ),
             ],
           ),
         ),

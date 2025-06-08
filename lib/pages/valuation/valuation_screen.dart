@@ -31,9 +31,13 @@ class _ValuationsState extends State<Valuations> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<ValuationProvider>(context, listen: false);
-      provider.getDrafts();
-      provider.getValuations(context, refresh: provider.valuations.isEmpty);
+      fetchAllValuations();
     });
+  }
+
+  fetchAllValuations() async {
+    await provider.getDrafts();
+    await provider.getValuations(context, refresh: provider.valuations.isEmpty);
   }
 
   @override
@@ -63,7 +67,7 @@ class _ValuationsState extends State<Valuations> {
                 backgroundColor: colorScheme.surfaceContainer,
                 floatingActionButton: CreateButton(createPage: ValuationForm(), label: "New report"),
                 body: RefreshIndicator(
-                  onRefresh: () => provider.getValuations(context),
+                  onRefresh: () => fetchAllValuations(),
                   child: ListView(
                     key: const ValueKey('list'),
                     children: [

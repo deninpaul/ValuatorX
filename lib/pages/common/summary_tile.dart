@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:valuatorx/pages/common/field/tag.dart';
 
 class SummaryTile extends StatelessWidget {
-  final int id;
+  final String id;
   final String title;
   final String subtitle;
   final String info;

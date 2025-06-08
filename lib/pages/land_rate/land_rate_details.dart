@@ -23,7 +23,7 @@ class LandRateDetails extends StatelessWidget {
     final MapController mapController = MapController();
 
     onEditAction({String fieldName = "",  int fieldTab = 0}) {
-      provider.setSelectedItem(landRate.id);
+      provider.setSelectedItem(landRate.id.toString());
       Navigator.push(context, MaterialPageRoute(builder: (context) => LandRateForm(editMode: true, focusField: fieldName)));
     }
 
@@ -38,13 +38,13 @@ class LandRateDetails extends StatelessWidget {
             ),
       );
       if (confirmed == true) {
-        provider.setSelectedItem(-1);
+        provider.setSelectedItem("");
       }
     }
 
     onBackAction() {
       Future.microtask(() {
-        provider.setSelectedItem(-1);
+        provider.setSelectedItem("");
       });
     }
 

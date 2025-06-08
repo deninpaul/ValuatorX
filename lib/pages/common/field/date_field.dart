@@ -70,7 +70,7 @@ class DatePickerField extends StatelessWidget {
                   suffixIcon: const Icon(Icons.date_range),
                 ),
                 validator: (value) =>
-                    required && (value == null || value.isEmpty) ? 'Required' : null,
+                    required && (value == null || value.isEmpty) ? 'Required field' : null,
               ),
             ),
           ),

@@ -36,7 +36,7 @@ class BasicField extends StatelessWidget {
             textInputAction: TextInputAction.next,
             keyboardType: type,
             decoration: InputDecoration(labelText: name, border: const OutlineInputBorder()),
-            validator: (value) => required && (value == null || value.isEmpty) ? 'Required' : null,
+            validator: (value) => required && (value == null || value.isEmpty) ? 'Required field' : null,
           ),
         ),
       ],

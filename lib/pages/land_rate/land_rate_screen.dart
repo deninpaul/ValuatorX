@@ -43,7 +43,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
 
   @override
   void dispose() {
-    provider.setSelectedItem(-1, notify: false);
+    provider.setSelectedItem("", notify: false);
     super.dispose();
   }
 
@@ -52,9 +52,9 @@ class _LandRateScreenState extends State<LandRateScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final provider = Provider.of<LandRateProvider>(context);
-    final isHomePage = provider.selectedItem == -1;
+    final isHomePage = provider.selectedItem.isEmpty;
 
-    viewLandRate(int id) {
+    viewLandRate(String id) {
       provider.setSelectedItem(id);
     }
 
@@ -109,7 +109,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
                         itemBuilder: (ctx, landRate, index) {
                           return SummaryTile(
                             onTapAction: viewLandRate,
-                            id: landRate.id,
+                            id: landRate.id.toString(),
                             title: "${landRate.latitude}° ${landRate.longitude}°",
                             subtitle: "${landRate.landRatePerCent}/cent",
                             info: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",

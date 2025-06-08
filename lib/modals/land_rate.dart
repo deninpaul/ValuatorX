@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 class LandRate {
-  final int id;
+  final String id;
   final String slNo;
   final String latitude;
   final String longitude;

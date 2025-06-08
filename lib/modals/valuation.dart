@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 class Valuation {
-  final int id;
+  final String id;
   final String reportName;
   final String dateOfInspection;
   String status;
@@ -341,6 +341,7 @@ class Valuation {
 
   Map<String, dynamic> toJson() {
     return {
+      ID: id,
       REPORT_NAME: reportName,
       DATE_OF_INSPECTION: dateOfInspection,
       STATUS: status,

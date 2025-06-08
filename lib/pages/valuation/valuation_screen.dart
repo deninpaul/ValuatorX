@@ -21,18 +21,24 @@ class Valuations extends StatefulWidget {
 
 class _ValuationsState extends State<Valuations> {
   late ValuationProvider provider;
+
+  String subtitle(Valuation valuation) {
+    return [valuation.village, valuation.taluk].where((e) => e.trim().isNotEmpty).join(', ');
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<ValuationProvider>(context, listen: false);
+      provider.getDrafts();
       provider.getValuations(context, refresh: provider.valuations.isEmpty);
     });
   }
 
   @override
   void dispose() {
-    provider.setSelectedItem(-1, notify: false);
+    provider.setSelectedItem("", notify: false);
     super.dispose();
   }
 
@@ -40,11 +46,11 @@ class _ValuationsState extends State<Valuations> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
-    final isHomePage = provider.selectedItem == -1;
-    final total = provider.valuations.length.toString().padLeft(2, '0');
-    final inProgress = provider.valuations.where((r) => r.status == Valuation.statusOptions[0]).length.toString().padLeft(2, '0');
+    final isHomePage = provider.selectedItem == "";
+    final total = provider.allValutions.length.toString().padLeft(2, '0');
+    final inProgress = provider.allValutions.where((r) => r.status == Valuation.statusOptions[0]).length.toString().padLeft(2, '0');
 
-    viewValuation(int id) {
+    viewValuation(String id) {
       provider.setSelectedItem(id);
     }
 
@@ -72,13 +78,13 @@ class _ValuationsState extends State<Valuations> {
                       ),
                       SizedBox(height: 16),
                       ExpandableList(
-                        items: provider.valuations.reversed.toList(),
+                        items: provider.allValutions,
                         isLoading: provider.isLoading,
                         itemBuilder: (ctx, valuation, index) {
                           return SummaryTile(
                             id: valuation.id,
                             title: valuation.reportName,
-                            subtitle: "${valuation.village}, ${valuation.taluk}",
+                            subtitle: subtitle(valuation).isNotEmpty ? subtitle(valuation) : "N/A",
                             info: valuation.dateOfInspection,
                             tag: valuation.status,
                             onTapAction: viewValuation,

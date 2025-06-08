@@ -9,7 +9,7 @@ class LandRateProvider extends ChangeNotifier {
   bool isLoading = false;
   bool isCreating = false;
   bool isDeleting = false;
-  int selectedItem = -1;
+  String selectedItem = "";
 
   final LandRateService service = LandRateService();
 
@@ -30,7 +30,7 @@ class LandRateProvider extends ChangeNotifier {
   }
 
   LandRate getSelectedLandRate() {
-    return landRates.firstWhere((landRate) => landRate.id == selectedItem);
+    return landRates.firstWhere((landRate) => landRate.id.toString() == selectedItem);
   }
 
   addLandRate(BuildContext context, LandRate newLandRate) async {
@@ -53,7 +53,7 @@ class LandRateProvider extends ChangeNotifier {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      await service.updateExcelTableRow(client: client, index: landRate.id, values: landRate.toList());
+      await service.updateExcelTableRow(client: client, index: landRate.id.toString(), values: landRate.toList());
       debugPrint("Land Rate ${landRate.slNo} updated in Excel table successfully.");
       await getLandRates(context, refresh: false);
     } catch (e) {
@@ -68,7 +68,7 @@ class LandRateProvider extends ChangeNotifier {
       setDeleting(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      await service.deleteExcelTableRow(client: client, index: landRate.id);
+      await service.deleteExcelTableRow(client: client, index: landRate.id.toString());
       debugPrint("Land Rate ${landRate.slNo} deleted from Excel table successfully.");
       await getLandRates(context, refresh: false);
     } catch (e) {
@@ -78,11 +78,12 @@ class LandRateProvider extends ChangeNotifier {
     }
   }
 
-  int generateIndex() {
-    return landRates.isEmpty ? -1 : landRates.last.id + 1;
+  String generateIndex() {
+    final ids = landRates.map((e) => int.tryParse(e.id)).whereType<int>().toList();
+    return (ids.isEmpty ? 0 : ids.last + 1).toString();
   }
 
-  void setSelectedItem(int value, {bool notify = true}) {
+  void setSelectedItem(String value, {bool notify = true}) {
     selectedItem = value;
     if (notify) {
       notifyListeners();

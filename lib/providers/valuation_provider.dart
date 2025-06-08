@@ -5,15 +5,19 @@ import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:valuatorx/utils/excel_service.dart';
+import 'package:valuatorx/utils/hive_service.dart';
 
 class ValuationProvider extends ChangeNotifier {
+  List<Valuation> get allValutions => drafts.reversed.toList() + valuations.reversed.toList();
   List<Valuation> valuations = [];
+  List<Valuation> drafts = [];
   bool isLoading = false;
   bool isCreating = false;
   bool isDeleting = false;
-  int selectedItem = -1;
+  String selectedItem = "";
 
   final ValuationService service = ValuationService();
+  final HiveService draftService = HiveService();
 
   getValuations(BuildContext context, {bool refresh = true}) async {
     try {
@@ -32,7 +36,7 @@ class ValuationProvider extends ChangeNotifier {
   }
 
   Valuation getSelectedValuation() {
-    return valuations.firstWhere((report) => report.id == selectedItem);
+    return allValutions.firstWhere((report) => report.id == selectedItem);
   }
 
   addValuations(BuildContext context, Valuation newValuation) async {
@@ -80,6 +84,52 @@ class ValuationProvider extends ChangeNotifier {
     }
   }
 
+  getDrafts() async {
+    try {
+      await draftService.init(VALUATION_DRAFT_BOX);
+      var result = draftService.getAllDrafts();
+      drafts = result.map(((item) => Valuation.fromJson(item))).toList();
+      debugPrint("Fetched ${drafts.length} Valuation record(s) from drafts.");
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Failed to fetch Valuations from drafts: ${e.toString()}");
+    }
+  }
+
+  Future<Map<String,dynamic>> getDraft(String id) async {
+    try {
+      await draftService.init(VALUATION_DRAFT_BOX);
+      final result = draftService.get(id);
+      debugPrint("Fetched $id from drafts.");
+      return result;
+    } catch (e) {
+      debugPrint("Failed to fetch Valuation from draft: ${e.toString()}");
+    }
+    return {};
+  }
+
+  createOrUpdateDraft(Valuation valuation) async {
+    try {
+      await draftService.init(VALUATION_DRAFT_BOX);
+      await draftService.put(valuation.id, valuation.toJson());
+      debugPrint("Saved draft ${valuation.id} to drafts.");
+      getDrafts();
+    } catch (e) {
+      debugPrint("Failed to save as drafts: ${e.toString()}");
+    }
+  }
+
+  deleteDraft(String id) async {
+    try {
+      await draftService.init(VALUATION_DRAFT_BOX);
+      await draftService.delete(id);
+      debugPrint("Deleted draft ${id} from drafts.");
+      getDrafts();
+    } catch (e) {
+      debugPrint("Failed to delete draft: ${e.toString()}");
+    }
+  }
+
   Future<String> uploadImage(BuildContext context, File image) async {
     String id = "";
     final fileData = await image.readAsBytes();
@@ -110,11 +160,34 @@ class ValuationProvider extends ChangeNotifier {
     return downloadLinks;
   }
 
-  int generateIndex() {
-    return valuations.isEmpty ? -1 : valuations.last.id + 1;
+  Future<bool> draftExists(Valuation valuation) async {
+    try {
+      await draftService.init(VALUATION_DRAFT_BOX);
+      var result = draftService.get(valuation.id);
+      return result.isNotEmpty;
+    } catch (e) {
+      debugPrint("Failed to check whether draft ${valuation.id} exists: ${e.toString()}");
+    }
+    return false;
   }
 
-  void setSelectedItem(int value, {bool notify = true}) {
+  Future<String> generateDraftIndex() async {
+    try {
+      await draftService.init(VALUATION_DRAFT_BOX);
+      var result = await draftService.generateDraftId();
+      return "draft_$result";
+    } catch (e) {
+      debugPrint("Failed to generate draft id: ${e.toString()}");
+    }
+    return "draft_0";
+  }
+
+  String generateIndex() {
+    final ids = valuations.map((e) => int.tryParse(e.id)).whereType<int>().toList()..sort();
+    return (ids.isEmpty ? 0 : ids.last + 1).toString();
+  }
+
+  void setSelectedItem(String value, {bool notify = true}) {
     selectedItem = value;
     if (notify) {
       notifyListeners();

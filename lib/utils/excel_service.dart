@@ -64,10 +64,10 @@ class _ExcelService {
     }
   }
 
-  updateExcelTableRow({required Client client, required int index, required List values}) async {
+  updateExcelTableRow({required Client client, required String index, required List values}) async {
     try {
       final response = await client.patch(
-        Uri.parse(tableRowEndpoint.replaceAll("_ID_", index.toString())),
+        Uri.parse(tableRowEndpoint.replaceAll("_ID_", index)),
         body: jsonEncode({
           "values": [values],
         }),
@@ -80,9 +80,9 @@ class _ExcelService {
     }
   }
 
-  deleteExcelTableRow({required Client client, required int index}) async {
+  deleteExcelTableRow({required Client client, required String index}) async {
     try {
-      final response = await client.delete(Uri.parse(tableRowEndpoint.replaceAll("_ID_", index.toString())));
+      final response = await client.delete(Uri.parse(tableRowEndpoint.replaceAll("_ID_", index)));
       if (response.statusCode != 204) {
         throw Exception("Error deleting Excel Table row. ${response.statusCode} ${response.body}");
       }
@@ -134,7 +134,7 @@ class _ExcelService {
         for (var i = 0; i < fields.length; i++) {
           item[fields[i]] = values[i];
         }
-        item['id'] = row["index"];
+        item['id'] = row["index"].toString();
         json.add(item);
       }
     }

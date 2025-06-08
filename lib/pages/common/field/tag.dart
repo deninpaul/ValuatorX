@@ -5,9 +5,17 @@ class Tag extends StatefulWidget {
   final String text;
   final bool isLoading;
   final bool isEditable;
+  final bool disabled;
   final Function(String) onStatusChange;
 
-  const Tag({super.key, required this.text, this.onStatusChange = _defaultOnStatusChange, this.isEditable = false, this.isLoading = false});
+  const Tag({
+    super.key,
+    required this.text,
+    this.onStatusChange = _defaultOnStatusChange,
+    this.isEditable = false,
+    this.isLoading = false,
+    this.disabled = false,
+  });
   static _defaultOnStatusChange(String s) {}
 
   @override
@@ -28,9 +36,10 @@ class _TagState extends State<Tag> {
     final textTheme = Theme.of(context).textTheme;
     Color tagColor() {
       switch (widget.text) {
+        case "Backlog":
         case "In progress":
           return colorScheme.secondaryContainer;
-        case "Backlog":
+        case "Draft":
           return colorScheme.tertiaryContainer;
         default:
           return widget.isEditable ? colorScheme.surface : colorScheme.surfaceContainer;
@@ -49,23 +58,26 @@ class _TagState extends State<Tag> {
               child:
                   !widget.isLoading
                       ? DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: widget.text,
-                          dropdownColor: colorScheme.surface,
-                          style: textTheme.bodyMedium,
-                          icon: const Icon(Icons.expand_more),
-                          elevation: 0,
-                          padding: EdgeInsets.only(left: 8),
-                          isDense: true,
-                          onChanged: (newStatus) {
-                            if (newStatus != null && newStatus != widget.text) {
-                              widget.onStatusChange(newStatus);
-                            }
-                          },
-                          items:
-                              statusOptions.map((status) {
-                                return DropdownMenuItem<String>(value: status, child: Text(status));
-                              }).toList(),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minWidth: 84),
+                          child: DropdownButton<String>(
+                            value: widget.text,
+                            dropdownColor: colorScheme.surface,
+                            style: textTheme.bodyMedium,
+                            icon: const Icon(Icons.expand_more),
+                            elevation: 0,
+                            padding: EdgeInsets.only(left: 8),
+                            isDense: true,
+                            onChanged: (newStatus) {
+                              if (newStatus != null && newStatus != widget.text) {
+                                widget.onStatusChange(newStatus);
+                              }
+                            },
+                            items:
+                                {if (!widget.disabled) ...statusOptions, widget.text}.map((status) {
+                                  return DropdownMenuItem<String>(value: status, child: Text(status));
+                                }).toList(),
+                          ),
                         ),
                       )
                       : Container(
@@ -76,7 +88,10 @@ class _TagState extends State<Tag> {
                       ),
             )
           else
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2), child: Text(widget.text, style: textTheme.bodyMedium)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              child: Text(widget.text, style: textTheme.bodyMedium),
+            ),
         ],
       ),
     );

@@ -29,6 +29,8 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
   final MapController mapController = MapController();
   late TabController tabController;
 
+  bool get isDraft => widget.valuation.id.contains("draft_");
+
   @override
   void initState() {
     super.initState();
@@ -60,17 +62,21 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
         builder:
             (ctx) => DeleteDialog(
               onDelete: () async {
-                await provider.deleteValuation(context, widget.valuation);
+                if (isDraft) {
+                  await provider.deleteDraft(widget.valuation.id);
+                } else {
+                  await provider.deleteValuation(context, widget.valuation);
+                }
               },
             ),
       );
       if (confirmed == true) {
-        provider.setSelectedItem(-1);
+        provider.setSelectedItem("");
       }
     }
 
     onBackAction() {
-      provider.setSelectedItem(-1);
+      provider.setSelectedItem("");
     }
 
     updateTagAction(String newStatus) async {
@@ -91,14 +97,24 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                   expandedHeight: 124,
                   onBackPressed: onBackAction,
                   actions: [
-                    Tag(text: widget.valuation.status, isEditable: true, onStatusChange: updateTagAction, isLoading: provider.isCreating),
+                    Tag(
+                      text: widget.valuation.status,
+                      isEditable: true,
+                      onStatusChange: updateTagAction,
+                      isLoading: provider.isCreating,
+                      disabled: isDraft,
+                    ),
                   ],
                 ),
                 ActionsHeader(
                   actions: [
-                    ActionButton(icon: Icons.edit_outlined, label: "Edit", onPressed: onEditAction),
-                    ActionButton(icon: Icons.delete_outlined, label: "Delete", onPressed: onDeleteAction),
-                    ActionButton(icon: Icons.note_add_outlined, label: "Generate\nReport", onPressed: () {}),
+                    ActionButton(
+                      icon: !isDraft ? Icons.edit_outlined : Icons.arrow_forward,
+                      label: !isDraft ? "Edit" : "Resume",
+                      onPressed: onEditAction,
+                    ),
+                    ActionButton(icon: Icons.delete_outlined, label: !isDraft ? "Delete" : "Delete Draft", onPressed: onDeleteAction),
+                    if (!isDraft) ActionButton(icon: Icons.note_add_outlined, label: "Generate\nReport", onPressed: () {}),
                   ],
                 ),
                 SliverAppBar(
@@ -512,7 +528,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-                child: ImagePickerField(editMode: false, value: widget.valuation.photos, onEditAction: () => onEditAction(fieldTab: 4),),
+                child: ImagePickerField(editMode: false, value: widget.valuation.photos, onEditAction: () => onEditAction(fieldTab: 4)),
               ),
             ],
           ),

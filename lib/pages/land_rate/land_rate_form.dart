@@ -55,7 +55,7 @@ class _LandRateFormState extends State<LandRateForm> {
         controllers[LandRate.SL_NO]!.text = "Loading...";
         await provider.getLandRates(context, refresh: false);
       }
-      controllers[LandRate.SL_NO]!.text = (provider.generateIndex() + 1).toString();
+      controllers[LandRate.SL_NO]!.text = provider.generateIndex();
     }
     setState(() => ready = true);
   }

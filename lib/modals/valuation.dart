@@ -5,6 +5,7 @@ class Valuation {
   final String reportName;
   final String dateOfInspection;
   String status;
+  String reportLink;
   final String bankDetails;
   final String ownerDetails;
   final String propertyPossessionAddress;
@@ -89,6 +90,7 @@ class Valuation {
     required this.reportName,
     required this.dateOfInspection,
     required this.status,
+    required this.reportLink,
     required this.bankDetails,
     required this.ownerDetails,
     required this.propertyPossessionAddress,
@@ -173,6 +175,7 @@ class Valuation {
   static const String REPORT_NAME = "Report Name";
   static const String DATE_OF_INSPECTION = "Date of Inspection";
   static const String STATUS = "Status";
+  static const String REPORT_LINK = "Report link";
   static const String BANK_BRANCH_VALUATION_TEAM_DETAILS = "Bank/ Branch/ Valuation Team Details";
   static const String NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO = "Name of the owner(s) and addresses with Phone No.";
   static const String PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS = "Property Possession Name/Postal Address`";
@@ -258,6 +261,7 @@ class Valuation {
       reportName: json[REPORT_NAME].toString(),
       dateOfInspection: json[DATE_OF_INSPECTION].toString(),
       status: json[STATUS].toString(),
+      reportLink: json[REPORT_LINK].toString(),
       bankDetails: json[BANK_BRANCH_VALUATION_TEAM_DETAILS].toString(),
       ownerDetails: json[NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO].toString(),
       propertyPossessionAddress: json[PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS].toString(),
@@ -345,6 +349,7 @@ class Valuation {
       REPORT_NAME: reportName,
       DATE_OF_INSPECTION: dateOfInspection,
       STATUS: status,
+      REPORT_LINK: reportLink,
       BANK_BRANCH_VALUATION_TEAM_DETAILS: bankDetails,
       NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO: ownerDetails,
       PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS: propertyPossessionAddress,
@@ -431,6 +436,7 @@ class Valuation {
       reportName,
       dateOfInspection,
       status,
+      reportLink,
       bankDetails,
       ownerDetails,
       propertyPossessionAddress,
@@ -516,6 +522,7 @@ class Valuation {
     REPORT_NAME,
     DATE_OF_INSPECTION,
     STATUS,
+    REPORT_LINK,
     BANK_BRANCH_VALUATION_TEAM_DETAILS,
     NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO,
     PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS,

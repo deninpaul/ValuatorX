@@ -21,3 +21,13 @@ bool equal(Map a, Map b) {
   const eq = DeepCollectionEquality();
   return eq.equals(aCopy, bCopy);
 }
+
+String getExcelColumn(int num) {
+  String column = '';
+  while (num > 0) {
+    int remainder = (num - 1) % 26;
+    column = String.fromCharCode(65 + remainder) + column;
+    num = (num - 1) ~/ 26;
+  }
+  return column;
+}

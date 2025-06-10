@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
+// ignore_for_file: non_constant_identifier_names
 final VALUATION_DRAFT_BOX = "valuations";
 
 class HiveService {

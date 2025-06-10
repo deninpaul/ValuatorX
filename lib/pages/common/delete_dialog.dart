@@ -15,8 +15,9 @@ class _DeleteDialogState extends State<DeleteDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     return AlertDialog(
       title: Text('Confirm Deletion'),
@@ -39,17 +40,15 @@ class _DeleteDialogState extends State<DeleteDialog> {
       actions: [
         TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
         TextButton(
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
-            backgroundColor: colorScheme.primary,
-          ),
-          onPressed: () async {
-            if (_isMatching) {
-              setState(() => _loading = true);
-              await widget.onDelete();
-              Navigator.of(context).pop(true);
-            }
-          },
+          style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10), backgroundColor: colorScheme.primary, disabledBackgroundColor: theme.disabledColor),
+          onPressed:
+              _isMatching
+                  ? () async {
+                    setState(() => _loading = true);
+                    await widget.onDelete();
+                    Navigator.of(context).pop(true);
+                  }
+                  : null,
           child:
               _loading
                   ? Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/button/action_button.dart';
 import 'package:valuatorx/pages/common/delete_dialog.dart';
@@ -12,6 +13,7 @@ import 'package:valuatorx/pages/common/view/location_view.dart';
 import 'package:valuatorx/pages/common/view/notes_view.dart';
 import 'package:valuatorx/pages/common/view/table_view.dart';
 import 'package:valuatorx/pages/common/view/view_tile.dart';
+import 'package:valuatorx/pages/valuation/components/generate_dialog.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
 
@@ -54,6 +56,17 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
         context,
         MaterialPageRoute(builder: (context) => ValuationForm(editMode: true, focusField: fieldName, focusTabIndex: fieldTab)),
       );
+    }
+
+    onGenerateReport() async {
+      await showDialog<bool>(context: context, barrierDismissible: false, builder: (ctx) => GenerateDialog(valuation: widget.valuation));
+    }
+
+    onOpenReport() async {
+      final url = Uri.parse(widget.valuation.reportLink);
+      if (!await launchUrl(url)) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not open report in excel')));
+      }
     }
 
     onDeleteAction() async {
@@ -114,7 +127,10 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                       onPressed: onEditAction,
                     ),
                     ActionButton(icon: Icons.delete_outlined, label: !isDraft ? "Delete" : "Delete Draft", onPressed: onDeleteAction),
-                    if (!isDraft) ActionButton(icon: Icons.note_add_outlined, label: "Generate\nReport", onPressed: () {}),
+                    if (!isDraft)
+                      widget.valuation.reportLink.isEmpty
+                          ? ActionButton(icon: Icons.note_add_outlined, label: "Generate\nReport", onPressed: onGenerateReport)
+                          : ActionButton(icon: Icons.launch, label: "Open\nReport", onPressed: onOpenReport),
                   ],
                 ),
                 SliverAppBar(

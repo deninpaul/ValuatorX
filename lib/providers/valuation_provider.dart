@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
+import 'package:valuatorx/pages/common/status_icon.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
+import 'package:valuatorx/utils/common_utils.dart';
 import 'package:valuatorx/utils/excel_service.dart';
 import 'package:valuatorx/utils/hive_service.dart';
 
@@ -24,7 +26,7 @@ class ValuationProvider extends ChangeNotifier {
       if (refresh) setLoading(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      var result = await service.getExcelTable(client: client);
+      final result = await service.getExcelTable(client: client);
       valuations = result.map((item) => Valuation.fromJson(item)).toList();
       debugPrint("Fetched ${valuations.length} Valuation record(s) from Excel successfully.");
       notifyListeners();
@@ -84,6 +86,45 @@ class ValuationProvider extends ChangeNotifier {
     }
   }
 
+  generateReport(BuildContext context, Valuation valuation, void Function(String message, {Status newStatus}) onStatusUpdate) async {
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final client = await authProvider.getClient();
+
+      onStatusUpdate("Generating Excel file");
+      final newFileId = await service.createNewReportWorksheet(
+        client: client,
+        fileName: "${valuation.id} - ${valuation.reportName} @ ${valuation.village}.xlsx",
+      );
+
+      onStatusUpdate("Linking values");
+      final workbookLink = await service.getWorkbookLink(client: client);
+
+      int column = 1;
+      final values =
+          valuation.toList().map((val) {
+            final columnLetter = getExcelColumn(column++);
+            final row = int.parse(valuation.id) + 2;
+            return ["=LET(VAL, '$workbookLink'!$columnLetter$row, IF(VAL = \"\", \"\", VAL))"];
+          }).toList();
+
+      await service.addValuesToRange(client: client, range: "B1:B82", values: values, id: newFileId, sheet: "Data");
+
+      onStatusUpdate("Fetching report link");
+      final String reportLink = await service.getWebLink(client: client, id: newFileId);
+      if (reportLink.isNotEmpty) {
+        valuation.reportLink = reportLink;
+        await updateValuation(context, valuation);
+      } else {
+        throw Exception("Could not fetch/update report link");
+      }
+
+      onStatusUpdate("Done", newStatus: Status.success);
+    } catch (e) {
+      onStatusUpdate("Failed to generate report: ${e.toString()}", newStatus: Status.error);
+    }
+  }
+
   getDrafts() async {
     try {
       await draftService.init(VALUATION_DRAFT_BOX);
@@ -96,7 +137,7 @@ class ValuationProvider extends ChangeNotifier {
     }
   }
 
-  Future<Map<String,dynamic>> getDraft(String id) async {
+  Future<Map<String, dynamic>> getDraft(String id) async {
     try {
       await draftService.init(VALUATION_DRAFT_BOX);
       final result = draftService.get(id);
@@ -123,7 +164,7 @@ class ValuationProvider extends ChangeNotifier {
     try {
       await draftService.init(VALUATION_DRAFT_BOX);
       await draftService.delete(id);
-      debugPrint("Deleted draft ${id} from drafts.");
+      debugPrint("Deleted draft $id from drafts.");
       getDrafts();
     } catch (e) {
       debugPrint("Failed to delete draft: ${e.toString()}");

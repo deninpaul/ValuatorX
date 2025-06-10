@@ -28,7 +28,7 @@ class LocationProvider extends ChangeNotifier {
     if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) {
       throw Exception("Location access denied");
     }
-    final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     return LatLng(position.latitude, position.longitude);
   }
 

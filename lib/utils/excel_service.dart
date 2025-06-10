@@ -7,7 +7,37 @@ class LandRateService extends _ExcelService {
 }
 
 class ValuationService extends _ExcelService {
-  ValuationService() : super(fileId: "01OTD6NSIJ4LY4ONM7ZVD3B2CK4MAL5TLC", tableName: "Valuations");
+  ValuationService() : super(fileId: "01OTD6NSIJ4LY4ONM7ZVD3B2CK4MAL5TLC", tableName: "Valuations", sheetName: "Data");
+
+  final _driveId = "b!bjWHx8vaSUGa2c_fZH7AoTlNAe4QjSFKrgLAyq8Smcgfz6YLhZb1T7j74-c_w8yy";
+  final _reportPath = "/drive/root:/Documents/Test/";
+  final _templateId = "01OTD6NSJ2IQ6WYOP24BA2W4XBSB2EYCDD";
+
+  createNewReportWorksheet({required Client client, required String fileName}) async {
+    try {
+      // Create new file based of template
+      final response = await client.post(
+        Uri.parse("${fileEndpoint.replaceAll("_ID_", _templateId)}/copy"),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "parentReference": {"driveId": _driveId, "path": _reportPath},
+          "name": fileName,
+        }),
+      );
+      if (response.statusCode != 202 && response.statusCode != 409) {
+        throw Exception("Error creating new report workbook. ${response.statusCode} ${response.body}");
+      }
+      // Get file ID of new file
+      final fileResponse = await client.get(Uri.parse("https://graph.microsoft.com/v1.0/me$_reportPath${Uri.encodeComponent(fileName)}"));
+      if (fileResponse.statusCode != 200) {
+        throw Exception("Error retrieving file id. ${fileResponse.statusCode} ${fileResponse.body}");
+      }
+      final fileResponseData = json.decode(fileResponse.body);
+      return fileResponseData["id"];
+    } catch (e) {
+      throw Exception("Error creating new report workbook: $e");
+    }
+  }
 }
 
 class _ExcelService {
@@ -16,15 +46,17 @@ class _ExcelService {
   late final String addTableEndpoint;
   late final String tableRowEndpoint;
   late final String fileUploadEndpoint;
-  late final String fileDownloadEndpoint;
+  late final String fileEndpoint;
+  late final String fileId;
+  late final String sheetName;
 
-  _ExcelService({fileId, tableName}) {
+  _ExcelService({required this.fileId, tableName, this.sheetName = "Sheet1"}) {
     tableRowsEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows";
     tableHeadersEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/headerRowRange";
     addTableEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/add";
     tableRowEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
-    fileUploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/Documents/Test/Images/_NAME_:/content";
-    fileDownloadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/_ID_";
+    fileUploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/Documents/Uploads/_NAME_:/content";
+    fileEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/_ID_";
   }
 
   Future<List<Map<String, dynamic>>> getExcelTable({required Client client}) async {
@@ -108,9 +140,22 @@ class _ExcelService {
     }
   }
 
+  getWebLink({required Client client, required String id}) async {
+    try {
+      final response = await client.get(Uri.parse(fileEndpoint.replaceAll("_ID_", id)));
+      if (response.statusCode != 200) {
+        throw Exception("Error getting web link. ${response.statusCode} ${response.body}");
+      }
+      final responseData = json.decode(response.body);
+      return responseData["webUrl"];
+    } catch (e) {
+      throw Exception("Error getting web link. $e");
+    }
+  }
+
   getFileDownloadLink({required Client client, required String id}) async {
     try {
-      final response = await client.get(Uri.parse(fileDownloadEndpoint.replaceAll("_ID_", id)));
+      final response = await client.get(Uri.parse(fileEndpoint.replaceAll("_ID_", id)));
       if (response.statusCode != 200) {
         throw Exception("Error retrieving download file link $id. ${response.statusCode} ${response.body}");
       }
@@ -118,6 +163,43 @@ class _ExcelService {
       return responseData['@microsoft.graph.downloadUrl'] as String;
     } catch (e) {
       throw Exception("Error retrieving download file link $id: $e");
+    }
+  }
+
+  getWorkbookLink({required Client client}) async {
+    try {
+      final response = await client.get(Uri.parse(fileEndpoint.replaceAll("_ID_", fileId)));
+      if (response.statusCode != 200) {
+        throw Exception("Error generating workbook link. ${response.statusCode} ${response.body}");
+      }
+      final details = json.decode(response.body);
+      final oneDriveRoot = (details["webUrl"] as String).split("/_layouts")[0];
+      final path = (details["parentReference"]["path"] as String).split("root:/")[1];
+      final fileName = (details["name"] as String);
+      return [oneDriveRoot, "Documents", path, "[$fileName]$sheetName"].join('/');
+    } catch (e) {
+      throw Exception("Error generating workbook link. $e");
+    }
+  }
+
+  addValuesToRange({
+    required Client client,
+    required List<List<String>> values,
+    required String range,
+    required String id,
+    required String sheet,
+  }) async {
+    try {
+      final response = await client.patch(
+        Uri.parse("${fileEndpoint.replaceAll("_ID_", id)}/workbook/worksheets/$sheet/range(address='$range')"),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"values": values}),
+      );
+      if (response.statusCode != 200) {
+        throw Exception("Error adding values to specifiec range. ${response.statusCode} ${response.body}");
+      }
+    } catch (e) {
+      throw Exception("Error adding values to specifiec range. $e");
     }
   }
 

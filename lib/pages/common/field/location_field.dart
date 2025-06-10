@@ -66,8 +66,8 @@ class _LocationFieldState extends State<LocationField> {
 
   _onPositionChanged(MapCamera position, bool hasGesture) {
     final center = position.center;
-    widget.latitudeController.text = center.latitude.toStringAsFixed(7);
-    widget.longitudeController.text = center.longitude.toStringAsFixed(7);
+    widget.latitudeController.text = center.latitude.toStringAsFixed(6);
+    widget.longitudeController.text = center.longitude.toStringAsFixed(6);
   }
 
   @override

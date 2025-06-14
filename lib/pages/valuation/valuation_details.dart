@@ -51,7 +51,6 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
     final provider = Provider.of<ValuationProvider>(context);
 
     onEditAction({String fieldName = "", int fieldTab = 0}) {
-      provider.setSelectedItem(widget.valuation.id);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ValuationForm(editMode: true, focusField: fieldName, focusTabIndex: fieldTab)),

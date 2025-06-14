@@ -203,6 +203,9 @@ class ValuationProvider extends ChangeNotifier {
 
   Future<bool> draftExists(Valuation valuation) async {
     try {
+      if (valuation.id.contains("draft_")) {
+        return false; // return false if draft
+      }
       await draftService.init(VALUATION_DRAFT_BOX);
       var result = draftService.get(valuation.id);
       return result.isNotEmpty;

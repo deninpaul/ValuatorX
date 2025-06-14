@@ -42,6 +42,7 @@ class ValuationProvider extends ChangeNotifier {
   }
 
   addValuations(BuildContext context, Valuation newValuation) async {
+    var success = false;
     try {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -49,14 +50,17 @@ class ValuationProvider extends ChangeNotifier {
       await service.addToExcelTable(client: client, values: newValuation.toList());
       debugPrint("New Valuation added to Excel table successfully.");
       await getValuations(context, refresh: false);
+      success = true;
     } catch (e) {
       debugPrint("Failed to add Valuation: ${e.toString()}");
     } finally {
       setCreating(false);
     }
+    return success;
   }
 
-  updateValuation(BuildContext context, Valuation valuation) async {
+  Future<bool> updateValuation(BuildContext context, Valuation valuation) async {
+    var success = false;
     try {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -64,11 +68,13 @@ class ValuationProvider extends ChangeNotifier {
       await service.updateExcelTableRow(client: client, index: valuation.id, values: valuation.toList());
       debugPrint("Valuation ${valuation.reportName} updated in Excel table successfully.");
       await getValuations(context, refresh: false);
+      success = true;
     } catch (e) {
       debugPrint("Failed to update Valuation: ${e.toString()}");
     } finally {
       setCreating(false);
     }
+    return success;
   }
 
   deleteValuation(BuildContext context, Valuation valuation) async {

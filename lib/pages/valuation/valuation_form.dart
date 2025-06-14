@@ -115,11 +115,8 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     final id = widget.editMode ? provider.getSelectedValuation().id : provider.generateIndex();
     final valuation = generateValuation(id);
     valuation.status = Valuation.statusOptions[0];
-    if (widget.editMode) {
-      await provider.updateValuation(context, valuation);
-      await provider.deleteDraft(valuation.id);
-    } else {
-      await provider.addValuations(context, valuation);
+    final done = widget.editMode ? await provider.updateValuation(context, valuation) : await provider.addValuations(context, valuation);
+    if (done) {
       await provider.deleteDraft(draftId);
     }
   }

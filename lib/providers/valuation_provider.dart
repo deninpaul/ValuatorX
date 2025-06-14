@@ -31,6 +31,7 @@ class ValuationProvider extends ChangeNotifier {
       debugPrint("Fetched ${valuations.length} Valuation record(s) from Excel successfully.");
       notifyListeners();
     } catch (e) {
+      valuations = [];
       debugPrint("Failed to fetch Valuations: ${e.toString()}");
     } finally {
       setLoading(false);

@@ -93,7 +93,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
                                       width: 56,
                                       height: 40,
                                       point: LatLng(double.tryParse(rate.latitude) ?? 0, double.tryParse(rate.longitude) ?? 0),
-                                      child: NumberedMarker(text: rate.slNo),
+                                      child: NumberedMarker(text: rate.slNo, onPressed: () => viewLandRate(rate.id)),
                                     );
                                   }),
                                 ],

@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:valuatorx/pages/login/utils/web_auth_helper.dart';
+import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../../providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,48 +16,64 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showWebView = false;
   late WebViewController webViewController;
 
-  void setupWebView() {
-    webViewController =
-        WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..setNavigationDelegate(
-            NavigationDelegate(
-              onNavigationRequest: (NavigationRequest request) {
-                final authProvider = Provider.of<AuthProvider>(context, listen: false);
-                // Check if the URL is our redirect URL
-                if (request.url.startsWith(authProvider.redirectUrl)) {
-                  final uri = Uri.parse(request.url);
-                  final code = uri.queryParameters['code'];
-                  if (code != null) {
-                    // Exchange the code for an access token
-                    authProvider.handleAuthCode(code).then((success) {
-                      if (success) {
-                        Navigator.of(context).pushReplacementNamed('/home');
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Authentication failed')));
-                        setState(() => showWebView = false);
-                      }
-                    });
-                    return NavigationDecision.prevent;
+  setupWebView() {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (kIsWeb) {
+      final code = getAuthCodeFromUrl();
+      if (code != null) {
+        authProvider.handleAuthCode(code).then((success) {
+          if (success) {
+            Navigator.of(context).pushReplacementNamed('/home');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Authentication failed')));
+          }
+        });
+      }
+    } else {
+      webViewController =
+          WebViewController()
+            ..setJavaScriptMode(JavaScriptMode.unrestricted)
+            ..setNavigationDelegate(
+              NavigationDelegate(
+                onNavigationRequest: (NavigationRequest request) {
+                  if (request.url.startsWith(authProvider.redirectUrl)) {
+                    final uri = Uri.parse(request.url);
+                    final code = uri.queryParameters['code'];
+                    if (code != null) {
+                      // Exchange the code for an access token
+                      authProvider.handleAuthCode(code).then((success) {
+                        if (success) {
+                          Navigator.of(context).pushReplacementNamed('/home');
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Authentication failed')));
+                          setState(() => showWebView = false);
+                        }
+                      });
+                      return NavigationDecision.prevent;
+                    }
                   }
-                }
-                return NavigationDecision.navigate;
-              },
-              onPageFinished: (String url) {
-                // Update loading state when page finishes loading
-                final authProvider = Provider.of<AuthProvider>(context, listen: false);
-                authProvider.isLoading = false;
-                if (mounted) setState(() {});
-              },
-            ),
-          );
+                  return NavigationDecision.navigate;
+                },
+                onPageFinished: (String url) {
+                  // Update loading state when page finishes loading
+                  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                  authProvider.isLoading = false;
+                  if (mounted) setState(() {});
+                },
+              ),
+            );
+    }
   }
 
-  void startLogin() {
+  startLogin() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final loginUrl = authProvider.startAuthFlow();
-    setState(() => showWebView = true);
-    webViewController.loadRequest(loginUrl);
+    if (kIsWeb) {
+      goToUrl(loginUrl);
+    } else {
+      setState(() => showWebView = true);
+      webViewController.loadRequest(loginUrl);
+    }
   }
 
   onBackAction() {
@@ -84,33 +102,32 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Consumer<AuthProvider>(
         builder: (context, auth, _) {
-          return Center(
-            child:
-                showWebView
-                    ? Stack(
-                      children: [
-                        WebViewWidget(controller: webViewController),
-                        if (auth.isLoading)
-                          Container(color: colorScheme.surfaceContainer, alignment: Alignment.center, child: CircularProgressIndicator()),
-                      ],
-                    )
-                    : (auth.isLoading
-                        ? const CircularProgressIndicator()
-                        : Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          padding: EdgeInsets.all(20),
-                          color: colorScheme.surfaceContainer,
-                          child: Column(
-                            spacing: 24,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
-                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-                                constraints: BoxConstraints(
-                                  maxWidth: 424,
-                                ),
+          return showWebView
+              ? Stack(
+                children: [
+                  WebViewWidget(controller: webViewController),
+                  if (auth.isLoading)
+                    Container(color: colorScheme.surfaceContainer, alignment: Alignment.center, child: CircularProgressIndicator()),
+                ],
+              )
+              : Container(
+                color: colorScheme.surfaceContainer,
+                width: double.infinity,
+                height: double.infinity,
+                alignment: Alignment.center,
+                child:
+                    (auth.isLoading
+                        ? CircularProgressIndicator()
+                        : Column(
+                          spacing: 24,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
+                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+                              constraints: BoxConstraints(maxWidth: 424),
+                              child: Padding(
+                                padding: EdgeInsets.all(20),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,11 +179,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ],
                                 ),
                               ),
-                              Text("Made for Samanto Associates Pvt. Ltd.", style: textTheme.bodyMedium!.copyWith(color: labelColor)),
-                            ],
-                          ),
+                            ),
+                            Text("Made for Samanto Associates Pvt. Ltd.", style: textTheme.bodyMedium!.copyWith(color: labelColor)),
+                          ],
                         )),
-          );
+              );
         },
       ),
     );

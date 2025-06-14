@@ -6,7 +6,7 @@ import 'package:valuatorx/pages/land_rate/land_rate_screen.dart';
 import 'package:valuatorx/pages/valuation/valuation_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:animations/animations.dart';
-import 'package:valuatorx/utils/common_utils.dart';
+import 'package:valuatorx/services/utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -10,7 +10,7 @@ import 'package:valuatorx/pages/common/summary_tile.dart';
 import 'package:valuatorx/pages/valuation/valuation_details.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
-import 'package:valuatorx/utils/common_utils.dart';
+import 'package:valuatorx/services/utils.dart';
 
 class Valuations extends StatefulWidget {
   const Valuations({super.key});

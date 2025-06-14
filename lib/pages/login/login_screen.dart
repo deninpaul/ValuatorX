@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
                                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 40),
                                 constraints: BoxConstraints(
-                                  maxWidth: 400,
+                                  maxWidth: 424,
                                 ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         spacing: 16,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("Welcome to ValuatorX", style: textTheme.headlineLarge!.copyWith(height: 1.35)),
+                                          Text("Welcome to ValuatorX", style: textTheme.headlineMedium!.copyWith(height: 1.35)),
                                           Text(
                                             "ValuatorX makes it easy to create and manage valuation reports, with access to additional tools and resources",
                                             style: textTheme.bodyMedium!.copyWith(color: labelColor, height: 1.6),

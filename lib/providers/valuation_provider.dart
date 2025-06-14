@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/status_icon.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
-import 'package:valuatorx/utils/common_utils.dart';
-import 'package:valuatorx/utils/excel_service.dart';
-import 'package:valuatorx/utils/hive_service.dart';
+import 'package:valuatorx/services/utils.dart';
+import 'package:valuatorx/services/excel_service.dart';
+import 'package:valuatorx/services/hive_service.dart';
 
 class ValuationProvider extends ChangeNotifier {
   List<Valuation> get allValutions => drafts.reversed.toList() + valuations.reversed.toList();

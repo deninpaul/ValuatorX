@@ -57,6 +57,10 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
       );
     }
 
+    onResumeAction() {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ValuationForm(editMode: true, isDraft: true)));
+    }
+
     onGenerateReport() async {
       await showDialog<bool>(context: context, barrierDismissible: false, builder: (ctx) => GenerateDialog(valuation: widget.valuation));
     }
@@ -120,11 +124,9 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                 ),
                 ActionsHeader(
                   actions: [
-                    ActionButton(
-                      icon: !isDraft ? Icons.edit_outlined : Icons.arrow_forward,
-                      label: !isDraft ? "Edit" : "Resume",
-                      onPressed: onEditAction,
-                    ),
+                    !isDraft
+                        ? ActionButton(icon: Icons.edit_outlined, label: "Edit", onPressed: onEditAction)
+                        : ActionButton(icon: Icons.arrow_forward, label: "Resume", onPressed: onResumeAction),
                     ActionButton(icon: Icons.delete_outlined, label: !isDraft ? "Delete" : "Delete Draft", onPressed: onDeleteAction),
                     if (!isDraft)
                       widget.valuation.reportLink.isEmpty

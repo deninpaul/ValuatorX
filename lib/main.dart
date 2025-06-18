@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/pages/home_screen.dart';
-import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/pages/login/login_screen.dart';
 import 'package:valuatorx/pages/splash_screen/splash_screen.dart';
-import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
@@ -41,8 +39,6 @@ class MyApp extends StatelessWidget {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginScreen(),
           '/home': (context) => const HomeScreen(),
-          '/land_rate/edit': (context) => const LandRateForm(editMode: true),
-          '/valuation/edit': (context) => const ValuationForm(editMode: true),
         },
         initialRoute: '/',
         debugShowCheckedModeBanner: false,

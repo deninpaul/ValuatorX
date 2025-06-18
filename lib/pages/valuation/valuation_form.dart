@@ -18,9 +18,10 @@ import 'package:valuatorx/services/utils.dart';
 
 class ValuationForm extends StatefulWidget {
   final bool editMode;
+  final bool isDraft;
   final String focusField;
   final int focusTabIndex;
-  const ValuationForm({super.key, this.editMode = false, this.focusField = "", this.focusTabIndex = 0});
+  const ValuationForm({super.key, this.editMode = false, this.isDraft = false, this.focusField = "", this.focusTabIndex = 0});
 
   @override
   State<ValuationForm> createState() => _ValuationFormState();
@@ -112,12 +113,18 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
 
   submitForm() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
-    final id = widget.editMode ? provider.getSelectedValuation().id : provider.generateIndex();
+    final id = widget.editMode && !widget.isDraft ? provider.getSelectedValuation().id : provider.generateIndex();
     final valuation = generateValuation(id);
     valuation.status = Valuation.statusOptions[0];
-    final done = widget.editMode ? await provider.updateValuation(context, valuation) : await provider.addValuations(context, valuation);
+    final done =
+        widget.editMode && !widget.isDraft
+            ? await provider.updateValuation(context, valuation)
+            : await provider.addValuations(context, valuation);
     if (done) {
       await provider.deleteDraft(draftId);
+      if (widget.isDraft) {
+        provider.setSelectedItem(id);
+      }
     }
   }
 

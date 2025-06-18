@@ -68,7 +68,7 @@ class ValuationProvider extends ChangeNotifier {
       final client = await authProvider.getClient();
       await service.updateExcelTableRow(client: client, index: valuation.id, values: valuation.toList());
       debugPrint("Valuation ${valuation.reportName} updated in Excel table successfully.");
-      await getValuations(context, refresh: false);
+      getValuations(context, refresh: false);
       success = true;
     } catch (e) {
       debugPrint("Failed to update Valuation: ${e.toString()}");

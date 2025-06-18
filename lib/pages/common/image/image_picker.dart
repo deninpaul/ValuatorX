@@ -33,7 +33,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
         final result = await Navigator.of(context).push<File>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file)));
         if (result != null) {
           final valuationProvider = Provider.of<ValuationProvider>(context, listen: false);
-          final imageId = await valuationProvider.uploadImage(context, file);
+          final imageId = await valuationProvider.uploadImage(context, result);
           setState(() {
             ready = false;
             widget.controller!.text += "$imageId,";

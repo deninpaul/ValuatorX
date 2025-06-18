@@ -36,7 +36,7 @@ class _ValuationsState extends State<Valuations> {
   }
 
   fetchAllValuations() async {
-    await provider.getValuations(context, refresh: provider.valuations.isEmpty);
+    await provider.getValuations(context);
     await provider.getDrafts();
   }
 

@@ -115,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 height: double.infinity,
                 alignment: Alignment.center,
+                padding: EdgeInsets.all(24),
                 child:
                     (auth.isLoading
                         ? CircularProgressIndicator()
@@ -124,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Container(
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
-                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 40),
                               constraints: BoxConstraints(maxWidth: 424),
                               child: Padding(
                                 padding: EdgeInsets.all(20),

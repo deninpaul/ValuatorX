@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cache/flutter_map_cache.dart';
@@ -26,7 +27,7 @@ class MapWrapper extends StatefulWidget {
     this.children = const [],
     this.actions = const [],
     this.enableCenterMarker = false,
-    this.center = const LatLng(0,0),
+    this.center = const LatLng(0, 0),
     this.zoom = 15,
     this.interactionOptions = const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
     this.onPositionChanged = _defaultOnPositionChanged,
@@ -39,7 +40,7 @@ class MapWrapper extends StatefulWidget {
 }
 
 class _MapWrapperState extends State<MapWrapper> {
-  String cachePath = "";
+  String? cachePath;
 
   @override
   void initState() {
@@ -48,8 +49,10 @@ class _MapWrapperState extends State<MapWrapper> {
   }
 
   getCachePath() async {
-    final cacheDirectory = await getTemporaryDirectory();
-    setState(() => cachePath = cacheDirectory.path);
+    if (!kIsWeb) {
+      final cacheDirectory = await getTemporaryDirectory();
+      setState(() => cachePath = cacheDirectory.path);
+    }
   }
 
   @override
@@ -58,7 +61,7 @@ class _MapWrapperState extends State<MapWrapper> {
     final LocationProvider provider = Provider.of<LocationProvider>(context);
     final initialCenter = (widget.center.latitude == 0) ? provider.currentLocation : widget.center;
 
-    return cachePath.isNotEmpty
+    return (kIsWeb || cachePath != null) 
         ? ClipRRect(
           borderRadius: BorderRadius.circular(widget.borderRadius),
           child: FlutterMap(
@@ -77,11 +80,7 @@ class _MapWrapperState extends State<MapWrapper> {
                 tileProvider: CachedTileProvider(store: HiveCacheStore(cachePath, hiveBoxName: "mapCache")),
               ),
               ...widget.children,
-              MarkerLayer(
-                markers: [
-                  Marker(point: provider.currentLocation, child: Icon(Icons.my_location, color: Colors.blue, size: 28)),
-                ],
-              ),
+              MarkerLayer(markers: [Marker(point: provider.currentLocation, child: Icon(Icons.my_location, color: Colors.blue, size: 28))]),
               if (widget.enableCenterMarker)
                 Container(
                   alignment: Alignment.center,

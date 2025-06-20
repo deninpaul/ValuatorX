@@ -6,7 +6,7 @@ import 'package:valuatorx/pages/common/field/dropdown_field.dart';
 import 'package:valuatorx/pages/common/field/location_field.dart';
 import 'package:valuatorx/pages/common/button/save_button.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
-import 'package:valuatorx/services/utils.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class LandRateForm extends StatefulWidget {
   final bool editMode;

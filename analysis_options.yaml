@@ -28,3 +28,6 @@ linter:
 # https://dart.dev/guides/language/analysis-options
 formatter:
   page_width: 140
+analyzer:
+  errors:
+    depend_on_referenced_packages: ignore

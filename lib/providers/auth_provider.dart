@@ -1,8 +1,7 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
-import 'package:path_provider/path_provider.dart';
+import 'package:valuatorx/services/hive_service.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -13,15 +12,16 @@ class AuthProvider extends ChangeNotifier {
   final String _tenantId = dotenv.env['TENANT_ID']!;
   final List<String> _scopes = ['openid', 'profile', 'email', 'offline_access', 'User.Read', 'Files.ReadWrite'];
 
+  final SettingsService settingsService = SettingsService();
+
   late final Uri _authorizationEndpoint;
   late final Uri _tokenEndpoint;
   late final String redirectUrl;
-  late File _credentialsFile;
 
   AuthProvider() {
     _authorizationEndpoint = Uri.parse('https://login.microsoftonline.com/$_tenantId/oauth2/v2.0/authorize');
     _tokenEndpoint = Uri.parse('https://login.microsoftonline.com/$_tenantId/oauth2/v2.0/token');
-    redirectUrl = "https://login.microsoftonline.com/$_tenantId/oauth2/nativeclient";
+    redirectUrl = kIsWeb ? "${dotenv.env['HOST']}/redirect.html" : "https://login.microsoftonline.com/$_tenantId/oauth2/nativeclient";
   }
 
   // OAuth grant object
@@ -40,11 +40,7 @@ class AuthProvider extends ChangeNotifier {
     if (_credentials == null) {
       await _getCredentials();
     }
-    return oauth2.Client(
-      _credentials!,
-      identifier: _clientId,
-      onCredentialsRefreshed: (updated) => _saveCredentials(updated),
-    );
+    return oauth2.Client(_credentials!, identifier: _clientId, onCredentialsRefreshed: (updated) => _saveCredentials(updated));
   }
 
   // Start authentication flow
@@ -71,16 +67,13 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     _credentials = null;
-    await _credentialsFile.delete();
+    await settingsService.delete("credentials");
     notifyListeners();
   }
 
   Future<void> _getCredentials() async {
     try {
-      final dir = await getApplicationDocumentsDirectory();
-      _credentialsFile = File('${dir.path}/credentials.json');
-
-      final json = await _credentialsFile.readAsString();
+      final json = await settingsService.get('credentials') as String;
       _credentials = oauth2.Credentials.fromJson(json);
       notifyListeners();
     } catch (e) {
@@ -90,11 +83,9 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> _saveCredentials(oauth2.Credentials newCredentials) async {
     try {
-      final dir = await getApplicationDocumentsDirectory();
-      _credentialsFile = File('${dir.path}/credentials.json');
-
       _credentials = newCredentials;
-      await _credentialsFile.writeAsString(_credentials!.toJson());
+      settingsService.init();
+      settingsService.put('credentials', newCredentials.toJson());
       notifyListeners();
     } catch (e) {
       debugPrint("Error saving credentials: $e");

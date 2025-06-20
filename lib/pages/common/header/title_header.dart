@@ -20,6 +20,7 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: colorScheme.surfaceContainer,
       scrolledUnderElevation: 0,
       leading: IconButton(onPressed: onBackPressed, icon: Icon(Icons.arrow_back_outlined)),
+      automaticallyImplyLeading: false,
       actions: actions,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,

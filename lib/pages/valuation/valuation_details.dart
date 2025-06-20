@@ -139,6 +139,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                   toolbarHeight: 68,
                   backgroundColor: colorScheme.surfaceContainer,
                   surfaceTintColor: colorScheme.surfaceContainer,
+                  automaticallyImplyLeading: false,
                   title: TabBar(
                     controller: tabController,
                     isScrollable: true,

@@ -16,7 +16,7 @@ import 'package:valuatorx/pages/land_rate/land_rate_details.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/providers/location_provider.dart';
-import 'package:valuatorx/services/utils.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class LandRateScreen extends StatefulWidget {
   const LandRateScreen({super.key});

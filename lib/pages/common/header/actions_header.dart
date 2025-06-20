@@ -25,6 +25,7 @@ class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
       collapsedHeight: collapsedHeight,
       clipBehavior: Clip.none,
       backgroundColor: colorScheme.surfaceContainer,
+      automaticallyImplyLeading: false,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           alignment: Alignment.bottomCenter,

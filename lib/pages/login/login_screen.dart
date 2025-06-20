@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/pages/login/utils/web_auth_helper.dart';
+import 'package:valuatorx/utils/web_utils/web_helper.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -17,11 +17,47 @@ class _LoginScreenState extends State<LoginScreen> {
   late WebViewController webViewController;
 
   setupWebView() {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (kIsWeb) {
-      final code = getAuthCodeFromUrl();
-      if (code != null) {
-        authProvider.handleAuthCode(code).then((success) {
+    final provider = Provider.of<AuthProvider>(context, listen: false);
+    webViewController =
+        WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onNavigationRequest: (NavigationRequest request) {
+                if (request.url.startsWith(provider.redirectUrl)) {
+                  final uri = Uri.parse(request.url);
+                  final code = uri.queryParameters['code'];
+                  if (code != null) {
+                    // Exchange the code for an access token
+                    provider.handleAuthCode(code).then((success) {
+                      if (success) {
+                        Navigator.of(context).pushReplacementNamed('/home');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Authentication failed')));
+                        setState(() => showWebView = false);
+                      }
+                    });
+                    return NavigationDecision.prevent;
+                  }
+                }
+                return NavigationDecision.navigate;
+              },
+              onPageFinished: (String url) {
+                // Update loading state when page finishes loading
+                provider.isLoading = false;
+                if (mounted) setState(() {});
+              },
+            ),
+          );
+  }
+
+  setupRedirectListener() {
+    final provider = Provider.of<AuthProvider>(context, listen: false);
+    listenWindowMessage((event) {
+      final data = event.data;
+      if (data is Map && data.containsKey('code')) {
+        final code = data['code'];
+        provider.handleAuthCode(code).then((success) {
           if (success) {
             Navigator.of(context).pushReplacementNamed('/home');
           } else {
@@ -29,47 +65,14 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         });
       }
-    } else {
-      webViewController =
-          WebViewController()
-            ..setJavaScriptMode(JavaScriptMode.unrestricted)
-            ..setNavigationDelegate(
-              NavigationDelegate(
-                onNavigationRequest: (NavigationRequest request) {
-                  if (request.url.startsWith(authProvider.redirectUrl)) {
-                    final uri = Uri.parse(request.url);
-                    final code = uri.queryParameters['code'];
-                    if (code != null) {
-                      // Exchange the code for an access token
-                      authProvider.handleAuthCode(code).then((success) {
-                        if (success) {
-                          Navigator.of(context).pushReplacementNamed('/home');
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Authentication failed')));
-                          setState(() => showWebView = false);
-                        }
-                      });
-                      return NavigationDecision.prevent;
-                    }
-                  }
-                  return NavigationDecision.navigate;
-                },
-                onPageFinished: (String url) {
-                  // Update loading state when page finishes loading
-                  final authProvider = Provider.of<AuthProvider>(context, listen: false);
-                  authProvider.isLoading = false;
-                  if (mounted) setState(() {});
-                },
-              ),
-            );
-    }
+    });
   }
 
   startLogin() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final loginUrl = authProvider.startAuthFlow();
+    final provider = Provider.of<AuthProvider>(context, listen: false);
+    final loginUrl = provider.startAuthFlow();
     if (kIsWeb) {
-      goToUrl(loginUrl);
+      openWindow(loginUrl.toString(), "Microsoft Login", "width=600,height=700");
     } else {
       setState(() => showWebView = true);
       webViewController.loadRequest(loginUrl);
@@ -86,7 +89,13 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    setupWebView();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (kIsWeb) {
+        setupRedirectListener();
+      } else {
+        setupWebView();
+      }
+    });
   }
 
   @override
@@ -99,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         backgroundColor: colorScheme.surfaceContainer,
         leading: showWebView ? IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBackAction) : null,
+        automaticallyImplyLeading: false,
       ),
       body: Consumer<AuthProvider>(
         builder: (context, auth, _) {

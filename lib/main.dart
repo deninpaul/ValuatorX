@@ -9,10 +9,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/providers/location_provider.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
+import 'package:valuatorx/utils/web_utils/web_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
+  initWeb();
   runApp(MyApp());
 }
 

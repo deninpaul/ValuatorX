@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:valuatorx/modals/valuation.dart';
 import 'package:valuatorx/pages/common/status_icon.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
-import 'package:valuatorx/services/utils.dart';
+import 'package:valuatorx/utils/common.dart';
 import 'package:valuatorx/services/excel_service.dart';
 import 'package:valuatorx/services/hive_service.dart';
 
@@ -19,7 +19,7 @@ class ValuationProvider extends ChangeNotifier {
   String selectedItem = "";
 
   final ValuationService service = ValuationService();
-  final HiveService draftService = HiveService();
+  final DraftService draftService = DraftService(boxName: "valuations");
 
   getValuations(BuildContext context, {bool refresh = true}) async {
     try {
@@ -134,8 +134,7 @@ class ValuationProvider extends ChangeNotifier {
 
   getDrafts() async {
     try {
-      await draftService.init(VALUATION_DRAFT_BOX);
-      var result = draftService.getAllDrafts();
+      var result = await draftService.getAllDrafts();
       drafts = result.map(((item) => Valuation.fromJson(item))).toList();
       debugPrint("Fetched ${drafts.length} Valuation record(s) from drafts.");
       notifyListeners();
@@ -146,8 +145,7 @@ class ValuationProvider extends ChangeNotifier {
 
   Future<Map<String, dynamic>> getDraft(String id) async {
     try {
-      await draftService.init(VALUATION_DRAFT_BOX);
-      final result = draftService.get(id);
+      final result = await draftService.get(id);
       debugPrint("Fetched $id from drafts.");
       return result;
     } catch (e) {
@@ -158,7 +156,6 @@ class ValuationProvider extends ChangeNotifier {
 
   createOrUpdateDraft(Valuation valuation) async {
     try {
-      await draftService.init(VALUATION_DRAFT_BOX);
       await draftService.put(valuation.id, valuation.toJson());
       debugPrint("Saved draft ${valuation.id} to drafts.");
       getDrafts();
@@ -169,7 +166,6 @@ class ValuationProvider extends ChangeNotifier {
 
   deleteDraft(String id) async {
     try {
-      await draftService.init(VALUATION_DRAFT_BOX);
       await draftService.delete(id);
       debugPrint("Deleted draft $id from drafts.");
       getDrafts();
@@ -213,8 +209,7 @@ class ValuationProvider extends ChangeNotifier {
       if (valuation.id.contains("draft_")) {
         return false; // return false if draft
       }
-      await draftService.init(VALUATION_DRAFT_BOX);
-      var result = draftService.get(valuation.id);
+      var result = await draftService.getDraft(valuation.id);
       return result.isNotEmpty;
     } catch (e) {
       debugPrint("Failed to check whether draft ${valuation.id} exists: ${e.toString()}");
@@ -224,7 +219,6 @@ class ValuationProvider extends ChangeNotifier {
 
   Future<String> generateDraftIndex() async {
     try {
-      await draftService.init(VALUATION_DRAFT_BOX);
       var result = await draftService.generateDraftId();
       return "draft_$result";
     } catch (e) {

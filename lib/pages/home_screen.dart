@@ -6,7 +6,7 @@ import 'package:valuatorx/pages/land_rate/land_rate_screen.dart';
 import 'package:valuatorx/pages/valuation/valuation_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:animations/animations.dart';
-import 'package:valuatorx/services/utils.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,10 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final textTheme = theme.textTheme;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: colorScheme.surfaceContainer,
-        statusBarIconBrightness: Brightness.dark,
-      ),
+      value: SystemUiOverlayStyle(statusBarColor: colorScheme.surfaceContainer, statusBarIconBrightness: Brightness.dark),
       child: Scaffold(
         body: SafeArea(
           child: Row(
@@ -93,10 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 12, 0, 32),
-                  child: Opacity(
-                    opacity: 0.9,
-                    child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 48),
-                  ),
+                  child: Opacity(opacity: 0.9, child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 48)),
                 ),
                 trailing: Expanded(
                   child: Container(
@@ -104,10 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.only(bottom: 32),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(icon: const Icon(Icons.logout), tooltip: 'Sign Out', onPressed: signOut),
-                        Text("Log out"),
-                      ],
+                      children: [IconButton(icon: const Icon(Icons.logout), tooltip: 'Sign Out', onPressed: signOut), Text("Log out")],
                     ),
                   ),
                 ),
@@ -130,10 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: colorScheme.surfaceContainer,
                   child: PageTransitionSwitcher(
                     reverse: previousIndex > selectedIndex,
-                    transitionBuilder: defaultTransition(
-                      colorScheme.surfaceContainer,
-                      orientation: SharedAxisTransitionType.vertical,
-                    ),
+                    transitionBuilder: defaultTransition(colorScheme.surfaceContainer, orientation: SharedAxisTransitionType.vertical),
                     child: tabs[selectedIndex].child,
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class CreateButton extends StatelessWidget {
   final Widget createPage;
@@ -14,7 +15,7 @@ class CreateButton extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 24),
+      padding: EdgeInsets.symmetric(vertical: isMobile(context) ? 8 : 24),
       child: OpenContainer(
         transitionType: ContainerTransitionType.fade,
         openBuilder: (context, _) => createPage,

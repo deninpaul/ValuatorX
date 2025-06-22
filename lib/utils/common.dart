@@ -31,3 +31,13 @@ String getExcelColumn(int num) {
   }
   return column;
 }
+
+bool isMobile(BuildContext context) {
+  final width = MediaQuery.of(context).size.width;
+  return width < 600;
+}
+
+bool isDesktop(BuildContext context) {
+  final width = MediaQuery.of(context).size.width;
+  return width > 1280;
+}

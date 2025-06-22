@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class ActionButton extends StatelessWidget {
   final IconData icon;
@@ -12,7 +13,7 @@ class ActionButton extends StatelessWidget {
     final texTheme = Theme.of(context).textTheme;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
-      width: 112,
+      width: isMobile(context) ? 100 : 108,
       child: Column(
         spacing: 16,
         mainAxisSize: MainAxisSize.min,

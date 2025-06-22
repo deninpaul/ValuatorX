@@ -35,7 +35,7 @@ class _ValuationsState extends State<Valuations> {
     });
   }
 
-  fetchAllValuations() async {
+  Future<void> fetchAllValuations() async {
     await provider.getValuations(context);
     await provider.getDrafts();
   }
@@ -67,11 +67,15 @@ class _ValuationsState extends State<Valuations> {
                 backgroundColor: colorScheme.surfaceContainer,
                 floatingActionButton: CreateButton(createPage: ValuationForm(), label: "New report"),
                 body: RefreshIndicator(
-                  onRefresh: () => fetchAllValuations(),
+                  onRefresh: fetchAllValuations,
                   child: ListView(
                     key: const ValueKey('list'),
                     children: [
-                      SearchHeader(name: "Land Rate", onSearch: (val) => debugPrint(val)),
+                      SearchHeader(
+                        name: "Land Rate",
+                        onSearch: (val) => debugPrint(val),
+                        actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh"))],
+                      ),
                       SizedBox(height: 16),
                       Row(
                         spacing: 20,

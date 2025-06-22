@@ -16,6 +16,7 @@ import 'package:valuatorx/pages/common/view/view_tile.dart';
 import 'package:valuatorx/pages/valuation/components/generate_dialog.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class ValuationDetails extends StatefulWidget {
   final Valuation valuation;
@@ -49,7 +50,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
-    final formPadding = EdgeInsets.symmetric(vertical: 24, horizontal: 20);
+    final formPadding = EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 20);
 
     onEditAction({String fieldName = "", int fieldTab = 0}) {
       Navigator.push(
@@ -236,45 +237,79 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                 child: Column(
                   spacing: 16,
                   children: [
-                    Row(
-                      spacing: 16,
-                      children: [
-                        Expanded(
-                          child: ViewTile(
-                            title: Valuation.VILLAGE,
-                            value: widget.valuation.village,
-                            icon: Icons.cottage_outlined,
-                            onPressed: onEditAction,
-                            tabIndex: 1,
+                    if (!isMobile(context))
+                      Row(
+                        spacing: 16,
+                        children: [
+                          Expanded(
+                            child: ViewTile(
+                              title: Valuation.VILLAGE,
+                              value: widget.valuation.village,
+                              icon: Icons.cottage_outlined,
+                              onPressed: onEditAction,
+                              tabIndex: 1,
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: ViewTile(title: Valuation.TALUK, value: widget.valuation.taluk, onPressed: onEditAction, tabIndex: 1),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 16,
-                      children: [
-                        Expanded(
-                          child: ViewTile(
-                            title: Valuation.PANCHAYATH,
-                            value: widget.valuation.panchayath,
-                            icon: Icons.account_balance_outlined,
-                            onPressed: onEditAction,
-                            tabIndex: 1,
+                          Expanded(
+                            child: ViewTile(title: Valuation.TALUK, value: widget.valuation.taluk, onPressed: onEditAction, tabIndex: 1),
                           ),
-                        ),
-                        Expanded(
-                          child: ViewTile(
-                            title: Valuation.KSEB_DIVISION,
-                            value: widget.valuation.ksebDivision,
-                            onPressed: onEditAction,
-                            tabIndex: 1,
+                        ],
+                      )
+                    else ...[
+                      ViewTile(
+                        title: Valuation.VILLAGE,
+                        value: widget.valuation.village,
+                        icon: Icons.cottage_outlined,
+                        onPressed: onEditAction,
+                        tabIndex: 1,
+                      ),
+                      ViewTile(
+                        title: Valuation.TALUK,
+                        value: widget.valuation.taluk,
+                        icon: Icons.holiday_village_outlined,
+                        onPressed: onEditAction,
+                        tabIndex: 1,
+                      ),
+                    ],
+                    if (!isMobile(context))
+                      Row(
+                        spacing: 16,
+                        children: [
+                          Expanded(
+                            child: ViewTile(
+                              title: Valuation.PANCHAYATH,
+                              value: widget.valuation.panchayath,
+                              icon: Icons.account_balance_outlined,
+                              onPressed: onEditAction,
+                              tabIndex: 1,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                          Expanded(
+                            child: ViewTile(
+                              title: Valuation.KSEB_DIVISION,
+                              value: widget.valuation.ksebDivision,
+                              onPressed: onEditAction,
+                              tabIndex: 1,
+                            ),
+                          ),
+                        ],
+                      )
+                    else ...[
+                      ViewTile(
+                        title: Valuation.PANCHAYATH,
+                        value: widget.valuation.panchayath,
+                        icon: Icons.account_balance_outlined,
+                        onPressed: onEditAction,
+                        tabIndex: 1,
+                      ),
+                      ViewTile(
+                        title: Valuation.KSEB_DIVISION,
+                        value: widget.valuation.ksebDivision,
+                        icon: Icons.cell_tower_outlined,
+                        onPressed: onEditAction,
+                        tabIndex: 1,
+                      ),
+                    ],
                     LocationViewTile(
                       mapController: mapController,
                       latitude: widget.valuation.latitude,
@@ -462,30 +497,47 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                         ),
                       ],
                     ),
-                    Row(
-                      spacing: 16,
-                      children: [
-                        Flexible(
-                          flex: 6,
-                          child: ViewTile(
-                            title: Valuation.CONDITION_OF_BUILDING_EXTERIOR,
-                            value: widget.valuation.exteriorCondition,
-                            icon: Icons.verified_outlined,
-                            onPressed: onEditAction,
-                            tabIndex: 2,
+                    if (!isMobile(context))
+                      Row(
+                        spacing: 16,
+                        children: [
+                          Flexible(
+                            flex: 6,
+                            child: ViewTile(
+                              title: Valuation.CONDITION_OF_BUILDING_EXTERIOR,
+                              value: widget.valuation.exteriorCondition,
+                              icon: Icons.verified_outlined,
+                              onPressed: onEditAction,
+                              tabIndex: 2,
+                            ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 5,
-                          child: ViewTile(
-                            title: Valuation.CONDITION_OF_BUILDING_INTERIOR,
-                            value: widget.valuation.interiorCondition,
-                            onPressed: onEditAction,
-                            tabIndex: 2,
+                          Flexible(
+                            flex: 5,
+                            child: ViewTile(
+                              title: Valuation.CONDITION_OF_BUILDING_INTERIOR,
+                              value: widget.valuation.interiorCondition,
+                              onPressed: onEditAction,
+                              tabIndex: 2,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      )
+                    else ...[
+                      ViewTile(
+                        title: Valuation.CONDITION_OF_BUILDING_EXTERIOR,
+                        value: widget.valuation.exteriorCondition,
+                        icon: Icons.verified_outlined,
+                        onPressed: onEditAction,
+                        tabIndex: 2,
+                      ),
+                      ViewTile(
+                        title: Valuation.CONDITION_OF_BUILDING_INTERIOR,
+                        value: widget.valuation.interiorCondition,
+                        icon: Icons.verified_outlined,
+                        onPressed: onEditAction,
+                        tabIndex: 2,
+                      ),
+                    ],
                     ViewTile(
                       title: Valuation.FOUNDATION_BASEMENT,
                       value: widget.valuation.foundationAndBasement,

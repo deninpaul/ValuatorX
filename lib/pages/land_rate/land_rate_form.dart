@@ -74,92 +74,94 @@ class _LandRateFormState extends State<LandRateForm> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isMobile = size.width < 600;
     final modeName = widget.editMode ? "Edit" : "New";
+    final formPadding = EdgeInsets.symmetric(horizontal: isMobile(context) ? 24 : isDesktop(context) ? 240 : 48, vertical: 32);
     final provider = Provider.of<LandRateProvider>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        title: Text("$modeName Land Rate", style: headerTheme),
-        leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
-        actions: [
-          SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready, creating: provider.isCreating),
-          PopupMenuButton(
-            offset: const Offset(0, 48),
-            itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))],
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 48, vertical: 24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            spacing: 24,
-            children: [
-              BasicField(
-                name: LandRate.SL_NO,
-                controller: controllers[LandRate.SL_NO]!,
-                icon: Icons.person_outline,
-                enabled: false,
-                focusField: widget.focusField,
-              ),
-              LocationField(
-                latitudeController: controllers["Lattitude"]!,
-                longitudeController: controllers["Longitude"]!,
-                focusField: widget.focusField,
-              ),
-              BasicField(
-                name: LandRate.LAND_RATE_PER_CENT,
-                controller: controllers[LandRate.LAND_RATE_PER_CENT]!,
-                icon: Icons.paid_outlined,
-                focusField: widget.focusField,
-                required: true,
-              ),
-              BasicField(
-                name: LandRate.LAND_SIZE_REMARKS,
-                controller: controllers[LandRate.LAND_SIZE_REMARKS]!,
-                focusField: widget.focusField,
-                icon: Icons.straighten_outlined,
-              ),
-              DropdownField(
-                name: LandRate.LAND_TYPE,
-                controller: controllers[LandRate.LAND_TYPE]!,
-                options: LandRate.landTypeOptions,
-                icon: Icons.landscape_outlined,
-                focusField: widget.focusField,
-              ),
-              DropdownField(
-                name: LandRate.ROAD,
-                controller: controllers[LandRate.ROAD]!,
-                options: LandRate.roadOptions,
-                icon: Icons.traffic_outlined,
-                focusField: widget.focusField,
-              ),
-              Row(
-                spacing: 24,
-                children: [
-                  Flexible(
-                    child: DropdownField(
-                      name: LandRate.MONTH_OF_VISIT,
-                      controller: controllers[LandRate.MONTH_OF_VISIT]!,
-                      options: LandRate.monthOptions,
-                      icon: Icons.calendar_today_outlined,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 80,
+          title: Text("$modeName Land Rate", style: headerTheme),
+          leading: IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
+          actions: [
+            SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready, creating: provider.isCreating),
+            PopupMenuButton(
+              offset: const Offset(0, 48),
+              itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))],
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          padding: formPadding,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              spacing: 24,
+              children: [
+                BasicField(
+                  name: LandRate.SL_NO,
+                  controller: controllers[LandRate.SL_NO]!,
+                  icon: Icons.person_outline,
+                  enabled: false,
+                  focusField: widget.focusField,
+                ),
+                LocationField(
+                  latitudeController: controllers["Lattitude"]!,
+                  longitudeController: controllers["Longitude"]!,
+                  focusField: widget.focusField,
+                ),
+                BasicField(
+                  name: LandRate.LAND_RATE_PER_CENT,
+                  controller: controllers[LandRate.LAND_RATE_PER_CENT]!,
+                  icon: Icons.paid_outlined,
+                  focusField: widget.focusField,
+                  required: true,
+                ),
+                BasicField(
+                  name: LandRate.LAND_SIZE_REMARKS,
+                  controller: controllers[LandRate.LAND_SIZE_REMARKS]!,
+                  focusField: widget.focusField,
+                  icon: Icons.straighten_outlined,
+                ),
+                DropdownField(
+                  name: LandRate.LAND_TYPE,
+                  controller: controllers[LandRate.LAND_TYPE]!,
+                  options: LandRate.landTypeOptions,
+                  icon: Icons.landscape_outlined,
+                  focusField: widget.focusField,
+                ),
+                DropdownField(
+                  name: LandRate.ROAD,
+                  controller: controllers[LandRate.ROAD]!,
+                  options: LandRate.roadOptions,
+                  icon: Icons.traffic_outlined,
+                  focusField: widget.focusField,
+                ),
+                Row(
+                  spacing: 24,
+                  children: [
+                    Flexible(
+                      child: DropdownField(
+                        name: LandRate.MONTH_OF_VISIT,
+                        controller: controllers[LandRate.MONTH_OF_VISIT]!,
+                        options: LandRate.monthOptions,
+                        icon: Icons.calendar_today_outlined,
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    child: BasicField(
-                      name: LandRate.YEAR_OF_VISIT,
-                      controller: controllers[LandRate.YEAR_OF_VISIT]!,
-                      type: TextInputType.numberWithOptions(),
+                    Flexible(
+                      child: BasicField(
+                        name: LandRate.YEAR_OF_VISIT,
+                        controller: controllers[LandRate.YEAR_OF_VISIT]!,
+                        type: TextInputType.numberWithOptions(),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-            ],
+                  ],
+                ),
+                SizedBox(height: 8),
+              ],
+            ),
           ),
         ),
       ),

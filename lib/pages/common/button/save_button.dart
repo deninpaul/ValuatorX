@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SaveButton extends StatelessWidget {
@@ -20,7 +21,7 @@ class SaveButton extends StatelessWidget {
       } : null,
       style:
        TextButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 32, vertical: kIsWeb ? 16 : 10),
         backgroundColor: theme.colorScheme.primary,
         disabledBackgroundColor: theme.disabledColor
       ),

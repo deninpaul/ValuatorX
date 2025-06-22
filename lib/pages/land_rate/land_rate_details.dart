@@ -11,6 +11,7 @@ import 'package:valuatorx/pages/common/view/location_view.dart';
 import 'package:valuatorx/pages/common/view/view_tile.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_form.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class LandRateDetails extends StatelessWidget {
   final LandRate landRate;
@@ -22,7 +23,7 @@ class LandRateDetails extends StatelessWidget {
     final provider = Provider.of<LandRateProvider>(context);
     final MapController mapController = MapController();
 
-    onEditAction({String fieldName = "",  int fieldTab = 0}) {
+    onEditAction({String fieldName = "", int fieldTab = 0}) {
       provider.setSelectedItem(landRate.id.toString());
       Navigator.push(context, MaterialPageRoute(builder: (context) => LandRateForm(editMode: true, focusField: fieldName)));
     }
@@ -73,7 +74,7 @@ class LandRateDetails extends StatelessWidget {
             SliverToBoxAdapter(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:valuatorx/utils/common.dart';
 
 typedef ItemBuilder<T> = Widget Function(BuildContext context, T item, int index);
 
@@ -43,7 +44,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final divider = Divider(color: theme.dividerColor.withAlpha(64), indent: 24, endIndent: 24);
-    final minHeight = MediaQuery.of(context).size.height - 240;
+    final minHeight = MediaQuery.of(context).size.height - 240 - (isMobile(context) ? 0 : 0);
 
     final int itemsToShow =
         widget.items.isEmpty

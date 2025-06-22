@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ValuationProvider()),
       ],
       child: MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(kIsWeb ? 0.95 : 1.0)),
+        data: MediaQuery.of(context).copyWith(textScaler: kIsWeb ? TextScaler.linear(0.95) : null),
         child: MaterialApp(
           title: 'ValuatorX',
           theme: ThemeData(

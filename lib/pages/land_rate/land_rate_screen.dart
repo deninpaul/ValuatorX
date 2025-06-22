@@ -58,6 +58,10 @@ class _LandRateScreenState extends State<LandRateScreen> {
       provider.setSelectedItem(id);
     }
 
+    Future<void> fetchAllLandRates() async{
+      await provider.getLandRates(context);
+    }
+
     return PageTransitionSwitcher(
       reverse: isHomePage,
       transitionBuilder: defaultTransition(colorScheme.surfaceContainer),
@@ -67,11 +71,11 @@ class _LandRateScreenState extends State<LandRateScreen> {
                 backgroundColor: colorScheme.surfaceContainer,
                 floatingActionButton: CreateButton(createPage: LandRateForm(), label: "Add rate"),
                 body: RefreshIndicator(
-                  onRefresh: () => provider.getLandRates(context),
+                  onRefresh: fetchAllLandRates,
                   child: ListView(
                     key: const ValueKey('list'),
                     children: [
-                      SearchHeader(name: "Land Rate", onSearch: (val) => debugPrint(val)),
+                      SearchHeader(name: "Land Rate", onSearch: (val) => debugPrint(val), actions: [PopupMenuItem(onTap: fetchAllLandRates, child: Text("Refresh"))],),
                       SizedBox(height: 16),
                       Container(
                         height: MediaQuery.of(context).size.height / 1.75,

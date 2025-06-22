@@ -82,7 +82,10 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
     final ids = parseStringtoArray(value);
 
     if (ids.isEmpty) {
-      setState(() => ready = true);
+      setState(() {
+        imageUrls = [];
+        ready = true;
+      });
       return;
     }
 

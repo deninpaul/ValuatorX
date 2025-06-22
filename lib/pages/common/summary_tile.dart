@@ -25,7 +25,6 @@ class SummaryTile extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
-    final labelColor = colorScheme.onSurface.withAlpha(160);
 
     return Material(
       color: Colors.transparent,
@@ -48,7 +47,7 @@ class SummaryTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(title, style: textTheme.bodyLarge),
-                      Text(subtitle, style: textTheme.bodyLarge!.copyWith(color: labelColor)),
+                      Text(subtitle, style: textTheme.bodyLarge!.copyWith(color: theme.hintColor)),
                     ],
                   ),
                 ),
@@ -56,7 +55,7 @@ class SummaryTile extends StatelessWidget {
                   spacing: 6,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(info, style: textTheme.bodyMedium!.copyWith(color: labelColor)),
+                    Text(info, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
                     Tag(text: tag)
                   ],
                 ),

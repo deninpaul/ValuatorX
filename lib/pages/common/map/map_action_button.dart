@@ -21,12 +21,12 @@ class MapActionButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: colorScheme.surface,
         shape: const CircleBorder(),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         disabledBackgroundColor: colorScheme.surface,
       ),
       child: isLoading
-          ? SizedBox(width: 24, height: 24, child: CircularProgressIndicator())
-          : Icon(icon, color: colorScheme.onSurfaceVariant, size: 24),
+          ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 3,))
+          : Icon(icon, color: colorScheme.onSurfaceVariant),
     );
   }
 }

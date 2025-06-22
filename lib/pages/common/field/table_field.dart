@@ -46,7 +46,7 @@ class _TableFieldState extends State<TableField> {
           spacing: 24,
           children: [
             Icon(widget.icon),
-            Text(widget.title, style: textTheme.bodyLarge!.copyWith(fontSize: 16 )),
+            Text(widget.title, style: textTheme.bodyLarge),
           ],
         ),
         const SizedBox(height: 16),
@@ -97,7 +97,7 @@ class _TableFieldState extends State<TableField> {
         ),
         if (rows.length < maxRows)
           Padding(
-            padding: const EdgeInsets.only(left: 32),
+            padding: const EdgeInsets.only(left: 28),
             child: Align(
               alignment: Alignment.centerLeft,
               child: TextButton.icon(
@@ -112,7 +112,7 @@ class _TableFieldState extends State<TableField> {
   }
 
   removeIcon(index) => SizedBox(
-    width: 40,
+    width: 36,
     child:
         (index < widget.minRows)
             ? const SizedBox()

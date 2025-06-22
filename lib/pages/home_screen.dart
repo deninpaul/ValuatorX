@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       TabItem(
         name: "Land rate",
         title: "Land Rate Data",
-        icon: Icon(Icons.map_outlined),
+        icon: Icon(Icons.map_outlined,),
         selectedIcon: Icon(Icons.map),
         child: LandRateScreen(),
       ),
@@ -98,10 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SafeArea(
           child:
               isMobile(context)
-                  ? Padding(
-                    padding: EdgeInsets.only(top: 12),
-                    child: selectedPage(),
-                  )
+                  ? selectedPage()
                   : Row(
                     children: <Widget>[
                       NavigationRail(
@@ -111,8 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: colorScheme.surfaceContainer,
                         onDestinationSelected: onSelectTab,
                         leading: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 32),
-                          child: Opacity(opacity: 0.9, child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 48)),
+                          padding: const EdgeInsets.fromLTRB(0, 16, 0, 32),
+                          child: Opacity(opacity: 0.9, child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 40)),
                         ),
                         trailing: Expanded(
                           child: Container(
@@ -149,11 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.symmetric(vertical: 8),
                   color: colorScheme.surfaceContainer,
                   child: BottomNavigationBar(
-                    currentIndex: selectedIndex,
-                    onTap: onSelectTab,
-                    type: BottomNavigationBarType.fixed,
-                    backgroundColor: colorScheme.surfaceContainer,
                     elevation: 0,
+                    onTap: onSelectTab,
+                    currentIndex: selectedIndex,
+                    backgroundColor: colorScheme.surfaceContainer,
                     landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
                     items: tabs.map((tab) => BottomNavigationBarItem(icon: tab.icon, activeIcon: tab.selectedIcon, label: tab.name)).toList(),
                   ),

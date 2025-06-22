@@ -100,9 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
-    final labelColor = colorScheme.onSurface.withAlpha(160);
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Text("Welcome to ValuatorX", style: textTheme.headlineMedium!.copyWith(height: 1.35)),
                                           Text(
                                             "ValuatorX makes it easy to create and manage valuation reports, with access to additional tools and resources",
-                                            style: textTheme.bodyMedium!.copyWith(color: labelColor, height: 1.6),
+                                            style: textTheme.bodyMedium!.copyWith(color: theme.hintColor, height: 1.6),
                                           ),
                                         ],
                                       ),
@@ -191,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            Text("Made for Samanto Associates Pvt. Ltd.", style: textTheme.bodyMedium!.copyWith(color: labelColor)),
+                            Text("Made for Samanto Associates Pvt. Ltd.", style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
                           ],
                         )),
               );

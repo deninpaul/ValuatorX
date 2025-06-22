@@ -50,7 +50,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
-    final formPadding = EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 20);
+    final formPadding = EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 16);
 
     onEditAction({String fieldName = "", int fieldTab = 0}) {
       Navigator.push(
@@ -138,7 +138,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                 ),
                 SliverAppBar(
                   pinned: true,
-                  toolbarHeight: 68,
+                  toolbarHeight: 48,
                   backgroundColor: colorScheme.surfaceContainer,
                   surfaceTintColor: colorScheme.surfaceContainer,
                   automaticallyImplyLeading: false,
@@ -146,7 +146,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     controller: tabController,
                     isScrollable: true,
                     tabAlignment: TabAlignment.center,
-                    padding: EdgeInsets.only(top: 12),
+                    padding: EdgeInsets.only(top: 0),
                     tabs: tabs.map((tab) => Tab(text: tab)).toList(),
                   ),
                 ),

@@ -74,7 +74,7 @@ class LandRateDetails extends StatelessWidget {
             SliverToBoxAdapter(
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 20),
+                padding: EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,

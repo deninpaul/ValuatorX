@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
-final headerTheme = TextStyle(fontSize: 19);
+final headerTheme = TextStyle(fontSize: 16);
 
 defaultTransition(Color color, {SharedAxisTransitionType orientation = SharedAxisTransitionType.horizontal}) {
   return (child, animation, secondaryAnimation) => SharedAxisTransition(

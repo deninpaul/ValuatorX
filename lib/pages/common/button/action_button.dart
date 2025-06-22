@@ -13,7 +13,7 @@ class ActionButton extends StatelessWidget {
     final texTheme = Theme.of(context).textTheme;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
-      width: isMobile(context) ? 100 : 108,
+      width: isMobile(context) ? 96 : 100,
       child: Column(
         spacing: 16,
         mainAxisSize: MainAxisSize.min,
@@ -24,7 +24,7 @@ class ActionButton extends StatelessWidget {
             onPressed: onPressed,
             icon: Icon(icon),
           ),
-          Text(label, style: texTheme.bodyLarge, textAlign: TextAlign.center),
+          Text(label, style: texTheme.bodyMedium, textAlign: TextAlign.center),
         ],
       ),
     );

@@ -21,7 +21,7 @@ class SaveButton extends StatelessWidget {
       } : null,
       style:
        TextButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: kIsWeb ? 16 : 10),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: kIsWeb ? 8 : 0),
         backgroundColor: theme.colorScheme.primary,
         disabledBackgroundColor: theme.disabledColor
       ),
@@ -29,8 +29,8 @@ class SaveButton extends StatelessWidget {
           creating
               ? Container(
                 margin: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                width: 20,
-                height: 20,
+                width: 16,
+                height: 16,
                 child: CircularProgressIndicator(color: theme.colorScheme.onPrimary, strokeWidth: 3),
               )
               : Text("Save", style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onPrimary)),

@@ -11,7 +11,6 @@ class CreateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
 
     return Padding(
@@ -25,9 +24,9 @@ class CreateButton extends StatelessWidget {
         closedBuilder:
             (context, openContainer) => FloatingActionButton.extended(
               onPressed: openContainer,
-              icon: const Icon(Icons.add),
+              icon: const Icon(Icons.add, size: 20),
               elevation: 0,
-              label: Text(label, style: textTheme.bodyMedium),
+              label: Text(label, style: TextStyle(fontWeight: FontWeight.normal),),
             ),
       ),
     );

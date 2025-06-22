@@ -50,11 +50,11 @@ class DatePickerField extends StatelessWidget {
     return Row(
       spacing: 24,
       children: [
-        if (isChild) const SizedBox(width: 24),
+        if (isChild) const SizedBox(width: 20),
         if (icon != null)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Icon(icon, size: 24),
+            child: Icon(icon),
           ),
         Expanded(
           child: GestureDetector(

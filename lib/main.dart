@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';
 import 'package:valuatorx/providers/location_provider.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
+import 'package:valuatorx/utils/theme.dart';
 import 'package:valuatorx/utils/web_utils/web_helper.dart';
 
 void main() async {
@@ -31,24 +31,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LocationProvider()),
         ChangeNotifierProvider(create: (_) => ValuationProvider()),
       ],
-      child: MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaler: kIsWeb ? TextScaler.linear(0.95) : null),
-        child: MaterialApp(
-          title: 'ValuatorX',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light),
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            useMaterial3: true,
-          ),
-          routes: {
-            '/': (context) => const SplashScreen(),
-            '/login': (context) => const LoginScreen(),
-            '/home': (context) => const HomeScreen(),
-          },
-          initialRoute: '/',
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: const [FlutterQuillLocalizations.delegate],
-        ),
+      child: MaterialApp(
+        title: 'ValuatorX',
+        color: Colors.white,
+        theme: globalTheme,
+        routes: {
+          '/': (context) => const SplashScreen(),
+          '/login': (context) => const LoginScreen(),
+          '/home': (context) => const HomeScreen(),
+        },
+        initialRoute: '/',
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [FlutterQuillLocalizations.delegate],
       ),
     );
   }

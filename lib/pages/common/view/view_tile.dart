@@ -11,9 +11,9 @@ class ViewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
-    final labelColor = colorScheme.onSurface.withAlpha(160);
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
     final valueFormated = value.trim().isEmpty ? "-" : value;
 
     return Material(
@@ -35,7 +35,7 @@ class ViewTile extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   spacing: 6,
                   children: [
-                    Text(title, style: textTheme.bodyMedium!.copyWith(color: labelColor)),
+                    Text(title, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
                     SelectableText(valueFormated, style: textTheme.bodyLarge),
                   ],
                 ),

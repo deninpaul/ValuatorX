@@ -19,14 +19,14 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: colorScheme.surfaceContainer,
       surfaceTintColor: colorScheme.surfaceContainer,
       scrolledUnderElevation: 0,
-      leading: IconButton(onPressed: onBackPressed, icon: Icon(Icons.arrow_back_outlined)),
+      leading: IconButton(onPressed: onBackPressed, icon: Icon(Icons.arrow_back_outlined), padding: EdgeInsets.zero,),
       automaticallyImplyLeading: false,
       actions: actions,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        expandedTitleScale: 1.35,
+        expandedTitleScale: 1.3,
         title: Container(
-          width: MediaQuery.of(context).size.width * 0.35,
+          width: MediaQuery.of(context).size.width * 0.4,
           padding: const EdgeInsets.only(top: 16.0),
           alignment: Alignment.bottomCenter,
           child: Text(title, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, textWidthBasis: TextWidthBasis.longestLine),

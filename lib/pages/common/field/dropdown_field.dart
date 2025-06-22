@@ -54,8 +54,8 @@ class _DropdownFieldState extends State<DropdownField> {
     return Row(
       spacing: 24,
       children: [
-        if (widget.isChild) const SizedBox(width: 24),
-        if (widget.icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(widget.icon, size: 24)),
+        if (widget.isChild) const SizedBox(width: 20),
+        if (widget.icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(widget.icon)),
         Expanded(
           child: DropdownButtonFormField<String>(
             autofocus: widget.name == widget.focusField,

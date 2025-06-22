@@ -92,7 +92,7 @@ class _MapWrapperState extends State<MapWrapper> {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 16,
+                  spacing: 4,
                   children: [
                     MapActionButton(
                       onPressed: () => provider.moveToMyLocation(widget.mapController),

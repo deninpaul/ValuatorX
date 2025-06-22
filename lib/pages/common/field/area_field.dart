@@ -23,7 +23,7 @@ class AreaField extends StatelessWidget {
       spacing: 24,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(icon, size: 24)),
+        if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(icon)),
         Expanded(
           child: TextFormField(
             controller: controller,

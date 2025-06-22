@@ -78,7 +78,7 @@ class _LocationFieldState extends State<LocationField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 24,
       children: [
-        Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(widget.icon, size: 24)),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(widget.icon)),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,

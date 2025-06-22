@@ -64,7 +64,7 @@ class _TagState extends State<Tag> {
                             value: widget.text,
                             dropdownColor: colorScheme.surface,
                             style: textTheme.bodyMedium,
-                            icon: const Icon(Icons.expand_more),
+                            icon: const Icon(Icons.expand_more, size: 20,),
                             elevation: 0,
                             padding: EdgeInsets.only(left: 8),
                             isDense: true,

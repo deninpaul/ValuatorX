@@ -10,9 +10,9 @@ class InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
-    final labelColor = colorScheme.onSurface.withAlpha(160);
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
     final valueFormated = value.trim().isEmpty ? "-" : value;
 
     return Container(
@@ -37,8 +37,13 @@ class InfoTile extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   spacing: 4,
                   children: [
-                    Text(valueFormated, style: textTheme.titleLarge!.copyWith(color: colorScheme.onSurfaceVariant), overflow: TextOverflow.fade),
-                    Text(title, style: textTheme.bodyMedium!.copyWith(color: labelColor), overflow: TextOverflow.fade),
+                    Text(
+                      valueFormated,
+                      style: textTheme.titleLarge!.copyWith(color: colorScheme.onSurfaceVariant),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(title, style: textTheme.bodyLarge!.copyWith(color: theme.hintColor), overflow: TextOverflow.ellipsis, maxLines: 1),
                   ],
                 ),
               ),

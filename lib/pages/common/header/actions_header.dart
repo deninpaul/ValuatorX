@@ -10,7 +10,7 @@ class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
   const ActionsHeader({
     super.key,
     required this.actions,
-    this.expandedHeight = 150,
+    this.expandedHeight = 136,
     this.collapsedHeight = 56,
     this.pinned = false,
   });
@@ -29,7 +29,7 @@ class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.only(bottom: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

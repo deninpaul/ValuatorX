@@ -522,14 +522,8 @@ class Valuation {
   }
 
   equal(Valuation val) {
-    final mapA =
-        toJson()
-          ..remove(STATUS)
-          ..remove(ID);
-    final mapB =
-        val.toJson()
-          ..remove(STATUS)
-          ..remove(ID);
+    final mapA = toJson()..remove(STATUS)..remove(ID);
+    final mapB = val.toJson()..remove(STATUS)..remove(ID);
     const eq = DeepCollectionEquality();
     return eq.equals(mapA, mapB);
   }

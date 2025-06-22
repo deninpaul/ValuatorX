@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:collection/collection.dart';
+
 class LandRate {
   final String id;
   final String slNo;
@@ -48,13 +50,7 @@ class LandRate {
     ROAD,
   ];
 
-  static const List<String> landTypeOptions = [
-    "Residential",
-    "Commercial",
-    "Industrial",
-    "Residential & Commercial",
-    "Agricultural",
-  ];
+  static const List<String> landTypeOptions = ["Residential", "Commercial", "Industrial", "Residential & Commercial", "Agricultural"];
 
   static const List<String> roadOptions = [
     "PWD",
@@ -83,16 +79,16 @@ class LandRate {
 
   factory LandRate.fromJson(Map<String, dynamic> json) {
     return LandRate(
-      id: json[ID],
-      slNo: json[SL_NO].toString(),
-      latitude: json[LATITUDE].toString(),
-      longitude: json[LONGITUDE].toString(),
-      landRatePerCent: json[LAND_RATE_PER_CENT].toString(),
-      landType: json[LAND_TYPE].toString(),
-      landSizeRemarks: json[LAND_SIZE_REMARKS].toString(),
-      monthOfVisit: json[MONTH_OF_VISIT].toString(),
-      yearOfVisit: json[YEAR_OF_VISIT].toString(),
-      road: json[ROAD].toString(),
+      id: (json[ID] ?? ""),
+      slNo: (json[SL_NO] ?? "").toString(),
+      latitude: (json[LATITUDE] ?? "").toString(),
+      longitude: (json[LONGITUDE] ?? "").toString(),
+      landRatePerCent: (json[LAND_RATE_PER_CENT] ?? "").toString(),
+      landType: (json[LAND_TYPE] ?? "").toString(),
+      landSizeRemarks: (json[LAND_SIZE_REMARKS] ?? "").toString(),
+      monthOfVisit: (json[MONTH_OF_VISIT] ?? "").toString(),
+      yearOfVisit: (json[YEAR_OF_VISIT] ?? "").toString(),
+      road: (json[ROAD] ?? "").toString(),
     );
   }
 
@@ -113,5 +109,12 @@ class LandRate {
 
   List<dynamic> toList() {
     return [slNo, latitude, longitude, landRatePerCent, landType, landSizeRemarks, monthOfVisit, yearOfVisit, road];
+  }
+
+  equal(LandRate val) {
+    final mapA = toJson()..remove(ID);
+    final mapB = val.toJson()..remove(ID);
+    const eq = DeepCollectionEquality();
+    return eq.equals(mapA, mapB);
   }
 }

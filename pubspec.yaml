@@ -15,7 +15,7 @@ dependencies:
   flutter_map_marker_cluster: ^1.4.0
   flutter_quill: ^11.4.1
   geocoding: ^4.0.0
-  geolocator: ^11.0.0
+  geolocator: ^14.0.1
   http_cache_hive_store: ^5.0.0
   hive_ce: ^2.11.3
   image_picker: ^1.1.2

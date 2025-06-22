@@ -49,6 +49,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
+    final formPadding = EdgeInsets.symmetric(vertical: 24, horizontal: 20);
 
     onEditAction({String fieldName = "", int fieldTab = 0}) {
       Navigator.push(
@@ -153,7 +154,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
             controller: tabController,
             children: [
               SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                padding: formPadding,
                 child: Column(
                   spacing: 16,
                   children: [
@@ -231,7 +232,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                 ),
               ),
               SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                padding: formPadding,
                 child: Column(
                   spacing: 16,
                   children: [
@@ -357,7 +358,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                 ),
               ),
               SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                padding: formPadding,
                 child: Column(
                   spacing: 16,
                   children: [
@@ -538,14 +539,14 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                 ),
               ),
               SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                padding: formPadding,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 440),
                   child: NotesViewer(title: Valuation.REMARKS, value: widget.valuation.remarks, onPressed: onEditAction, tabIndex: 3),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                padding: formPadding,
                 child: ImagePickerField(editMode: false, value: widget.valuation.photos, onEditAction: () => onEditAction(fieldTab: 4)),
               ),
             ],

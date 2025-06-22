@@ -8,8 +8,8 @@ class AuthProvider extends ChangeNotifier {
   oauth2.Credentials? _credentials;
 
   // Microsoft OAuth configuration
-  final String _clientId = dotenv.env['CLIENT_ID']!;
-  final String _tenantId = dotenv.env['TENANT_ID']!;
+  final String _clientId = kIsWeb ? const String.fromEnvironment('CLIENT_ID') : dotenv.env['CLIENT_ID'] ?? '';
+  final String _tenantId = kIsWeb ? const String.fromEnvironment('TENANT_ID') : dotenv.env['TENANT_ID'] ?? '';
   final List<String> _scopes = ['openid', 'profile', 'email', 'offline_access', 'User.Read', 'Files.ReadWrite'];
 
   final SettingsService settingsService = SettingsService();
@@ -21,7 +21,10 @@ class AuthProvider extends ChangeNotifier {
   AuthProvider() {
     _authorizationEndpoint = Uri.parse('https://login.microsoftonline.com/$_tenantId/oauth2/v2.0/authorize');
     _tokenEndpoint = Uri.parse('https://login.microsoftonline.com/$_tenantId/oauth2/v2.0/token');
-    redirectUrl = kIsWeb ? "${dotenv.env['HOST']}/redirect.html" : "https://login.microsoftonline.com/$_tenantId/oauth2/nativeclient";
+    redirectUrl =
+        kIsWeb
+            ? "${const String.fromEnvironment('HOST')}/redirect.html"
+            : "https://login.microsoftonline.com/$_tenantId/oauth2/nativeclient";
   }
 
   // OAuth grant object

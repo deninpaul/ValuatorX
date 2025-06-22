@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/modals/land_rate.dart';
+import 'package:valuatorx/models/land_rate.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:valuatorx/services/excel_service.dart';
 

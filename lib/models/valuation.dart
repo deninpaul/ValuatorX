@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:collection/collection.dart';
+
 class Valuation {
   final String id;
   final String reportName;
@@ -208,7 +210,8 @@ class Valuation {
   static const String LATTITUDE = "Lattitude";
   static const String LONGITUDE = "Longitude";
   static const String TANDAPPERENCUMFRANCE_REF = "Tandapper/Encumfrance Ref.";
-  static const String LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND = "Level of land with topographical conditions/ Shape of land";
+  static const String LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND =
+      "Level of land with topographical conditions/ Shape of land";
   static const String HOUSE_NO_DOOR_NO = "House No./ Door No.";
   static const String PANCHAYATH = "Panchayath";
   static const String ELECTRICITY_CONSUMER_NO = "Electricity Consumer no.";
@@ -257,89 +260,89 @@ class Valuation {
 
   factory Valuation.fromJson(Map<String, dynamic> json) {
     return Valuation(
-      id: json[ID],
-      reportName: json[REPORT_NAME].toString(),
-      dateOfInspection: json[DATE_OF_INSPECTION].toString(),
-      status: json[STATUS].toString(),
-      reportLink: json[REPORT_LINK].toString(),
-      bankDetails: json[BANK_BRANCH_VALUATION_TEAM_DETAILS].toString(),
-      ownerDetails: json[NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO].toString(),
-      propertyPossessionAddress: json[PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS].toString(),
-      surveyNo1: json[SURVEY_NO_RE_SY_NO_1].toString(),
-      area1: json[AREA_IN_ARE_1].toString(),
-      surveyNo2: json[SURVEY_NO_RE_SY_NO_2].toString(),
-      area2: json[AREA_IN_ARE_2].toString(),
-      surveyNo3: json[SURVEY_NO_RE_SY_NO_3].toString(),
-      area3: json[AREA_IN_ARE_3].toString(),
-      surveyNo4: json[SURVEY_NO_RE_SY_NO_4].toString(),
-      area4: json[AREA_IN_ARE_4].toString(),
-      village: json[VILLAGE].toString(),
-      taluk: json[TALUK].toString(),
-      landCategory: json[LAND_CATEGORY].toString(),
-      eastActual: json[EAST_ACTUALS].toString(),
-      eastDeed: json[EAST_AS_PER_DEED].toString(),
-      southActual: json[SOUTH_ACTUALS].toString(),
-      southDeed: json[SOUTH_AS_PER_DEED].toString(),
-      westActual: json[WEST_ACTUALS].toString(),
-      westDeed: json[WEST_AS_PER_DEED].toString(),
-      northActual: json[NORTH_ACTUALS].toString(),
-      northDeed: json[NORTH_AS_PER_DEED].toString(),
-      legalReportReference: json[LEGAL_REPORT_REFERENCE].toString(),
-      buildingApprovalReference: json[BUILDING_APPROVAL_REFERENCE].toString(),
-      deedRegDetails: json[DEED_REG_SRO_NO_DATE].toString(),
-      possessionCertificateDetails: json[POCCESSION_CERTIFICATE_DETAILS].toString(),
-      locationSketchDetails: json[LOCATION_SKETCH_DETAILS].toString(),
-      propertyTaxCertificateDetails: json[PROPERTY_TAX_CERTICATE_DETAILS].toString(),
-      buildingTaxCertificateDetails: json[BUILDING_TAX_CERTIFICATE_DETAILS].toString(),
-      latitude: json[LATTITUDE].toString(),
-      longitude: json[LONGITUDE].toString(),
-      encumbranceReference: json[TANDAPPERENCUMFRANCE_REF].toString(),
-      topographyAndShape: json[LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND].toString(),
-      houseNumber: json[HOUSE_NO_DOOR_NO].toString(),
-      panchayath: json[PANCHAYATH].toString(),
-      electricityConsumerNo: json[ELECTRICITY_CONSUMER_NO].toString(),
-      ksebDivision: json[KSEB_DIVISION].toString(),
-      yearOfConstruction: json[YEAR_OF_CONSTRUCTION].toString(),
-      qualityOfConstruction: json[QUALITY_OF_CONSTRUCTION].toString(),
-      buildingType: json[TYPE_OF_BUILDING].toString(),
-      constructionType: json[TYPE_OF_CONSTRUCTION].toString(),
-      plinthAreaGF: json[PLINT_AREA_GF].toString(),
-      replacementRateGF: json[REPLACEMENT_RATE_GF].toString(),
-      heightGF: json[HEIGHT_GF].toString(),
-      ageGF: json[AGE_GF].toString(),
-      plinthAreaFF: json[PLINTH_AREA_FF].toString(),
-      replacementRateFF: json[REPLACEMENT_RATE_FF].toString(),
-      heightFF: json[HEIGHT_FF].toString(),
-      ageFF: json[AGE_FF].toString(),
-      plinthAreaSF: json[PLINTH_AREA_SF].toString(),
-      replacementRateSF: json[REPLACEMENT_RATE_SF].toString(),
-      heightSF: json[HEIGHT_SF].toString(),
-      ageSF: json[AGE_SF].toString(),
-      plinthAreaTF: json[PLINTH_AREA_TF].toString(),
-      replacementRateTF: json[REPLACEMENT_RATE_TF].toString(),
-      heightTF: json[HEIGHT_TF].toString(),
-      ageTF: json[AGE_TF].toString(),
-      buildingCategory: json[BUILDING_TYPE].toString(),
-      exteriorCondition: json[CONDITION_OF_BUILDING_EXTERIOR].toString(),
-      interiorCondition: json[CONDITION_OF_BUILDING_INTERIOR].toString(),
-      foundationAndBasement: json[FOUNDATION_BASEMENT].toString(),
-      rccWorks: json[RCC_WORKS].toString(),
-      wallDetails: json[WALL_DETAILS].toString(),
-      flooring: json[FLOORING].toString(),
-      joinery: json[JOINERYDOORS].toString(),
-      windows: json[WINDOWS].toString(),
-      roofing: json[WPROOF_TRUSS].toString(),
-      landMarketRate: json[PREVAILING_LAND_MARKET_RATE].toString(),
-      buildingUnitRate: json[BUILDING_VALUATION_UNIT_RATE].toString(),
-      classificationArea1: json[CLASSIFICATION_OF_AREA_1].toString(),
-      classificationArea2: json[CLASSIFICATION_OF_AREA_2].toString(),
-      propertyLandmark: json[LANDMARK_OF_THE_PROPERTY].toString(),
-      roadDetails: json[ROAD_DETAILS].toString(),
-      mainJunction: json[MAIN_JUNCTION].toString(),
-      nearbyInstitutions: json[INSTITITUIONRELIGIOUS_GOVT_OFFICES].toString(),
-      nearbyTown: json[NEARBY_TOWN].toString(),
-      photos: json[PHOTOS].toString(),
-      remarks: json[REMARKS].toString(),
+      id: (json[ID] ?? "").toString(),
+      reportName: (json[REPORT_NAME] ?? "").toString(),
+      dateOfInspection: (json[DATE_OF_INSPECTION] ?? "").toString(),
+      status: (json[STATUS] ?? "").toString(),
+      reportLink: (json[REPORT_LINK] ?? "").toString(),
+      bankDetails: (json[BANK_BRANCH_VALUATION_TEAM_DETAILS] ?? "").toString(),
+      ownerDetails: (json[NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO] ?? "").toString(),
+      propertyPossessionAddress: (json[PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS] ?? "").toString(),
+      surveyNo1: (json[SURVEY_NO_RE_SY_NO_1] ?? "").toString(),
+      area1: (json[AREA_IN_ARE_1] ?? "").toString(),
+      surveyNo2: (json[SURVEY_NO_RE_SY_NO_2] ?? "").toString(),
+      area2: (json[AREA_IN_ARE_2] ?? "").toString(),
+      surveyNo3: (json[SURVEY_NO_RE_SY_NO_3] ?? "").toString(),
+      area3: (json[AREA_IN_ARE_3] ?? "").toString(),
+      surveyNo4: (json[SURVEY_NO_RE_SY_NO_4] ?? "").toString(),
+      area4: (json[AREA_IN_ARE_4] ?? "").toString(),
+      village: (json[VILLAGE] ?? "").toString(),
+      taluk: (json[TALUK] ?? "").toString(),
+      landCategory: (json[LAND_CATEGORY] ?? "").toString(),
+      eastActual: (json[EAST_ACTUALS] ?? "").toString(),
+      eastDeed: (json[EAST_AS_PER_DEED] ?? "").toString(),
+      southActual: (json[SOUTH_ACTUALS] ?? "").toString(),
+      southDeed: (json[SOUTH_AS_PER_DEED] ?? "").toString(),
+      westActual: (json[WEST_ACTUALS] ?? "").toString(),
+      westDeed: (json[WEST_AS_PER_DEED] ?? "").toString(),
+      northActual: (json[NORTH_ACTUALS] ?? "").toString(),
+      northDeed: (json[NORTH_AS_PER_DEED] ?? "").toString(),
+      legalReportReference: (json[LEGAL_REPORT_REFERENCE] ?? "").toString(),
+      buildingApprovalReference: (json[BUILDING_APPROVAL_REFERENCE] ?? "").toString(),
+      deedRegDetails: (json[DEED_REG_SRO_NO_DATE] ?? "").toString(),
+      possessionCertificateDetails: (json[POCCESSION_CERTIFICATE_DETAILS] ?? "").toString(),
+      locationSketchDetails: (json[LOCATION_SKETCH_DETAILS] ?? "").toString(),
+      propertyTaxCertificateDetails: (json[PROPERTY_TAX_CERTICATE_DETAILS] ?? "").toString(),
+      buildingTaxCertificateDetails: (json[BUILDING_TAX_CERTIFICATE_DETAILS] ?? "").toString(),
+      latitude: (json[LATTITUDE] ?? "").toString(),
+      longitude: (json[LONGITUDE] ?? "").toString(),
+      encumbranceReference: (json[TANDAPPERENCUMFRANCE_REF] ?? "").toString(),
+      topographyAndShape: (json[LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND] ?? "").toString(),
+      houseNumber: (json[HOUSE_NO_DOOR_NO] ?? "").toString(),
+      panchayath: (json[PANCHAYATH] ?? "").toString(),
+      electricityConsumerNo: (json[ELECTRICITY_CONSUMER_NO] ?? "").toString(),
+      ksebDivision: (json[KSEB_DIVISION] ?? "").toString(),
+      yearOfConstruction: (json[YEAR_OF_CONSTRUCTION] ?? "").toString(),
+      qualityOfConstruction: (json[QUALITY_OF_CONSTRUCTION] ?? "").toString(),
+      buildingType: (json[TYPE_OF_BUILDING] ?? "").toString(),
+      constructionType: (json[TYPE_OF_CONSTRUCTION] ?? "").toString(),
+      plinthAreaGF: (json[PLINT_AREA_GF] ?? "").toString(),
+      replacementRateGF: (json[REPLACEMENT_RATE_GF] ?? "").toString(),
+      heightGF: (json[HEIGHT_GF] ?? "").toString(),
+      ageGF: (json[AGE_GF] ?? "").toString(),
+      plinthAreaFF: (json[PLINTH_AREA_FF] ?? "").toString(),
+      replacementRateFF: (json[REPLACEMENT_RATE_FF] ?? "").toString(),
+      heightFF: (json[HEIGHT_FF] ?? "").toString(),
+      ageFF: (json[AGE_FF] ?? "").toString(),
+      plinthAreaSF: (json[PLINTH_AREA_SF] ?? "").toString(),
+      replacementRateSF: (json[REPLACEMENT_RATE_SF] ?? "").toString(),
+      heightSF: (json[HEIGHT_SF] ?? "").toString(),
+      ageSF: (json[AGE_SF] ?? "").toString(),
+      plinthAreaTF: (json[PLINTH_AREA_TF] ?? "").toString(),
+      replacementRateTF: (json[REPLACEMENT_RATE_TF] ?? "").toString(),
+      heightTF: (json[HEIGHT_TF] ?? "").toString(),
+      ageTF: (json[AGE_TF] ?? "").toString(),
+      buildingCategory: (json[BUILDING_TYPE] ?? "").toString(),
+      exteriorCondition: (json[CONDITION_OF_BUILDING_EXTERIOR] ?? "").toString(),
+      interiorCondition: (json[CONDITION_OF_BUILDING_INTERIOR] ?? "").toString(),
+      foundationAndBasement: (json[FOUNDATION_BASEMENT] ?? "").toString(),
+      rccWorks: (json[RCC_WORKS] ?? "").toString(),
+      wallDetails: (json[WALL_DETAILS] ?? "").toString(),
+      flooring: (json[FLOORING] ?? "").toString(),
+      joinery: (json[JOINERYDOORS] ?? "").toString(),
+      windows: (json[WINDOWS] ?? "").toString(),
+      roofing: (json[WPROOF_TRUSS] ?? "").toString(),
+      landMarketRate: (json[PREVAILING_LAND_MARKET_RATE] ?? "").toString(),
+      buildingUnitRate: (json[BUILDING_VALUATION_UNIT_RATE] ?? "").toString(),
+      classificationArea1: (json[CLASSIFICATION_OF_AREA_1] ?? "").toString(),
+      classificationArea2: (json[CLASSIFICATION_OF_AREA_2] ?? "").toString(),
+      propertyLandmark: (json[LANDMARK_OF_THE_PROPERTY] ?? "").toString(),
+      roadDetails: (json[ROAD_DETAILS] ?? "").toString(),
+      mainJunction: (json[MAIN_JUNCTION] ?? "").toString(),
+      nearbyInstitutions: (json[INSTITITUIONRELIGIOUS_GOVT_OFFICES] ?? "").toString(),
+      nearbyTown: (json[NEARBY_TOWN] ?? "").toString(),
+      photos: (json[PHOTOS] ?? "").toString(),
+      remarks: (json[REMARKS] ?? "").toString(),
     );
   }
 
@@ -518,6 +521,19 @@ class Valuation {
     ];
   }
 
+  equal(Valuation val) {
+    final mapA =
+        toJson()
+          ..remove(STATUS)
+          ..remove(ID);
+    final mapB =
+        val.toJson()
+          ..remove(STATUS)
+          ..remove(ID);
+    const eq = DeepCollectionEquality();
+    return eq.equals(mapA, mapB);
+  }
+
   static const editableFields = [
     REPORT_NAME,
     DATE_OF_INSPECTION,
@@ -603,47 +619,15 @@ class Valuation {
     REMARKS,
   ];
 
-  static const statusOptions = [
-    "In progress",
-    "Completed",
-    "Backlog",
-  ];
+  static const statusOptions = ["In progress", "Completed", "Backlog"];
 
-    static const buildingTypeOptions = [
-    "Residential",
-    "Commercial",
-    "Industrial",
-    "-",
-  ];
+  static const buildingTypeOptions = ["Residential", "Commercial", "Industrial", "-"];
 
-  static const constructionTypeOptions = [
-    "Loan bearing",
-    "RCC",
-    "Steel Frame",
-    "-",
-  ];
+  static const constructionTypeOptions = ["Loan bearing", "RCC", "Steel Frame", "-"];
 
-  static const qualityOfConstructionOptions = [
-    "Excellent",
-    "Good",
-    "Normal",
-    "Poor",
-    "-",
-  ];
+  static const qualityOfConstructionOptions = ["Excellent", "Good", "Normal", "Poor", "-"];
 
-  static const exteriorConditionOptions = [
-    "Excellent",
-    "Good",
-    "Normal",
-    "Poor",
-    "-",
-  ];
+  static const exteriorConditionOptions = ["Excellent", "Good", "Normal", "Poor", "-"];
 
-  static const interiorConditionOptions = [
-    "Excellent",
-    "Good",
-    "Normal",
-    "Poor",
-    "-",
-  ];
+  static const interiorConditionOptions = ["Excellent", "Good", "Normal", "Poor", "-"];
 }

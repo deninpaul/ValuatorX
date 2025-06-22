@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:valuatorx/modals/valuation.dart';
+import 'package:valuatorx/models/valuation.dart';
 
 class Tag extends StatefulWidget {
   final String text;

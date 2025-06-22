@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/modals/valuation.dart';
+import 'package:valuatorx/models/valuation.dart';
 import 'package:valuatorx/pages/common/status_icon.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:valuatorx/utils/common.dart';
@@ -143,7 +143,7 @@ class ValuationProvider extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> getDraft(String id) async {
+  Future<Map<dynamic, dynamic>> getDraft(String id) async {
     try {
       final result = await draftService.get(id);
       debugPrint("Fetched $id from drafts.");

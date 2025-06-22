@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/modals/land_rate.dart';
+import 'package:valuatorx/models/land_rate.dart';
 import 'package:valuatorx/pages/common/field/basic_field.dart';
 import 'package:valuatorx/pages/common/field/dropdown_field.dart';
 import 'package:valuatorx/pages/common/field/location_field.dart';
@@ -75,7 +75,6 @@ class _LandRateFormState extends State<LandRateForm> {
   @override
   Widget build(BuildContext context) {
     final modeName = widget.editMode ? "Edit" : "New";
-    final formPadding = EdgeInsets.symmetric(horizontal: isMobile(context) ? 24 : isDesktop(context) ? 240 : 48, vertical: 32);
     final provider = Provider.of<LandRateProvider>(context);
 
     return PopScope(
@@ -94,7 +93,7 @@ class _LandRateFormState extends State<LandRateForm> {
           ],
         ),
         body: SingleChildScrollView(
-          padding: formPadding,
+          padding: formPadding(context),
           child: Form(
             key: _formKey,
             child: Column(

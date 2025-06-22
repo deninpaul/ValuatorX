@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:valuatorx/modals/valuation.dart';
+import 'package:valuatorx/models/valuation.dart';
 import 'package:valuatorx/pages/common/button/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';

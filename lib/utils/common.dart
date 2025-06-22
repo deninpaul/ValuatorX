@@ -1,7 +1,5 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
-import 'package:valuatorx/modals/valuation.dart';
 
 final headerTheme = TextStyle(fontSize: 19);
 
@@ -13,13 +11,6 @@ defaultTransition(Color color, {SharedAxisTransitionType orientation = SharedAxi
     fillColor: color,
     child: child,
   );
-}
-
-bool equal(Map a, Map b) {
-  final Map aCopy = Map.of(a)..remove(Valuation.STATUS);
-  final Map bCopy = Map.of(b)..remove(Valuation.STATUS);
-  const eq = DeepCollectionEquality();
-  return eq.equals(aCopy, bCopy);
 }
 
 String getExcelColumn(int num) {
@@ -41,3 +32,13 @@ bool isDesktop(BuildContext context) {
   final width = MediaQuery.of(context).size.width;
   return width > 1280;
 }
+
+EdgeInsets formPadding(context) => EdgeInsets.symmetric(
+  horizontal:
+      isMobile(context)
+          ? 24
+          : isDesktop(context)
+          ? 240
+          : 48,
+  vertical: 32,
+);

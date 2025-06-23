@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:valuatorx/pages/common/image/image_editor.dart';
 import 'package:valuatorx/pages/common/image/image_viewer.dart';
-import 'package:valuatorx/providers/valuation_provider.dart';
+import 'package:valuatorx/providers/media_provider.dart';
 import 'dart:io';
+import 'package:valuatorx/utils/common.dart';
 
 class ImagePickerField extends StatefulWidget {
   final bool editMode;
@@ -32,8 +35,8 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
         final file = File(pickedFile.path);
         final result = await Navigator.of(context).push<File>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file)));
         if (result != null) {
-          final valuationProvider = Provider.of<ValuationProvider>(context, listen: false);
-          final imageId = await valuationProvider.uploadImage(context, result);
+          final provider = Provider.of<MediaProvider>(context, listen: false);
+          final imageId = await provider.uploadImage(context, result);
           setState(() {
             ready = false;
             widget.controller!.text += "$imageId,";
@@ -54,6 +57,16 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
     }
   }
 
+  onOpenAction(int index) async {
+    final ids = parseStringtoArray(widget.value ?? "");
+    final id = ids.removeAt(index);
+    final provider = Provider.of<MediaProvider>(context, listen: false);
+    final url = await provider.openImageUrl(context, id);
+    if (!await launchUrl(Uri.parse(url))) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not launch Google Maps')));
+    }
+  }
+
   void showFullImage(String imageUrl, int index) {
     showGeneralDialog(
       context: context,
@@ -61,7 +74,13 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
       barrierLabel: "Image Preview",
       transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
-        return ImageViewer(image: imageUrl, index: index, editable: editMode, onDelete: () => onDeleteAction(index));
+        return ImageViewer(
+          image: imageUrl,
+          index: index,
+          editable: editMode,
+          onDelete: () => onDeleteAction(index),
+          onOpen: () => onOpenAction(index),
+        );
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(
@@ -89,8 +108,8 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
       return;
     }
 
-    final valuationProvider = Provider.of<ValuationProvider>(context, listen: false);
-    final result = await valuationProvider.getImages(context, ids);
+    final provider = Provider.of<MediaProvider>(context, listen: false);
+    final result = await provider.getImages(context, ids);
     setState(() {
       imageUrls = result;
       ready = true;
@@ -122,7 +141,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
       children: [
         if (editMode)
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: isDesktop(context) ? 200 : 0),
             child: Row(
               spacing: 16,
               children: [
@@ -132,7 +151,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
                     icon: const Icon(Icons.camera_alt_outlined),
                     label: const Text('Take photo'),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 20 : 16),
                       backgroundColor: colorScheme.secondaryContainer,
                       foregroundColor: colorScheme.onSecondaryContainer,
                       textStyle: textTheme.bodyMedium,
@@ -145,7 +164,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
                     icon: const Icon(Icons.folder_outlined),
                     label: const Text('Import from gallery'),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 20 : 16),
                       backgroundColor: colorScheme.surfaceContainer,
                       foregroundColor: colorScheme.onPrimaryContainer,
                       textStyle: textTheme.bodyMedium,
@@ -157,7 +176,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
           ),
         Expanded(
           child: Container(
-            padding: EdgeInsets.all(16),
+            padding: !editMode ? EdgeInsets.symmetric(vertical: 16, horizontal: isDesktop(context) ? 64 : 16) : EdgeInsets.symmetric(vertical: 16),
             width: double.infinity,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
             child: Column(
@@ -184,8 +203,8 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
                                 ),
                               )
                               : GridView.builder(
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: isDesktop(context) ? 3 : 2,
                                   crossAxisSpacing: 12,
                                   mainAxisSpacing: 12,
                                   childAspectRatio: 1,

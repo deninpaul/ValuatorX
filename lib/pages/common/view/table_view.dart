@@ -42,7 +42,7 @@ class TableViewTile extends StatelessWidget {
             return needsScrolling
                 ? SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Column(children: _buildTableRows(rowsToDisplay, isScrollable: true)),
+                  child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: _buildTableRows(rowsToDisplay, isScrollable: true)),
                 )
                 : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: _buildTableRows(rowsToDisplay, isScrollable: false));
           },
@@ -57,6 +57,7 @@ class TableViewTile extends StatelessWidget {
 
       return Row(
         spacing: 16,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ...List.generate(fieldNames[0].length, (colIndex) {
             final String displayValue = rowIndex < values.length ? values[rowIndex][colIndex] : "";

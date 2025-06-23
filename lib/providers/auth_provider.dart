@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
-import 'package:valuatorx/services/hive_service.dart';
+import 'package:valuatorx/services/settings_service.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool isLoading = false;

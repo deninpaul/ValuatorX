@@ -311,7 +311,6 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                           icon: Icons.straighten_outlined,
                           focusField: widget.focusField,
                           minRows: 2,
-                          keyboardType: TextInputType.numberWithOptions(),
                           controllers: [
                             [controllers[Valuation.SURVEY_NO_RE_SY_NO_1]!, controllers[Valuation.AREA_IN_ARE_1]!],
                             [controllers[Valuation.SURVEY_NO_RE_SY_NO_2]!, controllers[Valuation.AREA_IN_ARE_2]!],
@@ -522,11 +521,11 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                    padding: formPadding(context),
                     child: ready ? NotesField(controller: controllers[Valuation.REMARKS]!) : CircularProgressIndicator(),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 28, horizontal: 20),
+                    padding: formPadding(context),
                     child: ImagePickerField(controller: controllers[Valuation.PHOTOS]!, editMode: true),
                   ),
                 ],

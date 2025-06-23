@@ -1,46 +1,7 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:oauth2/oauth2.dart';
 
-class LandRateService extends _ExcelService {
-  LandRateService() : super(fileId: "01OTD6NSLEWCWDOWM7WBAYNYM5RMPDACQR", tableName: "LandRate");
-}
-
-class ValuationService extends _ExcelService {
-  ValuationService() : super(fileId: "01OTD6NSIJ4LY4ONM7ZVD3B2CK4MAL5TLC", tableName: "Valuations", sheetName: "Data");
-
-  final _driveId = "b!bjWHx8vaSUGa2c_fZH7AoTlNAe4QjSFKrgLAyq8Smcgfz6YLhZb1T7j74-c_w8yy";
-  final _reportPath = "/drive/root:/Documents/Test/";
-  final _templateId = "01OTD6NSJ2IQ6WYOP24BA2W4XBSB2EYCDD";
-
-  createNewReportWorksheet({required Client client, required String fileName}) async {
-    try {
-      // Create new file based of template
-      final response = await client.post(
-        Uri.parse("${fileEndpoint.replaceAll("_ID_", _templateId)}/copy"),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "parentReference": {"driveId": _driveId, "path": _reportPath},
-          "name": fileName,
-        }),
-      );
-      if (response.statusCode != 202 && response.statusCode != 409) {
-        throw Exception("Error creating new report workbook. ${response.statusCode} ${response.body}");
-      }
-      // Get file ID of new file
-      final fileResponse = await client.get(Uri.parse("https://graph.microsoft.com/v1.0/me$_reportPath${Uri.encodeComponent(fileName)}"));
-      if (fileResponse.statusCode != 200) {
-        throw Exception("Error retrieving file id. ${fileResponse.statusCode} ${fileResponse.body}");
-      }
-      final fileResponseData = json.decode(fileResponse.body);
-      return fileResponseData["id"];
-    } catch (e) {
-      throw Exception("Error creating new report workbook: $e");
-    }
-  }
-}
-
-class _ExcelService {
+class ExcelService {
   late final String tableRowsEndpoint;
   late final String tableHeadersEndpoint;
   late final String addTableEndpoint;
@@ -50,12 +11,12 @@ class _ExcelService {
   late final String fileId;
   late final String sheetName;
 
-  _ExcelService({required this.fileId, tableName, this.sheetName = "Sheet1"}) {
+  ExcelService({required this.fileId, tableName, this.sheetName = "Sheet1"}) {
     tableRowsEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows";
     tableHeadersEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/headerRowRange";
     addTableEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/add";
     tableRowEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
-    fileUploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/Documents/Uploads/_NAME_:/content";
+    fileUploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
     fileEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/_ID_";
   }
 
@@ -120,49 +81,6 @@ class _ExcelService {
       }
     } catch (e) {
       throw Exception("Error deleting Excel table row: $e");
-    }
-  }
-
-  uploadFile({required Client client, required String name, required Uint8List file, contentType = "image/jpeg"}) async {
-    try {
-      final response = await client.put(
-        Uri.parse(fileUploadEndpoint.replaceAll("_NAME_", name)),
-        headers: {"Content-Type": contentType},
-        body: file,
-      );
-      if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception("Error uploading file $name. ${response.statusCode} ${response.body}");
-      }
-      final responseData = json.decode(response.body);
-      return responseData['id'] as String;
-    } catch (e) {
-      throw Exception("Error uploading file $name: $e");
-    }
-  }
-
-  getWebLink({required Client client, required String id}) async {
-    try {
-      final response = await client.get(Uri.parse(fileEndpoint.replaceAll("_ID_", id)));
-      if (response.statusCode != 200) {
-        throw Exception("Error getting web link. ${response.statusCode} ${response.body}");
-      }
-      final responseData = json.decode(response.body);
-      return responseData["webUrl"];
-    } catch (e) {
-      throw Exception("Error getting web link. $e");
-    }
-  }
-
-  getFileDownloadLink({required Client client, required String id}) async {
-    try {
-      final response = await client.get(Uri.parse(fileEndpoint.replaceAll("_ID_", id)));
-      if (response.statusCode != 200) {
-        throw Exception("Error retrieving download file link $id. ${response.statusCode} ${response.body}");
-      }
-      final responseData = json.decode(response.body);
-      return responseData['@microsoft.graph.downloadUrl'] as String;
-    } catch (e) {
-      throw Exception("Error retrieving download file link $id: $e");
     }
   }
 

@@ -132,8 +132,8 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     ActionButton(icon: Icons.delete_outlined, label: !isDraft ? "Delete" : "Delete Draft", onPressed: onDeleteAction),
                     if (!isDraft)
                       widget.valuation.reportLink.isEmpty
-                          ? ActionButton(icon: Icons.note_add_outlined, label: "Generate\nReport", onPressed: onGenerateReport)
-                          : ActionButton(icon: Icons.launch, label: "Open\nReport", onPressed: onOpenReport),
+                          ? ActionButton(icon: Icons.note_add_outlined, label: "Generate\nExcel", onPressed: onGenerateReport)
+                          : ActionButton(icon: Icons.launch, label: "Open in\nExcel", onPressed: onOpenReport),
                   ],
                 ),
                 SliverAppBar(

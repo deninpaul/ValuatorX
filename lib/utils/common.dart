@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 
 final headerTheme = TextStyle(fontSize: 16);
 
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+void showSnackbar(String message) {
+  scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(content: Text(message)));
+}
+
 defaultTransition(Color color, {SharedAxisTransitionType orientation = SharedAxisTransitionType.horizontal}) {
   return (child, animation, secondaryAnimation) => SharedAxisTransition(
     animation: animation,

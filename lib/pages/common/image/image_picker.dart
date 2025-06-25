@@ -28,15 +28,18 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
   List<String> imageUrls = [];
   bool ready = false;
 
+  getName(File file) => file.path.split('/').last + (kIsWeb ? ".png" : "");
+
   pickImage(ImageSource source) async {
     try {
-      final XFile? pickedFile = await picker.pickImage(source: source, maxWidth: 1800, maxHeight: 1800, imageQuality: 85);
+      final XFile? pickedFile = await picker.pickImage(source: source, maxWidth: 1080, maxHeight: 1080, imageQuality: 80);
       if (pickedFile != null) {
         final file = File(pickedFile.path);
-        final result = await Navigator.of(context).push<File>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file)));
+        final fileBytes = await pickedFile.readAsBytes();
+        final result = await Navigator.of(context).push<Uint8List>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file, fileBytes: fileBytes)));
         if (result != null) {
           final provider = Provider.of<MediaProvider>(context, listen: false);
-          final imageId = await provider.uploadImage(context, result);
+          final imageId = await provider.uploadImage(context, result, getName(file));
           setState(() {
             ready = false;
             widget.controller!.text += "$imageId,";
@@ -176,7 +179,10 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
           ),
         Expanded(
           child: Container(
-            padding: !editMode ? EdgeInsets.symmetric(vertical: 16, horizontal: isDesktop(context) ? 64 : 16) : EdgeInsets.symmetric(vertical: 16),
+            padding:
+                !editMode
+                    ? EdgeInsets.symmetric(vertical: 16, horizontal: isDesktop(context) ? 64 : 16)
+                    : EdgeInsets.symmetric(vertical: 16),
             width: double.infinity,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
             child: Column(

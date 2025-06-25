@@ -10,7 +10,7 @@ class AuthProvider extends ChangeNotifier {
   // Microsoft OAuth configuration
   final String _clientId = kIsWeb ? const String.fromEnvironment('CLIENT_ID') : dotenv.env['CLIENT_ID'] ?? '';
   final String _tenantId = kIsWeb ? const String.fromEnvironment('TENANT_ID') : dotenv.env['TENANT_ID'] ?? '';
-  final List<String> _scopes = ['openid', 'profile', 'email', 'offline_access', 'User.Read', 'Files.ReadWrite'];
+  final List<String> _scopes = ['openid', 'profile', 'email', 'offline_access', 'User.Read', 'Files.ReadWrite.All'];
 
   final SettingsService settingsService = SettingsService();
 

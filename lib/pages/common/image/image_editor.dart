@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'dart:io';
 import 'dart:ui' as ui;
+
+import 'package:valuatorx/utils/common.dart';
 
 // Location data model
 class LocationData {
@@ -36,7 +39,8 @@ class LocationData {
 // Location Details Screen
 class LocationDetailsScreen extends StatefulWidget {
   final File file;
-  const LocationDetailsScreen({super.key, required this.file});
+  final Uint8List fileBytes;
+  const LocationDetailsScreen({super.key, required this.file, required this.fileBytes});
 
   @override
   State<LocationDetailsScreen> createState() => _LocationDetailsScreenState();
@@ -55,9 +59,8 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     _getCurrentLocation();
   }
 
-  Future<File> _imprintLocationOnImage(File originalImage, LocationData location) async {
+  Future<Uint8List> _imprintLocationOnImage(Uint8List imageBytes, LocationData location) async {
     // Load the original image
-    final Uint8List imageBytes = await originalImage.readAsBytes();
     final ui.Codec codec = await ui.instantiateImageCodec(imageBytes);
     final ui.FrameInfo frameInfo = await codec.getNextFrame();
     final ui.Image originalImg = frameInfo.image;
@@ -144,16 +147,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     final ByteData? byteData = await finalImage.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List finalBytes = byteData!.buffer.asUint8List();
 
-    // Save to a new file
-    final String originalPath = originalImage.path;
-    final String directory = originalPath.substring(0, originalPath.lastIndexOf('/'));
-    final String fileName = originalPath.substring(originalPath.lastIndexOf('/') + 1);
-    final String nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-    final String newPath = '$directory/${nameWithoutExt}_with_location.png';
-    final File newFile = File(newPath);
-    await newFile.writeAsBytes(finalBytes);
-
-    return newFile;
+    return finalBytes;
   }
 
   _getCurrentLocation() async {
@@ -217,14 +211,14 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     if (imprintLocationDetails && locationData != null) {
       setState(() => isProcessingImage = true);
       try {
-        final imprintedfile = await _imprintLocationOnImage(widget.file, locationData!);
+        final imprintedfile = await _imprintLocationOnImage(widget.fileBytes, locationData!);
         Navigator.pop(context, imprintedfile);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
         setState(() => isProcessingImage = false);
       }
     } else {
-      Navigator.pop(context, widget.file);
+      Navigator.pop(context, widget.fileBytes);
     }
   }
 
@@ -242,7 +236,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
       backgroundColor: colorScheme.surface,
       appBar: AppBar(elevation: 0, title: Text("Edit image", style: textTheme.bodyLarge,),),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: isDesktop(context) ? MediaQuery.of(context).size.width * 0.21 : 16),
         child: Column(
           spacing: 16,
           mainAxisSize: MainAxisSize.min,
@@ -252,8 +246,8 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                 borderRadius: BorderRadius.circular(24),
                 child: Stack(
                   children: [
-                    Positioned.fill(child: Image.file(widget.file, fit: BoxFit.cover)),
-                    if (imprintLocationDetails)
+                    Positioned.fill(child: Image.memory(widget.fileBytes, fit: BoxFit.cover)),
+                    if (imprintLocationDetails && locationError == null)
                       Positioned(
                         left: 0,
                         right: 0,
@@ -333,7 +327,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                   child: TextButton(
                     onPressed: () => Navigator.pop(context),
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 20 : 16),
                       backgroundColor: colorScheme.surfaceContainerHigh,
                       foregroundColor: colorScheme.onSurface,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
@@ -343,9 +337,9 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                 ),
                 Expanded(
                   child: TextButton.icon(
-                    onPressed: (isProcessingImage || locationData == null) ? null : saveImage,
+                    onPressed: (isProcessingImage || locationData == null && locationError == null) ? null : saveImage,
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 20 : 16),
                       backgroundColor: colorScheme.primary,
                       foregroundColor: colorScheme.onPrimary,
                       disabledBackgroundColor: theme.disabledColor,

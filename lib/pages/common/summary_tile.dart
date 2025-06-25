@@ -46,7 +46,7 @@ class SummaryTile extends StatelessWidget {
                     spacing: 4,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: textTheme.bodyLarge),
+                      Text(title, style: textTheme.bodyLarge!.copyWith(color: colorScheme.onSurface)),
                       Text(subtitle, style: textTheme.bodyLarge!.copyWith(color: theme.hintColor)),
                     ],
                   ),

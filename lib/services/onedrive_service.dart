@@ -5,10 +5,12 @@ import 'package:oauth2/oauth2.dart';
 class OneDriveService {
   late final String uploadEndpoint;
   late final String fileEndpoint;
+  late final String userId;
 
   OneDriveService() {
-    uploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
-    fileEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/_ID_";
+    userId = "a328ee73-9709-4f7c-bb40-ae497e488a66";
+    uploadEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
+    fileEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/_ID_";
   }
 
   uploadFile({required Client client, required String name, required Uint8List file, contentType = "image/jpeg"}) async {

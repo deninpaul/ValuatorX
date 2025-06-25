@@ -24,7 +24,7 @@ class CreateButton extends StatelessWidget {
         closedBuilder:
             (context, openContainer) => FloatingActionButton.extended(
               onPressed: openContainer,
-              icon: const Icon(Icons.add, size: 20),
+              icon: const Icon(Icons.add, size: 16),
               elevation: 0,
               label: Text(label, style: TextStyle(fontWeight: FontWeight.normal),),
             ),

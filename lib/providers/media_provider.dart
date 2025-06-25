@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
@@ -8,14 +7,12 @@ import 'package:valuatorx/services/onedrive_service.dart';
 class MediaProvider extends ChangeNotifier {
   final OneDriveService driveService = OneDriveService();
 
-  Future<String> uploadImage(BuildContext context, File image) async {
+  Future<String> uploadImage(BuildContext context, Uint8List image, String name) async {
     String id = "";
-    final fileData = await image.readAsBytes();
-    final fileName = image.path.split('/').last;
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      id = await driveService.uploadFile(client: client, name: fileName, file: fileData);
+      id = await driveService.uploadFile(client: client, name: name, file: image);
     } catch (e) {
       debugPrint("Failed to upload image: ${e.toString()}");
     }

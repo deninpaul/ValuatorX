@@ -21,7 +21,7 @@ class SaveButton extends StatelessWidget {
       } : null,
       style:
        TextButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: kIsWeb ? 8 : 0),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: kIsWeb ? 12 : 0),
         backgroundColor: theme.colorScheme.primary,
         disabledBackgroundColor: theme.disabledColor
       ),

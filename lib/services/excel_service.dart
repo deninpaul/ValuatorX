@@ -10,14 +10,15 @@ class ExcelService {
   late final String fileEndpoint;
   late final String fileId;
   late final String sheetName;
+  late final String userId;
 
-  ExcelService({required this.fileId, tableName, this.sheetName = "Sheet1"}) {
-    tableRowsEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows";
-    tableHeadersEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/headerRowRange";
-    addTableEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/add";
-    tableRowEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
-    fileUploadEndpoint = "https://graph.microsoft.com/v1.0/me/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
-    fileEndpoint = "https://graph.microsoft.com/v1.0/me/drive/items/_ID_";
+  ExcelService({required this.fileId, tableName, this.sheetName = "Sheet1", this.userId = "me"}) {
+    tableRowsEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows";
+    tableHeadersEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/headerRowRange";
+    addTableEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows/add";
+    tableRowEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
+    fileUploadEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
+    fileEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/_ID_";
   }
 
   Future<List<Map<String, dynamic>>> getExcelTable({required Client client}) async {

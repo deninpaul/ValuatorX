@@ -5,6 +5,7 @@ final headerTheme = TextStyle(fontSize: 16);
 
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void showSnackbar(String message) {
+  scaffoldMessengerKey.currentState?.clearSnackBars();
   scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(content: Text(message)));
 }
 

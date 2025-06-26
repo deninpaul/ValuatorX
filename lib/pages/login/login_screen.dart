@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:valuatorx/utils/common.dart';
 import 'package:valuatorx/utils/web_utils/web_helper.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -53,22 +54,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   setupRedirectListener() {
     final provider = Provider.of<AuthProvider>(context, listen: false);
-    listenWindowMessage((event) {
+    listenWindowMessage((event) async {
       final data = event.data;
       if (data is Map && data.containsKey('code')) {
         final code = data['code'];
-        provider.handleAuthCode(code).then((success) {
-          if (success) {
-            Navigator.of(context).pushReplacementNamed('/home');
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Authentication failed')));
-          }
-        });
+        final success = await provider.handleAuthCode(code);
+        if (!success) {
+          showSnackbar("Authentication failed");
+          return;
+        }
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed('/home');
+        }
       }
     });
   }
 
-  startLogin() async {
+  startLogin() {
     final provider = Provider.of<AuthProvider>(context, listen: false);
     final loginUrl = provider.startAuthFlow();
     if (kIsWeb) {
@@ -99,10 +101,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void dispose() {
+    listenWindowMessage((event) {});
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
+    final subtitleStyle = kIsWeb ? textTheme.bodyLarge : textTheme.bodyMedium;
 
     return Scaffold(
       appBar: AppBar(
@@ -158,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Text("Welcome to ValuatorX", style: textTheme.headlineMedium!.copyWith(height: 1.35)),
                                           Text(
                                             "ValuatorX makes it easy to create and manage valuation reports, with access to additional tools and resources",
-                                            style: textTheme.bodyMedium!.copyWith(color: theme.hintColor, height: 1.6),
+                                            style: subtitleStyle!.copyWith(color: theme.hintColor, height: 1.6),
                                           ),
                                         ],
                                       ),

@@ -6,6 +6,8 @@ import 'package:valuatorx/services/settings_service.dart';
 class AuthProvider extends ChangeNotifier {
   bool isLoading = false;
   oauth2.Credentials? _credentials;
+  oauth2.AuthorizationCodeGrant? _grant;
+  bool _hasHandledCode = false;
 
   // Microsoft OAuth configuration
   final String _clientId = kIsWeb ? const String.fromEnvironment('CLIENT_ID') : dotenv.env['CLIENT_ID'] ?? '';
@@ -26,9 +28,6 @@ class AuthProvider extends ChangeNotifier {
             ? "${const String.fromEnvironment('HOST')}/redirect.html"
             : "https://login.microsoftonline.com/$_tenantId/oauth2/nativeclient";
   }
-
-  // OAuth grant object
-  oauth2.AuthorizationCodeGrant? _grant;
 
   // Check if user is authenticated
   Future<bool> get isAuthenticated async {
@@ -55,29 +54,41 @@ class AuthProvider extends ChangeNotifier {
 
   // Handle authorization code after login
   Future<bool> handleAuthCode(String code) async {
+    if (_hasHandledCode) {
+      debugPrint("AuthCode already handled. Skipping...");
+      return true;
+    }
     setLoading(true);
     try {
       final client = await _grant!.handleAuthorizationCode(code);
       _saveCredentials(client.credentials);
-      setLoading(false);
+      _hasHandledCode = true;
       return true;
     } catch (e) {
-      setLoading(false);
       debugPrint("Error handling auth code: $e");
       return false;
+    } finally {
+      setLoading(false);
     }
   }
 
   Future<void> signOut() async {
-    _credentials = null;
     await settingsService.delete("credentials");
+    _hasHandledCode = false;
+    _credentials = null;
     notifyListeners();
   }
 
   Future<void> _getCredentials() async {
     try {
       final json = await settingsService.get('credentials') as String;
-      _credentials = oauth2.Credentials.fromJson(json);
+      final creds = oauth2.Credentials.fromJson(json);
+      if (creds.isExpired) {
+        _credentials = null;
+        debugPrint("Stored credentials are expired");
+      } else {
+        _credentials = creds;
+      }
       notifyListeners();
     } catch (e) {
       debugPrint("Error getting credentials: $e");

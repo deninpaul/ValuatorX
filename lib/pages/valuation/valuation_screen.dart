@@ -21,9 +21,14 @@ class Valuations extends StatefulWidget {
 
 class _ValuationsState extends State<Valuations> {
   late ValuationProvider provider;
+  String searchQuery = "";
 
   String subtitle(Valuation valuation) {
     return [valuation.village, valuation.taluk].where((e) => e.trim().isNotEmpty).join(', ');
+  }
+
+  onSearchAction(String val) {
+    setState(() => searchQuery = val);
   }
 
   @override
@@ -72,8 +77,8 @@ class _ValuationsState extends State<Valuations> {
                     key: const ValueKey('list'),
                     children: [
                       SearchHeader(
-                        name: "Land Rate",
-                        onSearch: (val) => debugPrint(val),
+                        name: "Valuation",
+                        onSearch: onSearchAction,
                         actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh"))],
                       ),
                       SizedBox(height: 16),
@@ -86,7 +91,7 @@ class _ValuationsState extends State<Valuations> {
                       ),
                       SizedBox(height: 16),
                       ExpandableList(
-                        items: provider.allValutions,
+                        items: provider.getSearchResults(searchQuery),
                         isLoading: provider.isLoading,
                         itemBuilder: (ctx, valuation, index) {
                           return SummaryTile(

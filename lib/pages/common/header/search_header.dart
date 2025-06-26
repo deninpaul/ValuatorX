@@ -17,7 +17,7 @@ class SearchHeader extends StatelessWidget {
         if (onSearch != null)
           Expanded(
             child: SearchBar(
-              onSubmitted: onSearch,
+              onChanged: onSearch,
               elevation: const WidgetStatePropertyAll(0),
               backgroundColor: WidgetStatePropertyAll(colorScheme.surfaceBright),
               hintText: "Search in ${name.toLowerCase()}s",

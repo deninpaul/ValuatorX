@@ -63,12 +63,12 @@ class AuthProvider extends ChangeNotifier {
       final client = await _grant!.handleAuthorizationCode(code);
       _saveCredentials(client.credentials);
       _hasHandledCode = true;
+      setLoading(false);
       return true;
     } catch (e) {
       debugPrint("Error handling auth code: $e");
-      return false;
-    } finally {
       setLoading(false);
+      return false;
     }
   }
 
@@ -76,6 +76,7 @@ class AuthProvider extends ChangeNotifier {
     await settingsService.delete("credentials");
     _hasHandledCode = false;
     _credentials = null;
+    isLoading = false;
     notifyListeners();
   }
 

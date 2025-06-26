@@ -29,6 +29,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
   final MapController _mapController = MapController();
   late LandRateProvider provider;
   late LocationProvider locationProvider;
+  String searchQuery = "";
 
   @override
   void initState() {
@@ -58,7 +59,11 @@ class _LandRateScreenState extends State<LandRateScreen> {
       provider.setSelectedItem(id);
     }
 
-    Future<void> fetchAllLandRates() async{
+    onSearchAction(String val) {
+      setState(() => searchQuery = val);
+    }
+
+    Future<void> fetchAllLandRates() async {
       await provider.getLandRates(context);
     }
 
@@ -75,7 +80,11 @@ class _LandRateScreenState extends State<LandRateScreen> {
                   child: ListView(
                     key: const ValueKey('list'),
                     children: [
-                      SearchHeader(name: "Land Rate", onSearch: (val) => debugPrint(val), actions: [PopupMenuItem(onTap: fetchAllLandRates, child: Text("Refresh"))],),
+                      SearchHeader(
+                        name: "Land Rate",
+                        onSearch: onSearchAction,
+                        actions: [PopupMenuItem(onTap: fetchAllLandRates, child: Text("Refresh"))],
+                      ),
                       SizedBox(height: 16),
                       Container(
                         height: MediaQuery.of(context).size.height / 1.75,
@@ -108,7 +117,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
                       ),
                       SizedBox(height: 16),
                       ExpandableList<LandRate>(
-                        items: provider.landRates.reversed.toList(),
+                        items: provider.getSearchResults(searchQuery).reversed.toList(),
                         isLoading: provider.isLoading,
                         itemBuilder: (ctx, landRate, index) {
                           return SummaryTile(

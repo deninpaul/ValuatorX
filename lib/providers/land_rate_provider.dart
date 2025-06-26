@@ -33,6 +33,10 @@ class LandRateProvider extends ChangeNotifier {
     return landRates.firstWhere((landRate) => landRate.id.toString() == selectedItem);
   }
 
+  List<LandRate> getSearchResults(String query) {
+    return landRates.where((val) => "${val.longitude} ${val.latitude} ${val.id}".toLowerCase().contains(query.toLowerCase())).toList();
+  }
+
   addLandRate(BuildContext context, LandRate newLandRate) async {
     try {
       setCreating(true);

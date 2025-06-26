@@ -42,6 +42,14 @@ class ValuationProvider extends ChangeNotifier {
     return allValutions.firstWhere((report) => report.id == selectedItem);
   }
 
+  List<Valuation> getSearchResults(String query) {
+    return allValutions
+        .where(
+          (val) => "${val.reportName} ${val.status} ${val.dateOfInspection} ${val.bankDetails}".toLowerCase().contains(query.toLowerCase()),
+        )
+        .toList();
+  }
+
   addValuations(BuildContext context, Valuation newValuation) async {
     var success = false;
     try {

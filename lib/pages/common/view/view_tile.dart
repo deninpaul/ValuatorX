@@ -32,7 +32,6 @@ class ViewTile extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   spacing: 6,
                   children: [
                     Text(title, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),

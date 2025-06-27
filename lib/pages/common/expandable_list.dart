@@ -58,6 +58,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
       padding: const EdgeInsets.symmetric(vertical: 4),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
       child: Column(
         mainAxisSize: MainAxisSize.min,

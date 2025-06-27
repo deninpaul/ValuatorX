@@ -157,7 +157,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
               SingleChildScrollView(
                 padding: formPadding,
                 child: Column(
-                  spacing: 16,
+                  spacing: 12,
                   children: [
                     ViewTile(
                       title: Valuation.DATE_OF_INSPECTION,
@@ -411,29 +411,19 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                       onPressed: onEditAction,
                       tabIndex: 2,
                     ),
-                    Row(
-                      spacing: 16,
-                      children: [
-                        Flexible(
-                          flex: 6,
-                          child: ViewTile(
-                            title: Valuation.TYPE_OF_BUILDING,
-                            value: widget.valuation.buildingType,
-                            icon: Icons.domain_outlined,
-                            onPressed: onEditAction,
-                            tabIndex: 2,
-                          ),
-                        ),
-                        Flexible(
-                          flex: 5,
-                          child: ViewTile(
-                            title: Valuation.YEAR_OF_CONSTRUCTION,
-                            value: widget.valuation.yearOfConstruction,
-                            onPressed: onEditAction,
-                            tabIndex: 2,
-                          ),
-                        ),
-                      ],
+                    ViewTile(
+                      title: Valuation.TYPE_OF_BUILDING,
+                      value: widget.valuation.buildingType,
+                      icon: Icons.domain_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.YEAR_OF_CONSTRUCTION,
+                      value: widget.valuation.yearOfConstruction,
+                       icon: Icons.calendar_month_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
                     ),
                     TableViewTile(
                       title: "Floor measurements",
@@ -539,6 +529,28 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                       ),
                     ],
                     ViewTile(
+                      title: Valuation.PREVAILING_AREA_RATE_AT_CENTER,
+                      value: widget.valuation.areaRateCenter,
+                      icon: Icons.toll_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.PREVAILING_LAND_MARKET_RATE,
+                      value: widget.valuation.landMarketRate,
+                      icon: Icons.paid_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    ViewTile(
+                      title: Valuation.BUILDING_VALUATION_UNIT_RATE,
+                      value: widget.valuation.buildingUnitRate,
+                      icon: Icons.sell_outlined,
+                      onPressed: onEditAction,
+                      tabIndex: 2,
+                    ),
+                    Divider(),
+                    ViewTile(
                       title: Valuation.FOUNDATION_BASEMENT,
                       value: widget.valuation.foundationAndBasement,
                       icon: Icons.foundation_outlined,
@@ -593,7 +605,12 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
               SingleChildScrollView(
                 padding: formPadding,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 440),
+                  constraints: BoxConstraints(
+                    minHeight:
+                        MediaQuery.of(context).size.height - 440 < 0
+                            ? MediaQuery.of(context).size.height - 160
+                            : MediaQuery.of(context).size.height - 440,
+                  ),
                   child: NotesViewer(title: Valuation.REMARKS, value: widget.valuation.remarks, onPressed: onEditAction, tabIndex: 3),
                 ),
               ),

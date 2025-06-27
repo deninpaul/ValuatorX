@@ -17,8 +17,8 @@ class MapWrapper extends StatefulWidget {
   final bool enableCenterMarker;
   final LatLng center;
   final double zoom;
-  final InteractionOptions interactionOptions;
   final Function(MapCamera, bool) onPositionChanged;
+  final bool editMode;
 
   const MapWrapper({
     super.key,
@@ -29,7 +29,7 @@ class MapWrapper extends StatefulWidget {
     this.enableCenterMarker = false,
     this.center = const LatLng(0, 0),
     this.zoom = 15,
-    this.interactionOptions = const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
+    this.editMode = false,
     this.onPositionChanged = _defaultOnPositionChanged,
   });
 
@@ -42,12 +42,6 @@ class MapWrapper extends StatefulWidget {
 class _MapWrapperState extends State<MapWrapper> {
   String? cachePath;
 
-  @override
-  void initState() {
-    getCachePath();
-    super.initState();
-  }
-
   getCachePath() async {
     if (!kIsWeb) {
       final cacheDirectory = await getTemporaryDirectory();
@@ -56,22 +50,33 @@ class _MapWrapperState extends State<MapWrapper> {
   }
 
   @override
+  void initState() {
+    getCachePath();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final LocationProvider provider = Provider.of<LocationProvider>(context);
     final initialCenter = (widget.center.latitude == 0) ? provider.currentLocation : widget.center;
 
-    return (kIsWeb || cachePath != null) 
+    return (kIsWeb || cachePath != null)
         ? ClipRRect(
           borderRadius: BorderRadius.circular(widget.borderRadius),
           child: FlutterMap(
             mapController: widget.mapController,
             options: MapOptions(
+              initialZoom: widget.zoom,
               initialCenter: initialCenter,
-              interactionOptions: widget.interactionOptions,
               backgroundColor: colorScheme.surface,
               onPositionChanged: widget.onPositionChanged,
-              initialZoom: widget.zoom,
+              interactionOptions: InteractionOptions(
+                flags:
+                    widget.editMode
+                        ? InteractiveFlag.all & ~InteractiveFlag.rotate & ~InteractiveFlag.drag
+                        : InteractiveFlag.all & ~InteractiveFlag.rotate,
+              ),
             ),
             children: [
               TileLayer(
@@ -92,7 +97,7 @@ class _MapWrapperState extends State<MapWrapper> {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 4,
+                  spacing: 6,
                   children: [
                     MapActionButton(
                       onPressed: () => provider.moveToMyLocation(widget.mapController),

@@ -476,6 +476,25 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                         ),
                         Divider(),
                         BasicField(
+                          name: Valuation.PREVAILING_AREA_RATE_AT_CENTER,
+                          controller: controllers[Valuation.PREVAILING_AREA_RATE_AT_CENTER]!,
+                          icon: Icons.toll_outlined,
+                          focusField: widget.focusField,
+                        ),
+                        BasicField(
+                          name: Valuation.PREVAILING_LAND_MARKET_RATE,
+                          controller: controllers[Valuation.PREVAILING_LAND_MARKET_RATE]!,
+                          icon: Icons.paid_outlined,
+                          focusField: widget.focusField,
+                        ),
+                        BasicField(
+                          name: Valuation.BUILDING_VALUATION_UNIT_RATE,
+                          controller: controllers[Valuation.BUILDING_VALUATION_UNIT_RATE]!,
+                          icon: Icons.sell_outlined,
+                          focusField: widget.focusField,
+                        ),
+                        Divider(),
+                        BasicField(
                           name: Valuation.FOUNDATION_BASEMENT,
                           controller: controllers[Valuation.FOUNDATION_BASEMENT]!,
                           icon: Icons.foundation_outlined,

@@ -4,13 +4,20 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/pages/common/map/map_wrapper.dart';
 import 'package:valuatorx/providers/location_provider.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class LocationField extends StatefulWidget {
   final TextEditingController latitudeController;
   final TextEditingController longitudeController;
   final String focusField;
   final IconData icon;
-  const LocationField({super.key, required this.latitudeController, required this.longitudeController, this.icon = Icons.location_on_outlined, this.focusField = ""});
+  const LocationField({
+    super.key,
+    required this.latitudeController,
+    required this.longitudeController,
+    this.icon = Icons.location_on_outlined,
+    this.focusField = "",
+  });
 
   @override
   State<LocationField> createState() => _LocationFieldState();
@@ -114,13 +121,13 @@ class _LocationFieldState extends State<LocationField> {
                 ],
               ),
               SizedBox(
-                height: 240,
+                height: isMobile(context) ? 320 : 240,
                 child: MapWrapper(
+                  editMode: true,
                   borderRadius: 24,
-                  mapController: _mapController,
                   enableCenterMarker: true,
+                  mapController: _mapController,
                   onPositionChanged: _onPositionChanged,
-                  interactionOptions: InteractionOptions(flags: InteractiveFlag.pinchZoom | InteractiveFlag.pinchMove | InteractiveFlag.doubleTapDragZoom),
                 ),
               ),
             ],

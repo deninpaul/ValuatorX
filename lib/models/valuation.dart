@@ -75,6 +75,7 @@ class Valuation {
   final String joinery;
   final String windows;
   final String roofing;
+  final String areaRateCenter;
   final String landMarketRate;
   final String buildingUnitRate;
   final String classificationArea1;
@@ -160,6 +161,7 @@ class Valuation {
     required this.joinery,
     required this.windows,
     required this.roofing,
+    required this.areaRateCenter,
     required this.landMarketRate,
     required this.buildingUnitRate,
     required this.classificationArea1,
@@ -246,6 +248,7 @@ class Valuation {
   static const String JOINERYDOORS = "Joinery/Doors";
   static const String WINDOWS = "Windows";
   static const String WPROOF_TRUSS = "WP/Roof Truss";
+  static const String PREVAILING_AREA_RATE_AT_CENTER = "Prevailing Area Rate at Center";
   static const String PREVAILING_LAND_MARKET_RATE = "Prevailing Land Market Rate";
   static const String BUILDING_VALUATION_UNIT_RATE = "Building Valuation Unit Rate";
   static const String CLASSIFICATION_OF_AREA_1 = "Classification of area - 1";
@@ -332,6 +335,7 @@ class Valuation {
       joinery: (json[JOINERYDOORS] ?? "").toString(),
       windows: (json[WINDOWS] ?? "").toString(),
       roofing: (json[WPROOF_TRUSS] ?? "").toString(),
+      areaRateCenter: (json[PREVAILING_AREA_RATE_AT_CENTER] ?? "").toString(),
       landMarketRate: (json[PREVAILING_LAND_MARKET_RATE] ?? "").toString(),
       buildingUnitRate: (json[BUILDING_VALUATION_UNIT_RATE] ?? "").toString(),
       classificationArea1: (json[CLASSIFICATION_OF_AREA_1] ?? "").toString(),
@@ -420,6 +424,7 @@ class Valuation {
       JOINERYDOORS: joinery,
       WINDOWS: windows,
       WPROOF_TRUSS: roofing,
+      PREVAILING_AREA_RATE_AT_CENTER: areaRateCenter,
       PREVAILING_LAND_MARKET_RATE: landMarketRate,
       BUILDING_VALUATION_UNIT_RATE: buildingUnitRate,
       CLASSIFICATION_OF_AREA_1: classificationArea1,
@@ -507,6 +512,7 @@ class Valuation {
       joinery,
       windows,
       roofing,
+      areaRateCenter,
       landMarketRate,
       buildingUnitRate,
       classificationArea1,
@@ -600,6 +606,7 @@ class Valuation {
     JOINERYDOORS,
     WINDOWS,
     WPROOF_TRUSS,
+    PREVAILING_AREA_RATE_AT_CENTER,
     PREVAILING_LAND_MARKET_RATE,
     BUILDING_VALUATION_UNIT_RATE,
     CLASSIFICATION_OF_AREA_1,

@@ -93,6 +93,7 @@ class _ValuationsState extends State<Valuations> {
                       ExpandableList(
                         items: provider.getSearchResults(searchQuery),
                         isLoading: provider.isLoading,
+                        initialCount: 20,
                         itemBuilder: (ctx, valuation, index) {
                           return SummaryTile(
                             id: valuation.id,

@@ -84,7 +84,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final json = await settingsService.get('credentials') as String;
       final creds = oauth2.Credentials.fromJson(json);
-      if (creds.isExpired) {
+      if (creds.isExpired && kIsWeb) {
         _credentials = null;
         debugPrint("Stored credentials are expired");
       } else {

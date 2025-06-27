@@ -179,7 +179,7 @@ class ValuationProvider extends ChangeNotifier {
       onStatusUpdate("Generating Excel file");
       final newFileId = await service.createNewReportWorksheet(
         client: client,
-        fileName: "${valuation.id} - ${valuation.reportName} - Valuation Data.xls",
+        fileName: "${valuation.id} - ${valuation.reportName} - Valuation Data.xlsx",
       );
 
       onStatusUpdate("Linking values");
@@ -193,7 +193,7 @@ class ValuationProvider extends ChangeNotifier {
             return ["=LET(VAL, '$workbookLink'!$columnLetter$row, IF(VAL = \"\", \"\", VAL))"];
           }).toList();
 
-      await service.addValuesToRange(client: client, range: "B1:B82", values: values, id: newFileId, sheet: "Data");
+      await service.addValuesToRange(client: client, range: "B1:B${values.length}", values: values, id: newFileId, sheet: "Data");
 
       onStatusUpdate("Fetching report link");
       final String reportLink = await driveService.getWebLink(client: client, id: newFileId);

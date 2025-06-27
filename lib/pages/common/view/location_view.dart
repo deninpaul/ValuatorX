@@ -6,6 +6,7 @@ import 'package:valuatorx/pages/common/map/map_wrapper.dart';
 import 'package:valuatorx/pages/common/map/numbered_marker.dart';
 import 'package:valuatorx/pages/common/view/group_view.dart';
 import 'package:valuatorx/pages/common/view/view_tile.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class LocationViewTile extends StatelessWidget {
   final MapController mapController;
@@ -32,10 +33,15 @@ class LocationViewTile extends StatelessWidget {
     });
   }
 
+  double safeDoubleParse(String value) {
+    if (value.trim().isEmpty) return 0.0;
+    return double.tryParse(value) ?? 0.0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final location = LatLng(double.parse(latitude), double.parse(longitude));
+    final location = LatLng(safeDoubleParse(latitude), safeDoubleParse(longitude));
 
     return GroupViewWrapper(
       title: "Location",
@@ -45,7 +51,7 @@ class LocationViewTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 12, left: 8),
           child: Container(
-            height: 280,
+            height: isMobile(context) ? 360 : 240,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(32)),
             child: GestureDetector(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'dart:convert';
+import 'package:valuatorx/utils/common.dart';
 
 class NotesField extends StatefulWidget {
   final TextEditingController controller;
@@ -18,8 +18,8 @@ class _NotesFieldState extends State<NotesField> {
   bool _isFocused = false;
 
   void _onTextChanged() {
-    final jsonString = jsonEncode(_quillController.document.toDelta().toJson());
-    widget.controller.text = jsonString;
+    final delta = _quillController.document.toDelta();
+    widget.controller.text = deltaToMd.convert(delta);
   }
 
   void _onFocusChanged() {
@@ -33,8 +33,8 @@ class _NotesFieldState extends State<NotesField> {
     Document doc;
     if (widget.controller.text.isNotEmpty) {
       try {
-        final jsonData = jsonDecode(widget.controller.text);
-        doc = Document.fromJson(jsonData);
+        final delta = mdToDelta.convert(widget.controller.text);
+        doc = Document.fromDelta(delta);
       } catch (e) {
         doc = Document()..insert(0, widget.controller.text);
       }
@@ -80,6 +80,14 @@ class _NotesFieldState extends State<NotesField> {
                   const HorizontalSpacing(0, 0),
                   const VerticalSpacing(8, 8), // More space between paragraphs
                   const VerticalSpacing(0, 0),
+                  null,
+                ),
+                lists: DefaultListBlockStyle(
+                  textTheme.bodyLarge!,
+                  const HorizontalSpacing(0, 0),
+                  const VerticalSpacing(8, 8),
+                  const VerticalSpacing(0, 0),
+                  null,
                   null,
                 ),
                 placeHolder: DefaultTextBlockStyle(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'dart:convert';
+import 'package:valuatorx/utils/common.dart';
 
 class NotesViewer extends StatelessWidget {
   final String title;
@@ -14,8 +14,8 @@ class NotesViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     Document doc;
     try {
-      final json = jsonDecode(value);
-      doc = Document.fromJson(json);
+      final delta = mdToDelta.convert(value);
+      doc = Document.fromDelta(delta);
     } catch (e) {
       doc = Document()..insert(0, value);
     }
@@ -51,6 +51,14 @@ class NotesViewer extends StatelessWidget {
                     const HorizontalSpacing(0, 0),
                     const VerticalSpacing(8, 8),
                     const VerticalSpacing(0, 0),
+                    null,
+                  ),
+                  lists: DefaultListBlockStyle(
+                    textTheme.bodyLarge!,
+                    const HorizontalSpacing(0, 0),
+                    const VerticalSpacing(8, 8),
+                    const VerticalSpacing(0, 0),
+                    null,
                     null,
                   ),
                   placeHolder: DefaultTextBlockStyle(

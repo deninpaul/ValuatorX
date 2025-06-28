@@ -30,7 +30,7 @@ class ValuationService extends ExcelService {
         throw Exception("Error creating new report workbook. ${response.statusCode} ${response.body}");
       }
       // Get file ID of new file
-      final fileResponse = await client.get(Uri.parse("https://graph.microsoft.com/v1.0/me$_reportPath/$fileName"));
+      final fileResponse = await client.get(Uri.parse("https://graph.microsoft.com/v1.0/users/$userId$_reportPath/$fileName"));
       if (fileResponse.statusCode != 200) {
         throw Exception("Error retrieving file id. ${fileResponse.statusCode} ${fileResponse.body}");
       }

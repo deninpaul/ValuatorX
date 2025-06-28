@@ -1,7 +1,13 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:markdown_quill/markdown_quill.dart';
+import 'package:markdown/markdown.dart' as markdown;
 
 final headerTheme = TextStyle(fontSize: 16);
+
+final mdDocument = markdown.Document(encodeHtml: false);
+final mdToDelta = MarkdownToDelta(markdownDocument: mdDocument);
+final deltaToMd = DeltaToMarkdown();
 
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void showSnackbar(String message) {

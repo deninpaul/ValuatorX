@@ -37,13 +37,13 @@ class InfoTile extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   spacing: 4,
                   children: [
+                    Text(valueFormated, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, maxLines: 1),
                     Text(
-                      valueFormated,
-                      style: textTheme.titleLarge!.copyWith(color: colorScheme.onSurfaceVariant),
+                      title,
+                      style: textTheme.bodyMedium!.copyWith(color: theme.hintColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    Text(title, style: textTheme.bodyLarge!.copyWith(color: theme.hintColor), overflow: TextOverflow.ellipsis, maxLines: 1),
                   ],
                 ),
               ),

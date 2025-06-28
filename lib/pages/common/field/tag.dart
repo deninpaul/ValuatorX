@@ -54,19 +54,19 @@ class _TagState extends State<Tag> {
         children: [
           if (widget.isEditable)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: 2),
               child:
                   !widget.isLoading
                       ? DropdownButtonHideUnderline(
                         child: ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: 84),
+                          constraints: BoxConstraints(minWidth: 80),
                           child: DropdownButton<String>(
                             value: widget.text,
                             dropdownColor: colorScheme.surface,
                             style: textTheme.bodyMedium,
                             icon: const Icon(Icons.expand_more, size: 20,),
                             elevation: 0,
-                            padding: EdgeInsets.only(left: 8),
+                            padding: EdgeInsets.only(left: 4),
                             isDense: true,
                             onChanged: (newStatus) {
                               if (newStatus != null && newStatus != widget.text) {
@@ -83,13 +83,13 @@ class _TagState extends State<Tag> {
                       : Container(
                         width: 16,
                         height: 16,
-                        margin: EdgeInsets.symmetric(horizontal: 50, vertical: 4),
+                        margin: EdgeInsets.symmetric(horizontal: 50, vertical: 2),
                         child: CircularProgressIndicator(strokeWidth: 3),
                       ),
             )
           else
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
               child: Text(widget.text, style: textTheme.bodyMedium),
             ),
         ],

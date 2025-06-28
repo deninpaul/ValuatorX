@@ -12,8 +12,8 @@ class ActionButton extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final texTheme = Theme.of(context).textTheme;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      width: isMobile(context) ? 90 : 100,
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      width: isMobile(context) ? 84 : 92,
       child: Column(
         spacing: 16,
         mainAxisSize: MainAxisSize.min,

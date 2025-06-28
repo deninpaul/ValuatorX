@@ -125,6 +125,7 @@ class _LocationFieldState extends State<LocationField> {
                 child: MapWrapper(
                   editMode: true,
                   borderRadius: 24,
+                  zoom: 18,
                   enableCenterMarker: true,
                   mapController: _mapController,
                   onPositionChanged: _onPositionChanged,

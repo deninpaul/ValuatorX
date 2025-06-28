@@ -24,9 +24,9 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        expandedTitleScale: 1.3,
+        expandedTitleScale: 1.175,
         title: Container(
-          width: MediaQuery.of(context).size.width * 0.4,
+          width: MediaQuery.of(context).size.width * 0.5,
           padding: const EdgeInsets.only(top: 16.0),
           alignment: Alignment.bottomCenter,
           child: Text(title, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, textWidthBasis: TextWidthBasis.longestLine),

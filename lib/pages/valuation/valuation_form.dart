@@ -166,7 +166,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: 72,
         title: Text("$modeName Valuation Report", style: headerTheme),
         leading: IconButton(icon: Icon(Icons.close), onPressed: cancelForm),
         actions: [
@@ -190,6 +190,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
             Expanded(
               child: TabBarView(
                 controller: _tabController,
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   SingleChildScrollView(
                     padding: formPadding(context),

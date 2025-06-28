@@ -19,7 +19,7 @@ class ExpandableList<T> extends StatefulWidget {
     required this.itemBuilder,
     required this.isLoading,
     this.initialCount = 10,
-    this.incrementCount = 10,
+    this.incrementCount = 15,
     this.skeletonCount = 8,
   });
 

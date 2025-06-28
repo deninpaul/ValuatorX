@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -30,6 +32,12 @@ class _LandRateScreenState extends State<LandRateScreen> {
   late LandRateProvider provider;
   late LocationProvider locationProvider;
   String searchQuery = "";
+  Timer? timer;
+
+  syncData() async {
+    provider = Provider.of<LandRateProvider>(context, listen: false);
+    timer = Timer.periodic(const Duration(seconds: 15), (_) => provider.getLandRates(context, refresh: false));
+  }
 
   @override
   void initState() {
@@ -39,12 +47,14 @@ class _LandRateScreenState extends State<LandRateScreen> {
       locationProvider = Provider.of<LocationProvider>(context, listen: false);
       if (locationProvider.isEmpty) locationProvider.moveToMyLocation(_mapController);
       provider.getLandRates(context, refresh: provider.landRates.isEmpty);
+      syncData();
     });
   }
 
   @override
   void dispose() {
     provider.setSelectedItem("", notify: false);
+    timer?.cancel();
     super.dispose();
   }
 

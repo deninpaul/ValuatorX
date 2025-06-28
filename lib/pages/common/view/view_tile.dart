@@ -24,18 +24,18 @@ class ViewTile extends StatelessWidget {
         splashColor: colorScheme.surfaceContainerHigh,
         highlightColor: colorScheme.surfaceContainerHigh,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(16, 16, 24, 16),
+          padding: EdgeInsets.fromLTRB(16, 18, 24, 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              icon != null ? Padding(padding: const EdgeInsets.only(top: 16, right: 24), child: Icon(icon)) : SizedBox(width: 12),
+              icon != null ? Padding(padding: const EdgeInsets.only(top: 14, right: 24), child: Icon(icon)) : SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 6,
+                  spacing: 7,
                   children: [
-                    Text(title, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
-                    SelectableText(valueFormated, style: textTheme.bodyLarge),
+                    Text(title, style: textTheme.bodySmall!.copyWith(color: theme.hintColor)),
+                    SelectableText(valueFormated, style: textTheme.bodyLarge!.copyWith(height: 1.55)),
                   ],
                 ),
               ),

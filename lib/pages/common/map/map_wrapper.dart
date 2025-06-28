@@ -89,12 +89,6 @@ class _MapWrapperState extends State<MapWrapper> {
                   padding: EdgeInsets.only(bottom: 24),
                   child: Icon(Icons.location_pin, color: colorScheme.primary, size: 36), // Fixed center marker
                 ),
-              // Positioned.fill(
-              //   child: GestureDetector(
-              //     behavior: HitTestBehavior.opaque,
-              //     onTap: () => print("MWAHAHA"),
-              //   ),
-              // ),
               Container(
                 alignment: AlignmentDirectional.topEnd,
                 padding: EdgeInsets.all(16),
@@ -103,7 +97,7 @@ class _MapWrapperState extends State<MapWrapper> {
                   spacing: 6,
                   children: [
                     MapActionButton(
-                      onPressed: () => provider.moveToMyLocation(widget.mapController),
+                      onPressed: () => provider.moveToMyLocation(widget.mapController, zoom: 18),
                       icon: Icons.gps_fixed,
                       isLoading: provider.isLoading,
                     ),

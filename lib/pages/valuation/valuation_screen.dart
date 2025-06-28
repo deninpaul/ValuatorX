@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +24,7 @@ class Valuations extends StatefulWidget {
 class _ValuationsState extends State<Valuations> {
   late ValuationProvider provider;
   String searchQuery = "";
+  Timer? timer;
 
   String subtitle(Valuation valuation) {
     return [valuation.village, valuation.taluk].where((e) => e.trim().isNotEmpty).join(', ');
@@ -31,23 +34,29 @@ class _ValuationsState extends State<Valuations> {
     setState(() => searchQuery = val);
   }
 
+  Future<void> fetchAllValuations({bool refresh = true}) async {
+    await provider.getValuations(context, refresh: refresh);
+    await provider.getDrafts();
+  }
+
+  syncData() async {
+    timer = Timer.periodic(const Duration(seconds: 15), (_) => fetchAllValuations(refresh: false));
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<ValuationProvider>(context, listen: false);
       fetchAllValuations();
+      syncData();
     });
-  }
-
-  Future<void> fetchAllValuations() async {
-    await provider.getValuations(context);
-    await provider.getDrafts();
   }
 
   @override
   void dispose() {
     provider.setSelectedItem("", notify: false);
+    timer?.cancel();
     super.dispose();
   }
 

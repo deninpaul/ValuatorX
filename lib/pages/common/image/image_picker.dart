@@ -28,22 +28,16 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
   List<String> imageUrls = [];
   bool ready = false;
 
-  getName(File file) => file.path.split('/').last + (kIsWeb ? ".png" : "");
-
   pickImage(ImageSource source) async {
     try {
       final XFile? pickedFile = await picker.pickImage(source: source, maxWidth: 1080, maxHeight: 1080, imageQuality: 80);
       if (pickedFile != null) {
         final file = File(pickedFile.path);
         final fileBytes = await pickedFile.readAsBytes();
-        final result = await Navigator.of(context).push<Uint8List>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file, fileBytes: fileBytes)));
+        final result = await Navigator.of(context).push<String>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file, fileBytes: fileBytes)));
         if (result != null) {
-          final provider = Provider.of<MediaProvider>(context, listen: false);
-          final imageId = await provider.uploadImage(context, result, getName(file));
-          setState(() {
-            ready = false;
-            widget.controller!.text += "$imageId,";
-          });
+          setState(() => ready = false);
+          setState(() => widget.controller!.text += "$result,");
         }
       }
     } catch (e) {

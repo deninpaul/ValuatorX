@@ -56,7 +56,8 @@ class ValuationProvider extends ChangeNotifier {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      await service.addToExcelTable(client: client, values: newValuation.toList());
+      final values = await service.generateTableValues(client: client, data: newValuation.toJson());
+      await service.addToExcelTable(client: client, values: values);
       debugPrint("New Valuation added to Excel table successfully.");
       await getValuations(context, refresh: false);
       success = true;
@@ -74,7 +75,8 @@ class ValuationProvider extends ChangeNotifier {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      await service.updateExcelTableRow(client: client, index: valuation.id, values: valuation.toList());
+      final values = await service.generateTableValues(client: client, data: valuation.toJson());
+      await service.updateExcelTableRow(client: client, index: valuation.id, values: values);
       debugPrint("Valuation ${valuation.reportName} updated in Excel table successfully.");
       getValuations(context, refresh: false);
       success = true;
@@ -186,13 +188,13 @@ class ValuationProvider extends ChangeNotifier {
       final workbookLink = await service.getWorkbookLink(client: client);
 
       int column = 1;
+      final tableValues = await service.generateTableValues(client: client, data: valuation.toJson());
       final values =
-          valuation.toList().map((val) {
-            final columnLetter = getExcelColumn(column++);
+          tableValues.map((val) {
             final row = int.parse(valuation.id) + 2;
+            final columnLetter = getExcelColumn(column++);
             return ["=LET(VAL, '$workbookLink'!$columnLetter$row, IF(VAL = \"\", \"\", VAL))"];
           }).toList();
-
       await service.addValuesToRange(client: client, range: "B1:B${values.length}", values: values, id: newFileId, sheet: "Data");
 
       onStatusUpdate("Fetching report link");

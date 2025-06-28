@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:provider/provider.dart';
+import 'package:valuatorx/providers/media_provider.dart';
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -52,6 +54,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
   bool imprintLocationDetails = true;
   String? locationError;
   bool isProcessingImage = false;
+  bool isUploadingImage = false;
 
   @override
   void initState() {
@@ -207,18 +210,26 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     }
   }
 
+  getName(File file) => file.path.split('/').last + (kIsWeb ? ".png" : "");
+
   saveImage() async {
-    if (imprintLocationDetails && locationData != null) {
-      setState(() => isProcessingImage = true);
-      try {
-        final imprintedfile = await _imprintLocationOnImage(widget.fileBytes, locationData!);
-        Navigator.pop(context, imprintedfile);
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
-        setState(() => isProcessingImage = false);
-      }
-    } else {
-      Navigator.pop(context, widget.fileBytes);
+    setState(() => isProcessingImage = imprintLocationDetails && locationData != null);
+    try {
+      final provider = Provider.of<MediaProvider>(context, listen: false);
+      final bytes =
+          (imprintLocationDetails && locationData != null)
+              ? await _imprintLocationOnImage(widget.fileBytes, locationData!)
+              : widget.fileBytes;
+      setState(() => isUploadingImage = true);
+      final imageId = await provider.uploadImage(context, bytes, getName(widget.file));
+      Navigator.pop(context, imageId);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+    } finally {
+      setState(() {
+        isProcessingImage = false;
+        isUploadingImage = false;
+      });
     }
   }
 
@@ -234,7 +245,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(elevation: 0, title: Text("Edit image", style: textTheme.bodyLarge,),),
+      appBar: AppBar(elevation: 0, title: Text("Edit image", style: textTheme.bodyLarge)),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: isDesktop(context) ? MediaQuery.of(context).size.width * 0.21 : 16),
         child: Column(
@@ -345,10 +356,13 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                       disabledBackgroundColor: theme.disabledColor,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                     ),
-                    icon: !isProcessingImage ? Icon(Icons.save_outlined) : Center(),
+                    icon:
+                        isProcessingImage
+                            ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: theme.disabledColor, strokeWidth: 2))
+                            : Icon(Icons.save_outlined),
                     label:
                         isProcessingImage
-                            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white))
+                            ? (Text(isUploadingImage ? "Uploading" : "Processing", style: TextStyle(color: theme.disabledColor)))
                             : Text(imprintLocationDetails && locationData != null ? ' Save with Location' : 'Save'),
                   ),
                 ),

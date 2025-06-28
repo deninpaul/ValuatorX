@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class ImageViewer extends StatelessWidget {
   final String image;
@@ -27,7 +28,7 @@ class ImageViewer extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.fromLTRB(48, 48, 48, 48),
+      padding: isMobile(context) ? EdgeInsets.fromLTRB(16, 48, 16, 48) : EdgeInsets.fromLTRB(48, 48, 48, 48),
       child: Hero(
         tag: "image_$index",
         child: Material(

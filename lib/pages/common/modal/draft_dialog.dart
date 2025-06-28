@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class DraftDialog extends StatelessWidget {
-  final EdgeInsets padding;
   final VoidCallback onLoad;
   final VoidCallback onCancel;
-  const DraftDialog({super.key, this.padding = const EdgeInsets.all(0), required this.onLoad, required this.onCancel});
+  const DraftDialog({super.key, required this.onLoad, required this.onCancel});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final padding = isMobile(context) ?  EdgeInsets.fromLTRB(16, 20, 16, 4) : isDesktop(context) ? EdgeInsets.fromLTRB(240, 20, 240, 4) : EdgeInsets.fromLTRB(48, 20, 48, 4);
+
     return Padding(
       padding: padding,
       child: Container(

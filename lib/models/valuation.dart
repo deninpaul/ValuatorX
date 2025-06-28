@@ -6,6 +6,7 @@ class Valuation {
   final String id;
   final String reportName;
   final String dateOfInspection;
+  final String mobile;
   String status;
   String reportLink;
   final String bankDetails;
@@ -92,6 +93,7 @@ class Valuation {
     required this.id,
     required this.reportName,
     required this.dateOfInspection,
+    required this.mobile,
     required this.status,
     required this.reportLink,
     required this.bankDetails,
@@ -179,6 +181,7 @@ class Valuation {
   static const String REPORT_NAME = "Report Name";
   static const String DATE_OF_INSPECTION = "Date of Inspection";
   static const String STATUS = "Status";
+  static const String MOBILE = "Mobile No.";
   static const String REPORT_LINK = "Report link";
   static const String BANK_BRANCH_VALUATION_TEAM_DETAILS = "Bank/ Branch/ Valuation Team Details";
   static const String NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO = "Name of the owner(s) and addresses with Phone No.";
@@ -212,8 +215,7 @@ class Valuation {
   static const String LATTITUDE = "Lattitude";
   static const String LONGITUDE = "Longitude";
   static const String TANDAPPERENCUMFRANCE_REF = "Tandapper/Encumfrance Ref.";
-  static const String LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND =
-      "Level of land with topographical conditions/ Shape of land";
+  static const String LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND = "Level of land with topographical conditions/ Shape of land";
   static const String HOUSE_NO_DOOR_NO = "House No./ Door No.";
   static const String PANCHAYATH = "Panchayath";
   static const String ELECTRICITY_CONSUMER_NO = "Electricity Consumer no.";
@@ -266,6 +268,7 @@ class Valuation {
       id: (json[ID] ?? "").toString(),
       reportName: (json[REPORT_NAME] ?? "").toString(),
       dateOfInspection: (json[DATE_OF_INSPECTION] ?? "").toString(),
+      mobile: (json[MOBILE] ?? "").toString(),
       status: (json[STATUS] ?? "").toString(),
       reportLink: (json[REPORT_LINK] ?? "").toString(),
       bankDetails: (json[BANK_BRANCH_VALUATION_TEAM_DETAILS] ?? "").toString(),
@@ -355,6 +358,7 @@ class Valuation {
       ID: id,
       REPORT_NAME: reportName,
       DATE_OF_INSPECTION: dateOfInspection,
+      MOBILE: mobile,
       STATUS: status,
       REPORT_LINK: reportLink,
       BANK_BRANCH_VALUATION_TEAM_DETAILS: bankDetails,
@@ -440,91 +444,11 @@ class Valuation {
   }
 
   List<String?> toList() {
-    return [
-      reportName,
-      dateOfInspection,
-      status,
-      reportLink,
-      bankDetails,
-      ownerDetails,
-      propertyPossessionAddress,
-      surveyNo1,
-      area1,
-      surveyNo2,
-      area2,
-      surveyNo3,
-      area3,
-      surveyNo4,
-      area4,
-      village,
-      taluk,
-      landCategory,
-      eastActual,
-      eastDeed,
-      southActual,
-      southDeed,
-      westActual,
-      westDeed,
-      northActual,
-      northDeed,
-      legalReportReference,
-      buildingApprovalReference,
-      deedRegDetails,
-      possessionCertificateDetails,
-      locationSketchDetails,
-      propertyTaxCertificateDetails,
-      buildingTaxCertificateDetails,
-      latitude,
-      longitude,
-      encumbranceReference,
-      topographyAndShape,
-      houseNumber,
-      panchayath,
-      electricityConsumerNo,
-      ksebDivision,
-      yearOfConstruction,
-      qualityOfConstruction,
-      buildingType,
-      constructionType,
-      plinthAreaGF,
-      replacementRateGF,
-      heightGF,
-      ageGF,
-      plinthAreaFF,
-      replacementRateFF,
-      heightFF,
-      ageFF,
-      plinthAreaSF,
-      replacementRateSF,
-      heightSF,
-      ageSF,
-      plinthAreaTF,
-      replacementRateTF,
-      heightTF,
-      ageTF,
-      buildingCategory,
-      exteriorCondition,
-      interiorCondition,
-      foundationAndBasement,
-      rccWorks,
-      wallDetails,
-      flooring,
-      joinery,
-      windows,
-      roofing,
-      areaRateCenter,
-      landMarketRate,
-      buildingUnitRate,
-      classificationArea1,
-      classificationArea2,
-      propertyLandmark,
-      roadDetails,
-      mainJunction,
-      nearbyInstitutions,
-      nearbyTown,
-      photos,
-      remarks,
-    ];
+    List<String> list = [];
+    for (var field in editableFields) {
+      list.add((toJson()[field] ?? "").toString());
+    }
+    return list;
   }
 
   equal(Valuation val) {
@@ -537,11 +461,24 @@ class Valuation {
   static const editableFields = [
     REPORT_NAME,
     DATE_OF_INSPECTION,
+    MOBILE,
     STATUS,
     REPORT_LINK,
     BANK_BRANCH_VALUATION_TEAM_DETAILS,
     NAME_OF_THE_OWNERS_AND_ADDRESSES_WITH_PHONE_NO,
     PROPERTY_POSSESSION_NAMEPOSTAL_ADDRESS,
+    POCCESSION_CERTIFICATE_DETAILS,
+    DEED_REG_SRO_NO_DATE,
+    LEGAL_REPORT_REFERENCE,
+    BUILDING_APPROVAL_REFERENCE,
+    PROPERTY_TAX_CERTICATE_DETAILS,
+    BUILDING_TAX_CERTIFICATE_DETAILS,
+    VILLAGE,
+    TALUK,
+    PANCHAYATH,
+    KSEB_DIVISION,
+    LATTITUDE,
+    LONGITUDE,
     SURVEY_NO_RE_SY_NO_1,
     AREA_IN_ARE_1,
     SURVEY_NO_RE_SY_NO_2,
@@ -550,9 +487,6 @@ class Valuation {
     AREA_IN_ARE_3,
     SURVEY_NO_RE_SY_NO_4,
     AREA_IN_ARE_4,
-    VILLAGE,
-    TALUK,
-    LAND_CATEGORY,
     EAST_ACTUALS,
     EAST_AS_PER_DEED,
     SOUTH_ACTUALS,
@@ -561,25 +495,19 @@ class Valuation {
     WEST_AS_PER_DEED,
     NORTH_ACTUALS,
     NORTH_AS_PER_DEED,
-    LEGAL_REPORT_REFERENCE,
-    BUILDING_APPROVAL_REFERENCE,
-    DEED_REG_SRO_NO_DATE,
-    POCCESSION_CERTIFICATE_DETAILS,
+    LANDMARK_OF_THE_PROPERTY,
+    ROAD_DETAILS,
+    MAIN_JUNCTION,
+    INSTITITUIONRELIGIOUS_GOVT_OFFICES,
+    NEARBY_TOWN,
     LOCATION_SKETCH_DETAILS,
-    PROPERTY_TAX_CERTICATE_DETAILS,
-    BUILDING_TAX_CERTIFICATE_DETAILS,
-    LATTITUDE,
-    LONGITUDE,
+    HOUSE_NO_DOOR_NO,
+    ELECTRICITY_CONSUMER_NO,
+    BUILDING_TYPE,
+    YEAR_OF_CONSTRUCTION,
     TANDAPPERENCUMFRANCE_REF,
     LEVEL_OF_LAND_WITH_TOPOGRAPHICAL_CONDITIONS_SHAPE_OF_LAND,
-    HOUSE_NO_DOOR_NO,
-    PANCHAYATH,
-    ELECTRICITY_CONSUMER_NO,
-    KSEB_DIVISION,
-    YEAR_OF_CONSTRUCTION,
-    QUALITY_OF_CONSTRUCTION,
     TYPE_OF_BUILDING,
-    TYPE_OF_CONSTRUCTION,
     PLINT_AREA_GF,
     REPLACEMENT_RATE_GF,
     HEIGHT_GF,
@@ -596,9 +524,15 @@ class Valuation {
     REPLACEMENT_RATE_TF,
     HEIGHT_TF,
     AGE_TF,
-    BUILDING_TYPE,
+    PREVAILING_AREA_RATE_AT_CENTER,
+    PREVAILING_LAND_MARKET_RATE,
+    BUILDING_VALUATION_UNIT_RATE,
+    TYPE_OF_CONSTRUCTION,
+    QUALITY_OF_CONSTRUCTION,
     CONDITION_OF_BUILDING_EXTERIOR,
     CONDITION_OF_BUILDING_INTERIOR,
+    CLASSIFICATION_OF_AREA_1,
+    CLASSIFICATION_OF_AREA_2,
     FOUNDATION_BASEMENT,
     RCC_WORKS,
     WALL_DETAILS,
@@ -606,16 +540,6 @@ class Valuation {
     JOINERYDOORS,
     WINDOWS,
     WPROOF_TRUSS,
-    PREVAILING_AREA_RATE_AT_CENTER,
-    PREVAILING_LAND_MARKET_RATE,
-    BUILDING_VALUATION_UNIT_RATE,
-    CLASSIFICATION_OF_AREA_1,
-    CLASSIFICATION_OF_AREA_2,
-    LANDMARK_OF_THE_PROPERTY,
-    ROAD_DETAILS,
-    MAIN_JUNCTION,
-    INSTITITUIONRELIGIOUS_GOVT_OFFICES,
-    NEARBY_TOWN,
     PHOTOS,
     REMARKS,
   ];

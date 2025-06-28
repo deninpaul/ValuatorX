@@ -186,7 +186,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
         },
         child: Column(
           children: [
-            if (showDraftDialog) DraftDialog(padding: EdgeInsets.fromLTRB(48, 20, 48, 4), onLoad: loadDraft, onCancel: cancelDraft),
+            if (showDraftDialog) DraftDialog(onLoad: loadDraft, onCancel: cancelDraft),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -210,6 +210,13 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                           icon: Icons.calendar_today_outlined,
                           focusField: widget.focusField,
                           required: true,
+                        ),
+                        BasicField(
+                          name: Valuation.MOBILE,
+                          controller: controllers[Valuation.MOBILE]!,
+                          icon: Icons.call_outlined,
+                          focusField: widget.focusField,
+                          type: TextInputType.numberWithOptions(),
                         ),
                         Divider(),
                         BasicField(
@@ -432,6 +439,24 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                             [Valuation.PLINTH_AREA_TF, Valuation.HEIGHT_TF, Valuation.AGE_TF, Valuation.REPLACEMENT_RATE_TF],
                           ],
                         ),
+                        BasicField(
+                          name: Valuation.PREVAILING_AREA_RATE_AT_CENTER,
+                          controller: controllers[Valuation.PREVAILING_AREA_RATE_AT_CENTER]!,
+                          icon: Icons.toll_outlined,
+                          focusField: widget.focusField,
+                        ),
+                        BasicField(
+                          name: Valuation.PREVAILING_LAND_MARKET_RATE,
+                          controller: controllers[Valuation.PREVAILING_LAND_MARKET_RATE]!,
+                          icon: Icons.paid_outlined,
+                          focusField: widget.focusField,
+                        ),
+                        BasicField(
+                          name: Valuation.BUILDING_VALUATION_UNIT_RATE,
+                          controller: controllers[Valuation.BUILDING_VALUATION_UNIT_RATE]!,
+                          icon: Icons.sell_outlined,
+                          focusField: widget.focusField,
+                        ),
                         Divider(),
                         DropdownField(
                           name: Valuation.TYPE_OF_BUILDING,
@@ -473,25 +498,6 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                           options: Valuation.interiorConditionOptions,
                           focusField: widget.focusField,
                           isChild: true,
-                        ),
-                        Divider(),
-                        BasicField(
-                          name: Valuation.PREVAILING_AREA_RATE_AT_CENTER,
-                          controller: controllers[Valuation.PREVAILING_AREA_RATE_AT_CENTER]!,
-                          icon: Icons.toll_outlined,
-                          focusField: widget.focusField,
-                        ),
-                        BasicField(
-                          name: Valuation.PREVAILING_LAND_MARKET_RATE,
-                          controller: controllers[Valuation.PREVAILING_LAND_MARKET_RATE]!,
-                          icon: Icons.paid_outlined,
-                          focusField: widget.focusField,
-                        ),
-                        BasicField(
-                          name: Valuation.BUILDING_VALUATION_UNIT_RATE,
-                          controller: controllers[Valuation.BUILDING_VALUATION_UNIT_RATE]!,
-                          icon: Icons.sell_outlined,
-                          focusField: widget.focusField,
                         ),
                         Divider(),
                         BasicField(

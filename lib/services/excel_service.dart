@@ -85,6 +85,21 @@ class ExcelService {
     }
   }
 
+  Future<List> generateTableValues({required Client client, required Map<String, dynamic> data}) async {
+    var response = await client.get(Uri.parse(tableHeadersEndpoint));
+    if (response.statusCode != 200) {
+      throw Exception("Error fetching table headers. ${response.statusCode} ${response.body}");
+    }
+    final headerData = jsonDecode(response.body);
+
+    final headers = headerData["values"][0] as List;
+    final List<String> tableValue = [];
+    for (var header in headers) {
+      tableValue.add(data[header] ?? "");
+    }
+    return tableValue;
+  }
+
   getWorkbookLink({required Client client}) async {
     try {
       final response = await client.get(Uri.parse(fileEndpoint.replaceAll("_ID_", fileId)));
@@ -101,13 +116,9 @@ class ExcelService {
     }
   }
 
-  addValuesToRange({
-    required Client client,
-    required List<List<String>> values,
-    required String range,
-    required String id,
-    required String sheet,
-  }) async {
+  addValuesToRange({required Client client, required List<List<String>> values, required String range, String? id, String? sheet}) async {
+    id = id ?? fileId;
+    sheet = sheet ?? sheetName;
     try {
       final response = await client.patch(
         Uri.parse("${fileEndpoint.replaceAll("_ID_", id)}/workbook/worksheets/$sheet/range(address='$range')"),

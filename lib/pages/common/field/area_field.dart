@@ -28,7 +28,8 @@ class AreaField extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             enabled: enabled,
-            maxLines: 3,
+            minLines: 3,
+            maxLines: null,
             autofocus: name == focusField,
             textInputAction: TextInputAction.newline,
             decoration: InputDecoration(labelText: name, alignLabelWithHint: true, border: const OutlineInputBorder()),

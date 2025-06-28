@@ -17,6 +17,7 @@ class MapWrapper extends StatefulWidget {
   final bool enableCenterMarker;
   final LatLng center;
   final double zoom;
+  final InteractionOptions interactionOptions;
   final Function(MapCamera, bool) onPositionChanged;
   final bool editMode;
 
@@ -31,6 +32,7 @@ class MapWrapper extends StatefulWidget {
     this.zoom = 15,
     this.editMode = false,
     this.onPositionChanged = _defaultOnPositionChanged,
+    this.interactionOptions = const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate)
   });
 
   static void _defaultOnPositionChanged(MapCamera cam, bool hasGesture) {}
@@ -71,12 +73,7 @@ class _MapWrapperState extends State<MapWrapper> {
               initialCenter: initialCenter,
               backgroundColor: colorScheme.surface,
               onPositionChanged: widget.onPositionChanged,
-              interactionOptions: InteractionOptions(
-                flags:
-                    widget.editMode
-                        ? InteractiveFlag.all & ~InteractiveFlag.rotate & ~InteractiveFlag.drag
-                        : InteractiveFlag.all & ~InteractiveFlag.rotate,
-              ),
+              interactionOptions: widget.interactionOptions,
             ),
             children: [
               TileLayer(
@@ -92,6 +89,12 @@ class _MapWrapperState extends State<MapWrapper> {
                   padding: EdgeInsets.only(bottom: 24),
                   child: Icon(Icons.location_pin, color: colorScheme.primary, size: 36), // Fixed center marker
                 ),
+              // Positioned.fill(
+              //   child: GestureDetector(
+              //     behavior: HitTestBehavior.opaque,
+              //     onTap: () => print("MWAHAHA"),
+              //   ),
+              // ),
               Container(
                 alignment: AlignmentDirectional.topEnd,
                 padding: EdgeInsets.all(16),

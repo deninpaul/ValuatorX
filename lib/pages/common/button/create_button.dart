@@ -20,13 +20,13 @@ class CreateButton extends StatelessWidget {
         openBuilder: (context, _) => createPage,
         closedColor: colorScheme.primaryContainer,
         closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        closedElevation: 6,
+        closedElevation: 8,
         closedBuilder:
             (context, openContainer) => FloatingActionButton.extended(
+              elevation: 0,
               onPressed: openContainer,
               icon: const Icon(Icons.add, size: 16),
-              elevation: 0,
-              label: Text(label, style: TextStyle(fontWeight: FontWeight.normal),),
+              label: Text(label),
             ),
       ),
     );

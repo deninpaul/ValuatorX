@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       TabItem(
         name: "Land rate",
         title: "Land Rate Data",
-        icon: Icon(Icons.map_outlined,),
+        icon: Icon(Icons.map_outlined),
         selectedIcon: Icon(Icons.map),
         child: LandRateScreen(),
       ),
@@ -117,10 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: EdgeInsets.only(bottom: 32),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(icon: const Icon(Icons.logout), tooltip: 'Sign Out', onPressed: signOut),
-                                Text("Log out"),
-                              ],
+                              children: [IconButton(icon: Icon(Icons.logout), onPressed: signOut), Text("Log out")],
                             ),
                           ),
                         ),
@@ -145,16 +142,58 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? Container(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   color: colorScheme.surfaceContainer,
-                  child: BottomNavigationBar(
-                    elevation: 0,
-                    onTap: onSelectTab,
-                    currentIndex: selectedIndex,
-                    backgroundColor: colorScheme.surfaceContainer,
-                    landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-                    items: tabs.map((tab) => BottomNavigationBarItem(icon: tab.icon, activeIcon: tab.selectedIcon, label: tab.name)).toList(),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: BottomNavigationBar(
+                          elevation: 0,
+                          onTap: onSelectTab,
+                          currentIndex: selectedIndex,
+                          backgroundColor: colorScheme.surfaceContainer,
+                          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+                          items: [
+                            ...tabs.map((tab) => BottomNavigationBarItem(icon: tab.icon, activeIcon: tab.selectedIcon, label: tab.name)),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      LogOutButtonMobile(onTap: signOut),
+                      SizedBox(width: 28),
+                    ],
                   ),
                 )
                 : null,
+      ),
+    );
+  }
+}
+
+class LogOutButtonMobile extends StatelessWidget {
+  final VoidCallback onTap;
+  const LogOutButtonMobile({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    return Material(
+      shape: CircleBorder(),
+      clipBehavior: Clip.hardEdge,
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            spacing: 0,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.logout, size: 18, color: theme.unselectedWidgetColor),
+              Text("Log out", style: textTheme.bodyMedium!.copyWith(color: theme.unselectedWidgetColor)),
+            ],
+          ),
+        ),
       ),
     );
   }

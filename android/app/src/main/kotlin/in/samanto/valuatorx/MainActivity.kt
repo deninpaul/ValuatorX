@@ -1,4 +1,4 @@
-package com.example.valuatorx
+package `in`.samanto.valuatorx
 
 import io.flutter.embedding.android.FlutterActivity
 

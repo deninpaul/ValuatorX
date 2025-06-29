@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
-    final subtitleStyle = kIsWeb ? textTheme.bodyLarge : textTheme.bodyMedium;
+    final subtitleStyle = textTheme.bodyLarge!.copyWith(fontSize: 14);
 
     return Scaffold(
       appBar: AppBar(
@@ -167,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Text("Welcome to ValuatorX", style: textTheme.headlineMedium!.copyWith(height: 1.35)),
                                           Text(
                                             "ValuatorX makes it easy to create and manage valuation reports, with access to additional tools and resources",
-                                            style: subtitleStyle!.copyWith(color: theme.hintColor, height: 1.6),
+                                            style: subtitleStyle.copyWith(color: theme.hintColor, height: 1.6),
                                           ),
                                         ],
                                       ),

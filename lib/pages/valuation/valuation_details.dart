@@ -169,7 +169,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     ViewTile(
                       title: Valuation.MOBILE,
                       value: widget.valuation.mobile,
-                      icon: Icons.call_outlined,
+                      icon: Icons.dialpad,
                       onPressed: onEditAction,
                       tabIndex: 1,
                     ),

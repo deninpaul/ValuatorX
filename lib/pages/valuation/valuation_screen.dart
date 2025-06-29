@@ -40,7 +40,7 @@ class _ValuationsState extends State<Valuations> {
   }
 
   syncData() async {
-    timer = Timer.periodic(const Duration(seconds: 15), (_) => fetchAllValuations(refresh: false));
+    timer = Timer.periodic(const Duration(seconds: 15), (_) async => await fetchAllValuations(refresh: false));
   }
 
   @override

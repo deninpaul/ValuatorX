@@ -215,7 +215,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                         BasicField(
                           name: Valuation.MOBILE,
                           controller: controllers[Valuation.MOBILE]!,
-                          icon: Icons.call_outlined,
+                          icon: Icons.dialpad,
                           focusField: widget.focusField,
                           type: TextInputType.numberWithOptions(),
                         ),

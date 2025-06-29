@@ -50,3 +50,5 @@ app.*.map.json
 firebase.json
 .firebaserc
 
+key.properties
+app/upload-keystore.jks

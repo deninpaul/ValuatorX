@@ -18,6 +18,7 @@ class ValuationService extends ExcelService {
   createNewReportWorksheet({required Client client, required String fileName}) async {
     try {
       // Create new file based of template
+      fileName = '${fileName.replaceAll(RegExp(r'[\"*:<>?/\\|]'), '').replaceAll(RegExp(r'^\.+|\.+$'), '').trim()}.xlsx';
       final response = await client.post(
         Uri.parse("${fileEndpoint.replaceAll("_ID_", _templateId)}/copy"),
         headers: {'Content-Type': 'application/json'},

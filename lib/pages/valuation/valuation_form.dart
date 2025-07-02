@@ -73,6 +73,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     draftId = widget.editMode ? provider.getSelectedValuation().id : await provider.generateDraftIndex();
     timer = Timer.periodic(const Duration(seconds: 5), (_) async {
+      if (!mounted) return;
       final valuation = generateValuation(draftId, status: "Draft");
       if (!valuation.equal(baseValue)) {
         await provider.createOrUpdateDraft(valuation);

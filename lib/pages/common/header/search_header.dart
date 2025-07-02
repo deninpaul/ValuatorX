@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 
-class SearchHeader extends StatelessWidget {
+class SearchHeader extends StatefulWidget {
   final ValueChanged<String>? onSearch;
   final String name;
   final List<PopupMenuItem> actions;
-  const SearchHeader({super.key, this.onSearch, required this.name, this.actions = const []});
+  final String query;
+  const SearchHeader({super.key, this.onSearch, required this.name, required this.query, this.actions = const []});
+
+  @override
+  State<SearchHeader> createState() => _SearchHeaderState();
+}
+
+class _SearchHeaderState extends State<SearchHeader> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    controller.text = widget.query;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +28,19 @@ class SearchHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (onSearch != null)
+        if (widget.onSearch != null)
           Expanded(
             child: SearchBar(
-              onChanged: onSearch,
+              controller: controller,
+              onChanged: widget.onSearch,
               elevation: const WidgetStatePropertyAll(0),
               backgroundColor: WidgetStatePropertyAll(colorScheme.surfaceBright),
-              hintText: "Search in ${name.toLowerCase()}s",
+              hintText: "Search in ${widget.name.toLowerCase()}s",
               leading: Padding(padding: const EdgeInsets.only(left: 8), child: Icon(Icons.search, color: theme.hintColor)),
             ),
           ),
         const SizedBox(width: 8),
-        PopupMenuButton(offset: const Offset(0, 48), itemBuilder: (ctx) => [...actions]),
+        PopupMenuButton(offset: const Offset(0, 48), itemBuilder: (ctx) => [...widget.actions]),
       ],
     );
   }

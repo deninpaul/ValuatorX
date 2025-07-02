@@ -45,7 +45,7 @@ class ValuationProvider extends ChangeNotifier {
   List<Valuation> getSearchResults(String query) {
     return allValutions
         .where(
-          (val) => "${val.reportName} ${val.status} ${val.dateOfInspection} ${val.bankDetails}".toLowerCase().contains(query.toLowerCase()),
+          (val) => "${val.reportName} ${val.status} ${val.dateOfInspection} ${val.village} ${val.taluk} ${val.ownerDetails}".toLowerCase().contains(query.toLowerCase()),
         )
         .toList();
   }
@@ -181,7 +181,7 @@ class ValuationProvider extends ChangeNotifier {
       onStatusUpdate("Generating Excel file");
       final newFileId = await service.createNewReportWorksheet(
         client: client,
-        fileName: "${valuation.id} - ${valuation.reportName} - Valuation Data.xlsx",
+        fileName: "${valuation.id} - ${valuation.reportName} - Valuation Data",
       );
 
       onStatusUpdate("Linking values");

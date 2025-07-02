@@ -49,7 +49,9 @@ class AuthProvider extends ChangeNotifier {
   Uri startAuthFlow() {
     setLoading(true);
     _grant = oauth2.AuthorizationCodeGrant(_clientId, _authorizationEndpoint, _tokenEndpoint);
-    return _grant!.getAuthorizationUrl(Uri.parse(redirectUrl), scopes: _scopes);
+    final res = _grant!.getAuthorizationUrl(Uri.parse(redirectUrl), scopes: _scopes);
+    final authUrl = res.replace(queryParameters: {...res.queryParameters, 'prompt': 'select_account'});
+    return authUrl;
   }
 
   // Handle authorization code after login

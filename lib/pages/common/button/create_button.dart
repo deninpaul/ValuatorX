@@ -26,7 +26,7 @@ class CreateButton extends StatelessWidget {
               elevation: 0,
               onPressed: openContainer,
               icon: const Icon(Icons.add, size: 16),
-              label: Text(label),
+              label: Text(label, style: TextStyle(fontWeight: FontWeight.normal)),
             ),
       ),
     );

@@ -87,6 +87,7 @@ class _ValuationsState extends State<Valuations> {
                     children: [
                       SearchHeader(
                         name: "Valuation",
+                        query: searchQuery,
                         onSearch: onSearchAction,
                         actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh"))],
                       ),

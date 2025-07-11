@@ -31,7 +31,9 @@ class ValuationProvider extends ChangeNotifier {
       debugPrint("Fetched ${valuations.length} Valuation record(s) from Excel successfully.");
       notifyListeners();
     } catch (e) {
-      valuations = [];
+      if (refresh) {
+        valuations = [];
+      }
       debugPrint("Failed to fetch Valuations: ${e.toString()}");
     } finally {
       setLoading(false);
@@ -42,12 +44,28 @@ class ValuationProvider extends ChangeNotifier {
     return allValutions.firstWhere((report) => report.id == selectedItem);
   }
 
-  List<Valuation> getSearchResults(String query) {
-    return allValutions
-        .where(
-          (val) => "${val.reportName} ${val.status} ${val.dateOfInspection} ${val.village} ${val.taluk} ${val.ownerDetails}".toLowerCase().contains(query.toLowerCase()),
-        )
-        .toList();
+  List<Valuation> getSearchResults({String query = "", String filter = ""}) {
+    var result = allValutions.where(
+      (val) => "${val.reportName} ${val.status} ${val.dateOfInspection} ${val.village} ${val.taluk} ${val.ownerDetails} ${val.bankDetails}"
+          .toLowerCase()
+          .contains(query.toLowerCase()),
+    );
+    switch (filter) {
+      case "In progress":
+        result = result.where((val) => val.status == "In progress" || val.status == "Draft");
+        break;
+      case "Completed":
+        result = result.where((val) => val.status == "Completed");
+        break;
+      case "Drafts":
+        result = result.where((val) => val.status == "Draft");
+      case "Trash":
+        result = result.where((val) => val.status == "Trash");
+      case "All":
+      default:
+        result = result.where((val) => val.status != "Trash");
+    }
+    return result.toList();
   }
 
   addValuations(BuildContext context, Valuation newValuation) async {

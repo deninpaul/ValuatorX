@@ -544,7 +544,7 @@ class Valuation {
     REMARKS,
   ];
 
-  static const statusOptions = ["In progress", "Completed", "Backlog"];
+  static const statusOptions = ["In progress", "Completed"];
 
   static const buildingTypeOptions = ["Residential", "Commercial", "Industrial", "-"];
 

@@ -1,7 +1,7 @@
 name: valuatorx
-description: "A new Flutter project."
+description: "Create and manage valuation reports and more with ValuatorX"
 publish_to: 'none'
-version: 1.0.0+6
+version: 1.0.0+11
 environment:
   sdk: ^3.7.0
 dependencies:

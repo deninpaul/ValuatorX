@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/models/valuation.dart';
 import 'package:valuatorx/pages/common/button/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
+import 'package:valuatorx/pages/common/header/filter_pill.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
 import 'package:valuatorx/pages/common/view/info_tile.dart';
 import 'package:valuatorx/pages/common/summary_tile.dart';
@@ -21,9 +21,10 @@ class Valuations extends StatefulWidget {
   State<Valuations> createState() => _ValuationsState();
 }
 
-class _ValuationsState extends State<Valuations> {
+class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
   late ValuationProvider provider;
   String searchQuery = "";
+  String filter = Valuation.statusOptions[0];
   Timer? timer;
 
   String subtitle(Valuation valuation) {
@@ -34,18 +35,29 @@ class _ValuationsState extends State<Valuations> {
     setState(() => searchQuery = val);
   }
 
+  onSelectFilter(String val) {
+    setState(() => filter = val);
+  }
+
   Future<void> fetchAllValuations({bool refresh = true}) async {
     await provider.getValuations(context, refresh: refresh);
     await provider.getDrafts();
   }
 
   syncData() async {
-    timer = Timer.periodic(const Duration(seconds: 15), (_) async => await fetchAllValuations(refresh: false));
+    timer?.cancel();
+    timer = Timer.periodic(const Duration(seconds: 30), (_) async => await fetchAllValuations(refresh: provider.valuations.isEmpty));
+  }
+
+  void stopSync() {
+    timer?.cancel();
+    timer = null;
   }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<ValuationProvider>(context, listen: false);
       fetchAllValuations();
@@ -54,9 +66,19 @@ class _ValuationsState extends State<Valuations> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      stopSync();
+    } else if (state == AppLifecycleState.resumed) {
+      syncData();
+    }
+  }
+
+  @override
   void dispose() {
+    stopSync();
     provider.setSelectedItem("", notify: false);
-    timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -100,10 +122,25 @@ class _ValuationsState extends State<Valuations> {
                         ],
                       ),
                       SizedBox(height: 16),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          spacing: 8,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            FilterPill(text: Valuation.statusOptions[0], selectedText: filter, onSelected: onSelectFilter),
+                            FilterPill(text: "All", selectedText: filter, onSelected: onSelectFilter),
+                            FilterPill(text: Valuation.statusOptions[1], selectedText: filter, onSelected: onSelectFilter),
+                            FilterPill(text: "Drafts", selectedText: filter, onSelected: onSelectFilter),
+                            // FilterPill(text: "Trash", selectedText: filter, onSelected: onSelectFilter),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
                       ExpandableList(
-                        items: provider.getSearchResults(searchQuery),
+                        items: provider.getSearchResults(query: searchQuery, filter: filter),
                         isLoading: provider.isLoading,
-                        initialCount: 20,
+                        initialCount: 30,
                         itemBuilder: (ctx, valuation, index) {
                           return SummaryTile(
                             id: valuation.id,

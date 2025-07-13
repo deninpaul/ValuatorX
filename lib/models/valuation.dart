@@ -481,7 +481,7 @@ class Valuation {
 
   static const windowOptions = ["Wooden frame with glazed shutter", "Aluminimum frame with glazed shutter", "Steel frame with glazed steel shutter", "Concrete frame with aluminimum glazed shutter", "-"];
 
-  static const doorOptions = ["Wooden frame with panelled wooden door", "Wooden frame with modular door", "Wooden frame with laminate plywood door"];
+  static const doorOptions = ["Wooden frame with panelled wooden door", "Wooden frame with modular door", "Wooden frame with laminate plywood door", "-"];
 
   static const rccProtectionOptions = ["Cement mortar screed laid to slope", "GI powder coated tiled profile sheet on steel truss", "Designed mangalore tiles on steel truss", "Mangalore tiles laid on slope roof", "-"];
 }

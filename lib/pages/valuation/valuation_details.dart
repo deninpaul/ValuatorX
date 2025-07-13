@@ -379,7 +379,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                       ViewTile(
                         title: Valuation.MAIN_CENTER,
                         value: widget.valuation.mainCenter,
-                        icon: Icons.cell_tower_outlined,
+                        icon: Icons.hub_outlined,
                         onPressed: onEditAction,
                         tabIndex: 1,
                       ),
@@ -387,7 +387,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     ViewTile(
                       title: Valuation.NEARBY_TOWN,
                       value: widget.valuation.nearbyTown,
-                      icon: Icons.cell_tower_outlined,
+                      icon: Icons.near_me_outlined,
                       onPressed: onEditAction,
                       tabIndex: 1,
                     ),

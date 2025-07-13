@@ -27,8 +27,6 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
   String filter = Valuation.statusOptions[0];
   Timer? timer;
 
-
-
   onSearchAction(String val) {
     setState(() => searchQuery = val);
   }
@@ -42,8 +40,9 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
     await provider.getDrafts();
   }
 
-  syncData() async {
+  void syncData() {
     timer?.cancel();
+    fetchAllValuations(refresh: provider.valuations.isEmpty);
     timer = Timer.periodic(const Duration(seconds: 30), (_) async => await fetchAllValuations(refresh: provider.valuations.isEmpty));
   }
 
@@ -58,7 +57,6 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<ValuationProvider>(context, listen: false);
-      fetchAllValuations();
       syncData();
     });
   }
@@ -130,7 +128,6 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                             FilterPill(text: "All", selectedText: filter, onSelected: onSelectFilter),
                             FilterPill(text: Valuation.statusOptions[1], selectedText: filter, onSelected: onSelectFilter),
                             FilterPill(text: "Drafts", selectedText: filter, onSelected: onSelectFilter),
-                            // FilterPill(text: "Trash", selectedText: filter, onSelected: onSelectFilter),
                           ],
                         ),
                       ),

@@ -22,6 +22,7 @@ class ValuationProvider extends ChangeNotifier {
   final DraftService draftService = DraftService(boxName: "valuations");
 
   getValuations(BuildContext context, {bool refresh = true}) async {
+    await Future.delayed(Duration.zero);
     try {
       if (refresh) setLoading(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -96,7 +97,7 @@ class ValuationProvider extends ChangeNotifier {
       final values = await service.generateTableValues(client: client, data: valuation.toJson());
       await service.updateExcelTableRow(client: client, index: valuation.id, values: values);
       debugPrint("Valuation ${valuation.reportReference} updated in Excel table successfully.");
-      getValuations(context, refresh: false);
+      await getValuations(context, refresh: false);
       success = true;
     } catch (e) {
       debugPrint("Failed to update Valuation: ${e.toString()}");

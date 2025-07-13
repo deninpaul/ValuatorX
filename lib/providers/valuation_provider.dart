@@ -41,12 +41,12 @@ class ValuationProvider extends ChangeNotifier {
   }
 
   Valuation getSelectedValuation() {
-    return allValutions.firstWhere((report) => report.id == selectedItem);
+    return allValutions.firstWhere((report) => report.id == selectedItem, orElse: () => Valuation.fromJson({}));
   }
 
   List<Valuation> getSearchResults({String query = "", String filter = ""}) {
     var result = allValutions.where(
-      (val) => "${val.reportName} ${val.status} ${val.dateOfInspection} ${val.village} ${val.taluk} ${val.ownerDetails} ${val.bankDetails}"
+      (val) => "${val.reportReference} ${val.status} ${val.dateOfInspection} ${val.village} ${val.taluk} ${val.mortgagorDetail} ${val.fileAllocationDetail}"
           .toLowerCase()
           .contains(query.toLowerCase()),
     );
@@ -95,7 +95,7 @@ class ValuationProvider extends ChangeNotifier {
       final client = await authProvider.getClient();
       final values = await service.generateTableValues(client: client, data: valuation.toJson());
       await service.updateExcelTableRow(client: client, index: valuation.id, values: values);
-      debugPrint("Valuation ${valuation.reportName} updated in Excel table successfully.");
+      debugPrint("Valuation ${valuation.reportReference} updated in Excel table successfully.");
       getValuations(context, refresh: false);
       success = true;
     } catch (e) {
@@ -112,7 +112,7 @@ class ValuationProvider extends ChangeNotifier {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
       await service.deleteExcelTableRow(client: client, index: valuation.id);
-      debugPrint("Valuation ${valuation.reportName} deleted from Excel table successfully.");
+      debugPrint("Valuation ${valuation.reportReference} deleted from Excel table successfully.");
       await getValuations(context, refresh: false);
     } catch (e) {
       debugPrint("Failed to delete Valuation: ${e.toString()}");
@@ -199,7 +199,7 @@ class ValuationProvider extends ChangeNotifier {
       onStatusUpdate("Generating Excel file");
       final newFileId = await service.createNewReportWorksheet(
         client: client,
-        fileName: "${valuation.id} - ${valuation.reportName} - Valuation Data",
+        fileName: "${valuation.id} - ${valuation.reportReference} - Valuation Data",
       );
 
       onStatusUpdate("Linking values");

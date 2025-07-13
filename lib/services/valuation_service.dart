@@ -5,7 +5,7 @@ import 'package:valuatorx/services/excel_service.dart';
 class ValuationService extends ExcelService {
   ValuationService()
     : super(
-        fileId: "01OTD6NSIJ4LY4ONM7ZVD3B2CK4MAL5TLC",
+        fileId: "01OTD6NSNAPSCJTVO6YVHLAW2OINAZQBPV",
         userId: "a328ee73-9709-4f7c-bb40-ae497e488a66",
         tableName: "Valuations",
         sheetName: "Data",
@@ -13,7 +13,7 @@ class ValuationService extends ExcelService {
 
   final _driveId = "b!bjWHx8vaSUGa2c_fZH7AoTlNAe4QjSFKrgLAyq8Smcgfz6YLhZb1T7j74-c_w8yy";
   final _reportPath = "/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads";
-  final _templateId = "01OTD6NSJ2IQ6WYOP24BA2W4XBSB2EYCDD";
+  final _templateId = "01OTD6NSKJH6IV3JKRMBGKWNTKXJLS2CGK";
 
   createNewReportWorksheet({required Client client, required String fileName}) async {
     try {

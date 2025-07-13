@@ -67,7 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "More tools",
         icon: Icon(Icons.more_horiz_outlined),
         selectedIcon: Icon(Icons.more_horiz_rounded),
-        child: Text("Coming soon"),
+        child: Container(
+          alignment: Alignment.bottomCenter,
+          padding: EdgeInsets.only(bottom: 36),
+          child: Text("ValuatorX\nApp Version: v1.0.2", textAlign: TextAlign.center, 
+          style: TextStyle(color: Colors.black87),),
+        ),
       ),
     ];
   }

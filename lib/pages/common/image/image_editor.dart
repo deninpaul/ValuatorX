@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/providers/media_provider.dart';
+import 'package:image/image.dart' as img;
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -51,16 +54,10 @@ class LocationDetailsScreen extends StatefulWidget {
 class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
   LocationData? locationData;
   bool isLoadingLocation = true;
-  bool imprintLocationDetails = true;
+  bool imprintLocationDetails = false;
   String? locationError;
   bool isProcessingImage = false;
   bool isUploadingImage = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentLocation();
-  }
 
   Future<Uint8List> _imprintLocationOnImage(Uint8List imageBytes, LocationData location) async {
     // Load the original image
@@ -146,9 +143,20 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     final ui.Picture picture = recorder.endRecording();
     final ui.Image finalImage = await picture.toImage(originalImg.width, originalImg.height);
 
-    // Convert to bytes
-    final ByteData? byteData = await finalImage.toByteData(format: ui.ImageByteFormat.png);
-    final Uint8List finalBytes = byteData!.buffer.asUint8List();
+    // Get raw image data
+    final ByteData? byteData = await finalImage.toByteData(format: ui.ImageByteFormat.rawRgba);
+
+    // Convert to image package format
+    final img.Image image = img.Image.fromBytes(
+      width: finalImage.width,
+      height: finalImage.height,
+      bytes: byteData!.buffer,
+      format: img.Format.uint8,
+      numChannels: 4,
+    );
+
+    // Encode as JPEG with quality compression (same as original image)
+    final Uint8List finalBytes = Uint8List.fromList(img.encodeJpg(image, quality: 90));
 
     return finalBytes;
   }
@@ -210,7 +218,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     }
   }
 
-  getName(File file) => file.path.split('/').last + (kIsWeb ? ".png" : "");
+  String get fileName => "${widget.file.path.split('/').last.split('.')[0]}_${Random().nextInt(1000)}.jpg";
 
   saveImage() async {
     setState(() => isProcessingImage = imprintLocationDetails && locationData != null);
@@ -221,7 +229,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
               ? await _imprintLocationOnImage(widget.fileBytes, locationData!)
               : widget.fileBytes;
       setState(() => isUploadingImage = true);
-      final imageId = await provider.uploadImage(context, bytes, getName(widget.file));
+      final imageId = await provider.uploadImage(context, bytes, fileName);
       Navigator.pop(context, imageId);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
@@ -233,8 +241,13 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     }
   }
 
-  toggleDetails(bool value) {
+  void toggleDetails(bool value) async {
     setState(() => imprintLocationDetails = value);
+    if (value && locationData == null && locationError == null) {
+      setState(() => isLoadingLocation = true);
+      await _getCurrentLocation();
+      setState(() => isLoadingLocation = false);
+    }
   }
 
   @override
@@ -313,7 +326,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                     Expanded(child: Text('Enable location details', style: textTheme.bodyLarge)),
                     Switch(
                       value: imprintLocationDetails,
-                      onChanged: locationData != null ? toggleDetails : null,
+                      onChanged: (!imprintLocationDetails || locationData != null) ? toggleDetails : null,
                       activeColor: colorScheme.primary,
                     ),
                   ],
@@ -348,7 +361,12 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                 ),
                 Expanded(
                   child: TextButton.icon(
-                    onPressed: (isProcessingImage || locationData == null && locationError == null) ? null : saveImage,
+                    onPressed:
+                        ((imprintLocationDetails && (locationData == null && locationError == null)) ||
+                                isProcessingImage ||
+                                isUploadingImage)
+                            ? null
+                            : saveImage,
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 20 : 16),
                       backgroundColor: colorScheme.primary,
@@ -357,11 +375,11 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                     ),
                     icon:
-                        isProcessingImage
+                        isProcessingImage || isUploadingImage
                             ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: theme.disabledColor, strokeWidth: 2))
                             : Icon(Icons.save_outlined),
                     label:
-                        isProcessingImage
+                        isProcessingImage || isUploadingImage
                             ? (Text(isUploadingImage ? "Uploading" : "Processing", style: TextStyle(color: theme.disabledColor)))
                             : Text(imprintLocationDetails && locationData != null ? ' Save with Location' : 'Save'),
                   ),

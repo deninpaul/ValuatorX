@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class TableField extends StatefulWidget {
   final int minRows;
@@ -25,30 +26,32 @@ class TableField extends StatefulWidget {
 
 class _TableFieldState extends State<TableField> {
   List<Map<String, String>> rows = [];
-  int maxRows = 4;
+  int get maxRows => widget.controllers.length;
 
   @override
   void initState() {
     super.initState();
-    rows = [for (int i = 0; i < widget.minRows; i++) {}];
+    updateRowsBasedOnData();
+  }
+
+  void updateRowsBasedOnData() {
+    int requiredRows = widget.controllers.where((x) => x.where((y) => y.text.isNotEmpty).isNotEmpty).length;
+    if (requiredRows < widget.minRows) {
+      requiredRows = widget.minRows;
+    }
+    setState(() => rows = [for (int i = 0; i < requiredRows; i++) {}]);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final widgetWidth = MediaQuery.of(context).size.width - 96;
+    final widgetWidth = MediaQuery.of(context).size.width - (isMobile(context) ? 40 : isDesktop(context) ? 480 : 96);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          spacing: 24,
-          children: [
-            Icon(widget.icon),
-            Text(widget.title, style: textTheme.bodyLarge),
-          ],
-        ),
+        Row(spacing: 24, children: [Icon(widget.icon), Text(widget.title, style: textTheme.bodyLarge)]),
         const SizedBox(height: 16),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -60,12 +63,15 @@ class _TableFieldState extends State<TableField> {
                 children: [
                   ...rows.asMap().entries.map((entry) {
                     final rowIndex = entry.key;
+                    if (rowIndex >= widget.controllers.length) {
+                      return const SizedBox.shrink();
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          removeIcon(rowIndex),
+                          removeIcon(rowIndex, theme),
                           ...List.generate(widget.controllers[rowIndex].length, (colIndex) {
                             final labelText = widget.fieldNames[rowIndex][colIndex];
                             return Expanded(
@@ -77,10 +83,8 @@ class _TableFieldState extends State<TableField> {
                                     controller: widget.controllers[rowIndex][colIndex],
                                     keyboardType: widget.keyboardType,
                                     autofocus: labelText == widget.focusField,
-                                    decoration: InputDecoration(
-                                      border: const OutlineInputBorder(),
-                                      labelText: labelText,
-                                    ),
+                                    onChanged: (value) => setState(() {}),
+                                    decoration: InputDecoration(border: const OutlineInputBorder(), labelText: labelText),
                                   ),
                                 ),
                               ),
@@ -111,14 +115,14 @@ class _TableFieldState extends State<TableField> {
     );
   }
 
-  removeIcon(index) => SizedBox(
+  removeIcon(index, ThemeData theme) => SizedBox(
     width: 36,
     child:
         (index < widget.minRows)
             ? const SizedBox()
             : IconButton(
               visualDensity: const VisualDensity(horizontal: -2),
-              icon: const Icon(Icons.remove_circle_outline),
+              icon: Icon(Icons.remove_circle_outline, color: theme.colorScheme.secondary),
               onPressed: () => setState(() => rows.removeAt(index)),
             ),
   );

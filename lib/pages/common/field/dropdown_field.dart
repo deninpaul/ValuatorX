@@ -64,9 +64,12 @@ class _DropdownFieldState extends State<DropdownField> {
                 _allOptions.map((option) {
                   return DropdownMenuItem<String>(
                     value: option,
-                    child: Text(
-                      option == "Other (Custom)" && isCustomValue ? "Other: ${widget.controller.text}" : option,
-                      style: textTheme.bodyLarge,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        option == "Other (Custom)" && isCustomValue ? "Other: ${widget.controller.text}" : option,
+                        style: textTheme.bodyLarge!.copyWith(height: 1.3)
+                      ),
                     ),
                   );
                 }).toList(),
@@ -80,6 +83,7 @@ class _DropdownFieldState extends State<DropdownField> {
             },
             decoration: InputDecoration(labelText: widget.name, border: const OutlineInputBorder()),
             validator: (v) => widget.required && (widget.controller.text.isEmpty) ? 'Required' : null,
+            isExpanded: true,
           ),
         ),
       ],

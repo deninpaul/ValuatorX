@@ -25,8 +25,13 @@ class MediaProvider extends ChangeNotifier {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
       for (var id in ids) {
-        final String downloadLink = await driveService.getFileDownloadLink(client: client, id: id);
-        downloadLinks.add(downloadLink);
+        try {
+          final String downloadLink = await driveService.getFileDownloadLink(client: client, id: id);
+          downloadLinks.add(downloadLink);
+        } catch(e) {
+          debugPrint(e.toString());
+          continue;
+        }
       }
       return downloadLinks;
     } catch (e) {

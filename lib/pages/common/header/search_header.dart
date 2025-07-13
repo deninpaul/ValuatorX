@@ -31,7 +31,7 @@ class _SearchHeaderState extends State<SearchHeader> {
     final colorScheme = theme.colorScheme;
 
     return PopScope(
-      canPop: widget.query.isEmpty,
+      canPop: controller.text.isEmpty,
       onPopInvokedWithResult: (didPop, result) => onClear(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

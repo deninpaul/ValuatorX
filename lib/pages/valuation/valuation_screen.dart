@@ -27,9 +27,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
   String filter = Valuation.statusOptions[0];
   Timer? timer;
 
-  String subtitle(Valuation valuation) {
-    return [valuation.village, valuation.taluk].where((e) => e.trim().isNotEmpty).join(', ');
-  }
+
 
   onSearchAction(String val) {
     setState(() => searchQuery = val);
@@ -144,8 +142,8 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                         itemBuilder: (ctx, valuation, index) {
                           return SummaryTile(
                             id: valuation.id,
-                            title: valuation.reportName,
-                            subtitle: subtitle(valuation).isNotEmpty ? subtitle(valuation) : "N/A",
+                            title: valuation.title,
+                            subtitle: valuation.subtitle,
                             info: valuation.dateOfInspection,
                             tag: valuation.status,
                             onTapAction: viewValuation,

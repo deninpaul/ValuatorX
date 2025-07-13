@@ -54,3 +54,38 @@ EdgeInsets formPadding(context) => EdgeInsets.symmetric(
           : 48,
   vertical: 32,
 );
+
+String extractPersons(String input) {
+  final results = <String>[];
+  input = input.replaceAll("\n", ", ");
+  input = input.replaceAll("&", ", ");
+  input = input.replaceAllMapped(
+    RegExp(r'\b(S/o|D/o|W/o|F/o)\s*,\s*(Mr\.|Mrs\.|Ms\.|Dr\.|M/s\.)?\s*([A-Za-z@.\s]+)', caseSensitive: false),
+    (m) => '${m.group(1)} ${m.group(2)?.trim() ?? ''}${m.group(3)?.trim() ?? ''}',
+  );
+  final relationRegex = RegExp(
+    r'(?:\b(Mr\.|Mrs\.|Ms\.|M/s\.|Miss|Dr\.)\s*)?([A-Za-z.\s]+?)\s*,?\s*(S/o|D/o|W/o|F/o)\s*([A-Za-z.\s@&]*)',
+    caseSensitive: false,
+  );
+  for (final match in relationRegex.allMatches(input)) {
+    final title = match.group(1)?.trim() ?? '';
+    final name = match.group(2)?.trim().replaceAll(RegExp(r'^[.\s]+|[.\s]+$'), '') ?? '';
+    final relation = match.group(3);
+    final relatedTo = (match.group(4) ?? '').split('&').first.split(',').first.replaceAll('@', '').trim();
+    final fullName = '$title$name';
+    results.add(relatedTo.isNotEmpty ? '$fullName ($relation $relatedTo)' : '$fullName ($relation)');
+  }
+  if (results.isEmpty) {
+    final justNameRegex = RegExp(r'\b(Mr\.|Mrs\.|Ms\.|M/s\.|Miss|Dr\.)\s*([A-Za-z]+(?:\s+[A-Za-z.]+)?)', caseSensitive: false);
+    for (final match in justNameRegex.allMatches(input)) {
+      final title = match.group(1)?.trim() ?? '';
+      final name = match.group(2)?.trim() ?? '';
+      results.add('$title$name');
+    }
+  }
+  if (results.isEmpty) {
+    final rawName = input.trim().split(RegExp(r'[,.\n]')).firstWhere((part) => part.trim().isNotEmpty, orElse: () => '');
+    if (rawName.isNotEmpty) results.add(rawName.trim());
+  }
+  return results.take(3).join(', ');
+}

@@ -7,6 +7,7 @@ class AreaField extends StatelessWidget {
   final bool required;
   final bool enabled;
   final String focusField;
+  final bool isChild;
   const AreaField({
     super.key,
     required this.name,
@@ -14,7 +15,8 @@ class AreaField extends StatelessWidget {
     this.icon,
     this.required = false,
     this.enabled = true,
-    this.focusField = ""
+    this.focusField = "",
+    this.isChild = false,
   });
 
   @override
@@ -23,6 +25,7 @@ class AreaField extends StatelessWidget {
       spacing: 24,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (isChild) SizedBox(width: 20),
         if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(icon)),
         Expanded(
           child: TextFormField(

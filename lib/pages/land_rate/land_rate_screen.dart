@@ -12,7 +12,7 @@ import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/map/cluster_icon.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
 import 'package:valuatorx/pages/common/map/map_wrapper.dart';
-import 'package:valuatorx/pages/common/summary_tile.dart';
+import 'package:valuatorx/pages/common/tiles/summary_tile.dart';
 import 'package:valuatorx/pages/common/map/numbered_marker.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_details.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_form.dart';

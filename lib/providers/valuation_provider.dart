@@ -46,10 +46,11 @@ class ValuationProvider extends ChangeNotifier {
   }
 
   List<Valuation> getSearchResults({String query = "", String filter = ""}) {
+    query = normalizeString(query);
     var result = allValutions.where(
-      (val) => "${val.reportReference} ${val.status} ${val.dateOfInspection} ${val.village} ${val.taluk} ${val.mortgagorDetail} ${val.fileAllocationDetail}"
-          .toLowerCase()
-          .contains(query.toLowerCase()),
+      (val) => normalizeString(
+        [val.reportReference, val.dateOfInspection, val.village, val.taluk, val.mortgagorDetail, val.fileAllocationDetail].join(' '),
+      ).contains(query),
     );
     switch (filter) {
       case "In progress":
@@ -78,7 +79,8 @@ class ValuationProvider extends ChangeNotifier {
       final values = await service.generateTableValues(client: client, data: newValuation.toJson());
       await service.addToExcelTable(client: client, values: values);
       debugPrint("New Valuation added to Excel table successfully.");
-      await getValuations(context, refresh: false);
+      valuations = [newValuation, ...valuations];
+      getValuations(context, refresh: false);
       success = true;
     } catch (e) {
       debugPrint("Failed to add Valuation: ${e.toString()}");
@@ -97,7 +99,8 @@ class ValuationProvider extends ChangeNotifier {
       final values = await service.generateTableValues(client: client, data: valuation.toJson());
       await service.updateExcelTableRow(client: client, index: valuation.id, values: values);
       debugPrint("Valuation ${valuation.reportReference} updated in Excel table successfully.");
-      await getValuations(context, refresh: false);
+      valuations[valuations.indexWhere((v) => v.id == valuation.id)] = valuation;
+      getValuations(context, refresh: false);
       success = true;
     } catch (e) {
       debugPrint("Failed to update Valuation: ${e.toString()}");
@@ -114,7 +117,8 @@ class ValuationProvider extends ChangeNotifier {
       final client = await authProvider.getClient();
       await service.deleteExcelTableRow(client: client, index: valuation.id);
       debugPrint("Valuation ${valuation.reportReference} deleted from Excel table successfully.");
-      await getValuations(context, refresh: false);
+      valuations.removeWhere((v) => v.id == valuation.id);
+      getValuations(context, refresh: false);
     } catch (e) {
       debugPrint("Failed to delete Valuation: ${e.toString()}");
     } finally {

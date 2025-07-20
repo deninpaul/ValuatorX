@@ -160,28 +160,30 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                   spacing: 12,
                   children: [
                     if (!isMobile(context))
-                      Row(
-                        spacing: 16,
-                        children: [
-                          Expanded(
-                            child: ViewTile(
-                              title: Valuation.REPORT_REFERENCE,
-                              value: widget.valuation.reportReference,
-                              icon: Icons.numbers_outlined,
-                              onPressed: onEditAction,
-                              tabIndex: 0,
+                      IntrinsicHeight(
+                        child: Row(
+                          spacing: 16,
+                          children: [
+                            Expanded(
+                              child: ViewTile(
+                                title: Valuation.REPORT_REFERENCE,
+                                value: widget.valuation.reportReference,
+                                icon: Icons.numbers_outlined,
+                                onPressed: onEditAction,
+                                tabIndex: 0,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: ViewTile(
-                              title: Valuation.DATE_OF_INSPECTION,
-                              value: widget.valuation.dateOfInspection,
-                              icon: Icons.calendar_today_outlined,
-                              onPressed: onEditAction,
-                              tabIndex: 0,
+                            Expanded(
+                              child: ViewTile(
+                                title: Valuation.DATE_OF_INSPECTION,
+                                value: widget.valuation.dateOfInspection,
+                                icon: Icons.calendar_today_outlined,
+                                onPressed: onEditAction,
+                                tabIndex: 0,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                     else ...[
                       ViewTile(

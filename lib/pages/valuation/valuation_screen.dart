@@ -7,8 +7,8 @@ import 'package:valuatorx/pages/common/button/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/header/filter_pill.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
-import 'package:valuatorx/pages/common/view/info_tile.dart';
-import 'package:valuatorx/pages/common/summary_tile.dart';
+import 'package:valuatorx/pages/common/tiles/info_tile.dart';
+import 'package:valuatorx/pages/common/tiles/summary_tile.dart';
 import 'package:valuatorx/pages/valuation/valuation_details.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
@@ -81,6 +81,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final provider = Provider.of<ValuationProvider>(context);
     final isHomePage = provider.selectedItem == "";
     final total = provider.allValutions.length.toString().padLeft(2, '0');
@@ -107,7 +108,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                         name: "Valuation",
                         query: searchQuery,
                         onSearch: onSearchAction,
-                        actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh"))],
+                        actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh", style: textTheme.bodyMedium,))],
                       ),
                       SizedBox(height: 16),
                       Row(

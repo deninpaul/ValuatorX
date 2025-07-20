@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/models/tab.dart';
 import 'package:valuatorx/pages/land_rate/land_rate_screen.dart';
+import 'package:valuatorx/pages/more/more_screen.dart';
 import 'package:valuatorx/pages/valuation/valuation_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:animations/animations.dart';
@@ -67,12 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "More tools",
         icon: Icon(Icons.more_horiz_outlined),
         selectedIcon: Icon(Icons.more_horiz_rounded),
-        child: Container(
-          alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.only(bottom: 36),
-          child: Text("ValuatorX\nApp Version: v1.0.2", textAlign: TextAlign.center, 
-          style: TextStyle(color: Colors.black87),),
-        ),
+        child: MoreScreen(),
       ),
     ];
   }
@@ -147,25 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? Container(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   color: colorScheme.surfaceContainer,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: BottomNavigationBar(
-                          elevation: 0,
-                          onTap: onSelectTab,
-                          currentIndex: selectedIndex,
-                          backgroundColor: colorScheme.surfaceContainer,
-                          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-                          items: [
-                            ...tabs.map((tab) => BottomNavigationBarItem(icon: tab.icon, activeIcon: tab.selectedIcon, label: tab.name)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      LogOutButtonMobile(onTap: signOut),
-                      SizedBox(width: 28),
-                    ],
+                  child: BottomNavigationBar(
+                    elevation: 0,
+                    onTap: onSelectTab,
+                    currentIndex: selectedIndex,
+                    backgroundColor: colorScheme.surfaceContainer,
+                    landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+                    items: [...tabs.map((tab) => BottomNavigationBarItem(icon: tab.icon, activeIcon: tab.selectedIcon, label: tab.name))],
                   ),
                 )
                 : null,

@@ -60,7 +60,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
     final provider = Provider.of<MediaProvider>(context, listen: false);
     final url = await provider.openImageUrl(context, id);
     if (!await launchUrl(Uri.parse(url))) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not launch Google Maps')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not open image')));
     }
   }
 

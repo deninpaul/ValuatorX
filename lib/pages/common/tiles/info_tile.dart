@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 class InfoTile extends StatelessWidget {
   final String title;
   final String value;
-  final bool iconOnly;
   final IconData? icon;
 
-  const InfoTile({super.key, this.title = "", this.value = "", this.icon, this.iconOnly = false});
+  const InfoTile({super.key, this.title = "", this.value = "", this.icon });
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +23,10 @@ class InfoTile extends StatelessWidget {
         children: [
           if (icon != null)
             Container(
-              decoration: BoxDecoration(shape: BoxShape.circle, color: !iconOnly ? colorScheme.primaryContainer : Colors.transparent),
-              padding: !iconOnly ? EdgeInsets.all(8) : EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: colorScheme.primaryContainer),
+              padding: EdgeInsets.all(8),
               child: Icon(icon, color: colorScheme.primary),
             ),
-          if (!iconOnly)
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 20),

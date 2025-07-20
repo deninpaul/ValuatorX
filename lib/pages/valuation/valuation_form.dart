@@ -46,7 +46,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   Valuation generateValuation(String? id, {String? status}) {
     final values = {
       for (final key in fieldKeys) key: controllers[key]!.text.trim(),
-      if (status != null) Valuation.STATUS: status,
+      Valuation.STATUS: status ?? controllers[Valuation.STATUS]!.text.trim(),
       Valuation.ID: id ?? "",
     };
     return Valuation.fromJson(values);
@@ -105,8 +105,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   submitForm() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     final id = widget.editMode && !widget.isDraft ? provider.getSelectedValuation().id : provider.generateIndex();
-    final valuation = generateValuation(id);
-    valuation.status = Valuation.statusOptions[0];
+    final valuation = generateValuation(id, status: !widget.editMode ? Valuation.statusOptions[0] : null);
     final done =
         widget.editMode && !widget.isDraft
             ? await provider.updateValuation(context, valuation)
@@ -116,6 +115,8 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
       if (widget.isDraft) {
         provider.setSelectedItem(id);
       }
+    } else {
+      await saveDraft();
     }
   }
 
@@ -204,7 +205,6 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                           controller: controllers[Valuation.REPORT_REFERENCE]!,
                           icon: Icons.person_outline,
                           focusField: widget.focusField,
-                          type: TextInputType.numberWithOptions(),
                           required: true,
                         ),
                         DatePickerField(

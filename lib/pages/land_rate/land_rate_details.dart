@@ -51,7 +51,7 @@ class LandRateDetails extends StatelessWidget {
 
     onOpenMapAction() async {
       final url = Uri.parse('https://www.google.com/maps/search/?api=1&query=${landRate.latitude},${landRate.longitude}');
-      if (!await launchUrl(url)) {
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not launch Google Maps')));
       }
     }

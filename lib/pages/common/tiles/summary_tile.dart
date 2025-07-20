@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:valuatorx/pages/common/field/tag.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class SummaryTile extends StatelessWidget {
   final String id;
@@ -46,7 +47,13 @@ class SummaryTile extends StatelessWidget {
                     spacing: 4,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: textTheme.bodyLarge!.copyWith(color: colorScheme.onSurface)),
+                      Text(
+                        title,
+                        style: textTheme.bodyLarge!.copyWith(color: colorScheme.onSurface, overflow: TextOverflow.visible),
+                        maxLines: isMobile(context) ? 3 : 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      ),
                       Text(subtitle, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
                     ],
                   ),
@@ -60,7 +67,6 @@ class SummaryTile extends StatelessWidget {
                       padding: EdgeInsets.only(right: 4),
                       child: Text(info, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
                     ),
-                    
                   ],
                 ),
               ],

@@ -1,7 +1,7 @@
 name: valuatorx
 description: "Create and manage valuation reports and more with ValuatorX"
 publish_to: 'none'
-version: 1.0.2+18
+version: 1.0.3+23
 environment:
   sdk: ^3.7.0
 dependencies:
@@ -30,6 +30,7 @@ dependencies:
   url_launcher: ^6.3.1
   webview_flutter: ^4.0.0
   markdown: ^7.3.0
+  flutter_compass: ^0.8.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -55,6 +55,10 @@ EdgeInsets formPadding(context) => EdgeInsets.symmetric(
   vertical: 32,
 );
 
+String normalizeString(String input) {
+  return input.toLowerCase().replaceAll(RegExp(r'[^\w]+'), ' ').trim();
+}
+
 String extractPersons(String input) {
   final results = <String>[];
   input = input.replaceAll("\n", ", ");

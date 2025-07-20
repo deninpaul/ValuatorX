@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'ValuatorX',
         color: Colors.white,
-        theme: globalTheme(context),
+        theme: theme(context),
         routes: {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginScreen(),

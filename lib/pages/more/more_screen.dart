@@ -1,13 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:valuatorx/pages/common/tiles/link_tile.dart';
 import 'package:valuatorx/pages/more/compass_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:valuatorx/utils/common.dart';
 
-class MoreScreen extends StatelessWidget {
+class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
+
+  @override
+  State<MoreScreen> createState() => _MoreScreenState();
+}
+
+class _MoreScreenState extends State<MoreScreen> {
+  String name = "Full name";
+  String email = "email@samanto.in";
+  String profile = "SA";
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final (resName, resEmail, resProfile) = await authProvider.getProfile();
+      setState(() {
+        name = resName;
+        email = resEmail;
+        profile = resProfile;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +39,8 @@ class MoreScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
     final authProvider = Provider.of<AuthProvider>(context);
+    final skeletonDecoration = BoxDecoration(color: colorScheme.surfaceContainer, borderRadius: BorderRadius.circular(40));
+
     int columnCount =
         isMobile(context)
             ? 4
@@ -54,14 +80,27 @@ class MoreScreen extends StatelessWidget {
                         Row(
                           spacing: 20,
                           children: [
-                            CircleAvatar(backgroundColor: colorScheme.primaryContainer, radius: 24, child: Text("AP")),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Anto Paul", style: textTheme.bodyLarge),
-                                Text("antopaul@samanto.in", style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
-                              ],
-                            ),
+                            CircleAvatar(backgroundColor: colorScheme.primaryContainer, radius: 24, child: authProvider.isLoading ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3,),) : Text(profile)),
+                            authProvider.isLoading
+                                ? Shimmer.fromColors(
+                                  baseColor: colorScheme.surfaceContainerHigh,
+                                  highlightColor: colorScheme.surfaceContainer,
+                                  child: Column(
+                                    spacing: 8,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(width: 80, height: 12, decoration: skeletonDecoration),
+                                      Container(width: 160, height: 12, decoration: skeletonDecoration),
+                                    ],
+                                  ),
+                                )
+                                : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(name, style: textTheme.bodyLarge),
+                                    Text(email, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
+                                  ],
+                                ),
                           ],
                         ),
                         PopupMenuButton(
@@ -173,6 +212,5 @@ class MoreTitle extends StatelessWidget {
     final textTheme = theme.textTheme;
 
     return Padding(padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8), child: Text(title, style: textTheme.bodyLarge));
-    ;
   }
 }

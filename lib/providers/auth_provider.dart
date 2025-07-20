@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
@@ -8,6 +10,10 @@ class AuthProvider extends ChangeNotifier {
   oauth2.Credentials? _credentials;
   oauth2.AuthorizationCodeGrant? _grant;
   bool _hasHandledCode = false;
+
+  String fullName = "";
+  String email = "";
+  String profile = "";
 
   // Microsoft OAuth configuration
   final String _clientId = kIsWeb ? const String.fromEnvironment('CLIENT_ID') : dotenv.env['CLIENT_ID'] ?? '';
@@ -106,6 +112,31 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint("Error saving credentials: $e");
+    }
+  }
+
+  Future<(String, String, String)> getProfile() async {
+    try {
+      if (fullName.isEmpty || email.isEmpty || profile.isEmpty) {
+        setLoading(true);
+        final client = await getClient();
+        final response = await client.get(Uri.parse('https://graph.microsoft.com/v1.0/me'));
+        if (response.statusCode != 200) {
+          debugPrint("Error getting profile details. ${response.statusCode} ${response.body}");
+        }
+        final responseData = json.decode(response.body);
+        final firstName = responseData["givenName"].toString().trim();
+        final surName = responseData["surname"].toString().trim();
+        fullName = responseData["displayName"].toString().trim();
+        email = responseData["mail"].toString().trim();
+        profile = (firstName.isEmpty || surName.isEmpty) ? email.toString().substring(0, 2) : "${firstName[0]}${surName[0]}".toUpperCase();
+        setLoading(false);
+      }
+      return (fullName, email, profile);
+    } catch (e) {
+      debugPrint("Error getting profile detailse: $e");
+      setLoading(false);
+      return ("", "", "");
     }
   }
 

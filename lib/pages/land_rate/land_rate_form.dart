@@ -102,7 +102,11 @@ class _LandRateFormState extends State<LandRateForm> {
           leading: IconButton(icon: Icon(Icons.close), onPressed: cancelForm),
           actions: [
             SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready, creating: provider.isCreating),
-            PopupMenuButton(offset: const Offset(0, 48), itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))]),
+            PopupMenuButton(
+              icon: Icon(Icons.more_vert),
+              offset: const Offset(0, 48),
+              itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))],
+            ),
           ],
         ),
         body: SingleChildScrollView(

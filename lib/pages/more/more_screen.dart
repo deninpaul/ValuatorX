@@ -41,13 +41,6 @@ class _MoreScreenState extends State<MoreScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
     final skeletonDecoration = BoxDecoration(color: colorScheme.surfaceContainer, borderRadius: BorderRadius.circular(40));
 
-    int columnCount =
-        isMobile(context)
-            ? 4
-            : isDesktop(context)
-            ? 11
-            : 5;
-
     onLogOut() {
       authProvider.signOut();
       Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false);
@@ -80,7 +73,14 @@ class _MoreScreenState extends State<MoreScreen> {
                         Row(
                           spacing: 20,
                           children: [
-                            CircleAvatar(backgroundColor: colorScheme.primaryContainer, radius: 24, child: authProvider.isLoading ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3,),) : Text(profile)),
+                            CircleAvatar(
+                              backgroundColor: colorScheme.primaryContainer,
+                              radius: 24,
+                              child:
+                                  authProvider.isLoading
+                                      ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
+                                      : Text(profile),
+                            ),
                             authProvider.isLoading
                                 ? Shimmer.fromColors(
                                   baseColor: colorScheme.surfaceContainerHigh,
@@ -104,14 +104,20 @@ class _MoreScreenState extends State<MoreScreen> {
                           ],
                         ),
                         PopupMenuButton(
-                          offset: const Offset(-16, 44),
+                          icon: Icon(Icons.more_vert),
+                          offset: const Offset(-16, 40),
                           itemBuilder:
                               (ctx) => [
                                 PopupMenuItem(
                                   onTap: () => onOpenURL('https://myaccount.microsoft.com/'),
-                                  child: Text("View account", style: textTheme.bodyMedium),
+                                  child: Text("View account  ", style: textTheme.bodyMedium),
                                 ),
-                                PopupMenuItem(onTap: onLogOut, child: Text("Log out", style: textTheme.bodyMedium)),
+                                PopupMenuItem(
+                                  onTap: onLogOut,
+                                  child: Row(
+                                    children: [Text("Log out   ", style: textTheme.bodyMedium!.copyWith(color: colorScheme.error))],
+                                  ),
+                                ),
                               ],
                         ),
                       ],
@@ -119,77 +125,73 @@ class _MoreScreenState extends State<MoreScreen> {
                   ),
                   SizedBox(height: 8),
                   MoreTitle(title: "Shortcuts"),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
-                      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          SizedBox(height: 8),
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              double spacing = 16;
-                              double itemWidth = (constraints.maxWidth - (columnCount - 1) * spacing) / columnCount;
-                              final tiles = [
-                                LinkTile(
-                                  onPressed: () => onOpenURL('http://bit.ly/4lZL6ah'),
-                                  title: "Onedrive",
-                                  subTitle: "Open",
-                                  icon: Icons.cloud,
-                                ),
-                                LinkTile(
-                                  onPressed: () => onOpenURL('https://mapp.lichousing.com/LIC-HFL-VYOM/login'),
-                                  title: "LIC Portal",
-                                  subTitle: "Open",
-                                  icon: Icons.home_rounded,
-                                ),
-                                LinkTile(
-                                  onPressed: () => onOpenURL('https://vvm.bank.sbi:9445/VVM/portal/'),
-                                  title: "SBI Portal",
-                                  subTitle: "Open",
-                                  icon: Icons.account_balance,
-                                ),
-                                LinkTile(
-                                  onPressed: () => onOpenURL('https://igr.kerala.gov.in/index.php/fairvalue/view_fairvalue'),
-                                  title: "Fair Value \nof Land",
-                                  subTitle: "Open",
-                                  icon: Icons.paid_rounded,
-                                ),
-                                LinkTile(
-                                  onPressed: () => onOpenURL('https://bhuvan-app1.nrsc.gov.in/bhuvan2d2.0/'),
-                                  title: "Bhuvan 2D",
-                                  subTitle: "Open",
-                                  icon: Icons.public_rounded,
-                                ),
-                                LinkTile(
-                                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CompassScreen())),
-                                  title: "Compass",
-                                  subTitle: "Open",
-                                  icon: Icons.explore_rounded,
-                                ),
-                              ];
-                              return Wrap(
-                                spacing: spacing,
-                                runSpacing: 32,
-                                alignment: WrapAlignment.start,
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                children: [...tiles.map((tile) => SizedBox(width: itemWidth, child: tile))],
-                              );
-                            },
-                          ),
-                          Spacer(),
-                          Container(
-                            padding: EdgeInsets.only(bottom: 0, top: 16),
-                            child: Text(
-                              "ValuatorX\nApp Version: v1.0.3",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: theme.hintColor),
-                            ),
-                          ),
-                        ],
-                      ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+                    decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(height: 8),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            double itemWidth = 80;
+                            double columnCount = MediaQuery.of(context).size.width / (isMobile(context) ? 100 : 120);
+                            double spacing = (constraints.maxWidth - columnCount.floor() * itemWidth) / (columnCount.floor() - 1);
+                            final tiles = [
+                              LinkTile(
+                                onPressed: () => onOpenURL('https://samantoassociates-my.sharepoint.com/my?id=%2Fpersonal%2Fantopaul%5Fsamanto%5Fin%2FDocuments%2FSAMANTO%20ASSOCIATES%20%28P%29%20Ltd'),
+                                title: "Onedrive",
+                                subTitle: "Open",
+                                icon: Icons.cloud,
+                              ),
+                              LinkTile(
+                                onPressed: () => onOpenURL('https://mapp.lichousing.com/LIC-HFL-VYOM/login'),
+                                title: "LIC Portal",
+                                subTitle: "Open",
+                                icon: Icons.home_rounded,
+                              ),
+                              LinkTile(
+                                onPressed: () => onOpenURL('https://vvm.bank.sbi:9445/VVM/portal/'),
+                                title: "SBI Portal",
+                                subTitle: "Open",
+                                icon: Icons.account_balance,
+                              ),
+                              LinkTile(
+                                onPressed: () => onOpenURL('https://igr.kerala.gov.in/index.php/fairvalue/view_fairvalue'),
+                                title: "Fair Value \nof Land",
+                                subTitle: "Open",
+                                icon: Icons.paid_rounded,
+                              ),
+                              LinkTile(
+                                onPressed: () => onOpenURL('https://bhuvan-app1.nrsc.gov.in/bhuvan2d2.0/'),
+                                title: "Bhuvan 2D",
+                                subTitle: "Open",
+                                icon: Icons.public_rounded,
+                              ),
+                              LinkTile(
+                                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CompassScreen())),
+                                title: "Compass",
+                                subTitle: "Open",
+                                icon: Icons.explore_rounded,
+                              ),
+                            ];
+                            return Wrap(
+                              spacing: spacing,
+                              runSpacing: 32,
+                              alignment: WrapAlignment.start,
+                              crossAxisAlignment: WrapCrossAlignment.start,
+                              children: [...tiles.map((tile) => SizedBox(width: itemWidth, child: tile))],
+                            );
+                          },
+                        ),
+                        SizedBox(height: 16),
+                      ],
                     ),
+                  ),
+                  Spacer(),
+                  Container(
+                    padding: EdgeInsets.only(bottom: isMobile(context) ? 8 : 12, top: 16),
+                    child: Text("ValuatorX\nApp Version: v1.0.3", textAlign: TextAlign.center, style: TextStyle(color: theme.hintColor)),
                   ),
                 ],
               ),

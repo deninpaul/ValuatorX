@@ -174,7 +174,11 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
         actions: [
           SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready, creating: provider.isCreating),
           if (kIsWeb) SizedBox(width: 8),
-          PopupMenuButton(offset: const Offset(0, 48), itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))]),
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            offset: const Offset(0, 48),
+            itemBuilder: (ctx) => [PopupMenuItem(child: Text("Clear form"))],
+          ),
           if (kIsWeb) SizedBox(width: 8),
         ],
         bottom: TabBar(controller: _tabController, isScrollable: true, tabs: tabs.map((tab) => Tab(text: tab)).toList()),

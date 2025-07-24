@@ -3,7 +3,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/pages/home_screen.dart';
 import 'package:valuatorx/pages/login/login_screen.dart';
-import 'package:valuatorx/pages/splash_screen/splash_screen.dart';
+import 'package:valuatorx/pages/login/splash_screen.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:valuatorx/providers/land_rate_provider.dart';

@@ -49,7 +49,7 @@ class _SearchHeaderState extends State<SearchHeader> {
               ),
             ),
           const SizedBox(width: 8),
-          PopupMenuButton(offset: const Offset(0, 48), itemBuilder: (ctx) => [...widget.actions]),
+          PopupMenuButton(icon: Icon(Icons.more_vert), offset: const Offset(0, 48), itemBuilder: (ctx) => [...widget.actions]),
         ],
       ),
     );

@@ -1,16 +1,24 @@
-# valuatorx
+<!-- <div align="center"> -->
 
-A new Flutter project.
+<img width="80" src="assets/logo.png">
 
-## Getting Started
+# ValuatorX
+<!-- </div> -->
 
-This project is a starting point for a Flutter application.
+**ValuatorX** is a Flutter app built for my father's construction consultancy, [Samanto Associates Pvt. Ltd.](https://samanto.in/) to streamline the process of creating and managing property valuation reports. It also includes a set of tools and shortcuts that support their workflow, making it the ideal starting point for their work.
 
-A few resources to get you started if this is your first Flutter project:
+Try it out: 
+- [Download on Google Play](https://play.google.com/store/apps/details?id=in.samanto.valuatorx) (closed beta)
+- [Access the Web App](https://samanto-valuatorx.web.app/login) (login requires access to Samanto Microsoft organization)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Screenshots
+![](assets/mockup.png)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Technologies Used
+
+| Tech | Purpose |
+|------|---------|
+| [Flutter](https://flutter.dev/) | Cross-platform frontend (mobile + web) |
+| [Microsoft Graph API](https://developer.microsoft.com/en-us/graph/graph-explorer) | Reads/writes to online Excel spreadsheets for data storage |
+| [Hive](https://github.com/isar/hive) | Auto-save local draft system |
+

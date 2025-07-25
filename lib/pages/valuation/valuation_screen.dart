@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/models/valuation.dart';
+import 'package:valuatorx/pages/common/animations/horizontal_transition.dart';
 import 'package:valuatorx/pages/common/button/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
 import 'package:valuatorx/pages/common/header/filter_pill.dart';
@@ -12,7 +12,6 @@ import 'package:valuatorx/pages/common/tiles/summary_tile.dart';
 import 'package:valuatorx/pages/valuation/valuation_details.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
-import 'package:valuatorx/utils/common.dart';
 
 class Valuations extends StatefulWidget {
   const Valuations({super.key});
@@ -91,68 +90,71 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
       provider.setSelectedItem(id);
     }
 
-    return PageTransitionSwitcher(
-      reverse: isHomePage,
-      transitionBuilder: defaultTransition(colorScheme.surfaceContainer),
-      child:
-          isHomePage
-              ? Scaffold(
-                backgroundColor: colorScheme.surfaceContainer,
-                floatingActionButton: CreateButton(createPage: ValuationForm(), label: "New report"),
-                body: RefreshIndicator(
-                  onRefresh: fetchAllValuations,
-                  child: ListView(
-                    key: const ValueKey('list'),
+    return Stack(
+      children: [
+        HorizontalTransition(
+          visible: isHomePage,
+          reverse: true,
+          child: Scaffold(
+            backgroundColor: colorScheme.surfaceContainer,
+            floatingActionButton: CreateButton(createPage: ValuationForm(), label: "New report"),
+            body: RefreshIndicator(
+              onRefresh: fetchAllValuations,
+              child: ListView(
+                key: const ValueKey('list'),
+                children: [
+                  SearchHeader(
+                    name: "Valuation",
+                    query: searchQuery,
+                    onSearch: onSearchAction,
+                    actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh", style: textTheme.bodyMedium))],
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    spacing: 20,
                     children: [
-                      SearchHeader(
-                        name: "Valuation",
-                        query: searchQuery,
-                        onSearch: onSearchAction,
-                        actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh", style: textTheme.bodyMedium,))],
-                      ),
-                      SizedBox(height: 16),
-                      Row(
-                        spacing: 20,
-                        children: [
-                          Expanded(child: InfoTile(icon: Icons.view_carousel_rounded, title: "Total reports", value: total)),
-                          Expanded(child: InfoTile(icon: Icons.timelapse_rounded, title: "In progress", value: inProgress)),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          spacing: 8,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            FilterPill(text: Valuation.statusOptions[0], selectedText: filter, onSelected: onSelectFilter),
-                            FilterPill(text: "All", selectedText: filter, onSelected: onSelectFilter),
-                            FilterPill(text: Valuation.statusOptions[1], selectedText: filter, onSelected: onSelectFilter),
-                            FilterPill(text: "Drafts", selectedText: filter, onSelected: onSelectFilter),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      ExpandableList(
-                        items: provider.getSearchResults(query: searchQuery, filter: filter),
-                        isLoading: provider.isLoading,
-                        initialCount: 30,
-                        itemBuilder: (ctx, valuation, index) {
-                          return SummaryTile(
-                            id: valuation.id,
-                            title: valuation.title,
-                            subtitle: valuation.subtitle,
-                            info: valuation.dateOfInspection,
-                            tag: valuation.status,
-                            onTapAction: viewValuation,
-                          );
-                        },
-                      ),
+                      Expanded(child: InfoTile(icon: Icons.view_carousel_rounded, title: "Total reports", value: total)),
+                      Expanded(child: InfoTile(icon: Icons.timelapse_rounded, title: "In progress", value: inProgress)),
                     ],
                   ),
-                ),
-              )
-              : ValuationDetails(valuation: provider.getSelectedValuation()),
+                  SizedBox(height: 16),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      spacing: 8,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        FilterPill(text: Valuation.statusOptions[0], selectedText: filter, onSelected: onSelectFilter),
+                        FilterPill(text: "All", selectedText: filter, onSelected: onSelectFilter),
+                        FilterPill(text: Valuation.statusOptions[1], selectedText: filter, onSelected: onSelectFilter),
+                        FilterPill(text: "Drafts", selectedText: filter, onSelected: onSelectFilter),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  ExpandableList(
+                    items: provider.getSearchResults(query: searchQuery, filter: filter),
+                    isLoading: provider.isLoading,
+                    initialCount: 30,
+                    incrementCount: 30,
+                    itemBuilder: (ctx, valuation, index) {
+                      return SummaryTile(
+                        id: valuation.id,
+                        title: valuation.title,
+                        subtitle: valuation.subtitle,
+                        info: valuation.dateOfInspection,
+                        tag: valuation.status,
+                        onTapAction: viewValuation,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        HorizontalTransition(visible: !isHomePage, destroyOnHide: true, child: ValuationDetails(valuation: provider.getSelectedValuation())),
+      ],
     );
   }
 }

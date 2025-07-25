@@ -34,7 +34,7 @@ class _SearchHeaderState extends State<SearchHeader> {
       canPop: controller.text.isEmpty,
       onPopInvokedWithResult: (didPop, result) => onClear(),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        spacing: 8,
         children: [
           if (widget.onSearch != null)
             Expanded(
@@ -44,11 +44,10 @@ class _SearchHeaderState extends State<SearchHeader> {
                 elevation: const WidgetStatePropertyAll(0),
                 backgroundColor: WidgetStatePropertyAll(colorScheme.surfaceBright),
                 hintText: "Search in ${widget.name.toLowerCase()}s",
-                leading: Padding(padding: const EdgeInsets.only(left: 8), child: Icon(Icons.search, color: theme.hintColor)),
+                leading: Padding(padding: EdgeInsets.only(left: 8), child: Icon(Icons.search, color: theme.hintColor)),
                 trailing: [if (controller.text.isNotEmpty) IconButton(onPressed: onClear, icon: Icon(Icons.close, color: theme.hintColor))],
               ),
             ),
-          const SizedBox(width: 8),
           PopupMenuButton(icon: Icon(Icons.more_vert), offset: const Offset(0, 48), itemBuilder: (ctx) => [...widget.actions]),
         ],
       ),

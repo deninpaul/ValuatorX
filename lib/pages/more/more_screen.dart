@@ -65,20 +65,20 @@ class _MoreScreenState extends State<MoreScreen> {
                 children: [
                   MoreTitle(title: "Account"),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                    decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
+                    padding: EdgeInsets.symmetric(horizontal: 18, vertical: 21),
+                    decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(26)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          spacing: 20,
+                          spacing: 21,
                           children: [
                             CircleAvatar(
                               backgroundColor: colorScheme.primaryContainer,
                               radius: 24,
                               child:
                                   authProvider.isLoading
-                                      ? SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3))
+                                      ? SizedBox(height: 21, width: 21, child: CircularProgressIndicator(strokeWidth: 3))
                                       : Text(profile),
                             ),
                             authProvider.isLoading
@@ -89,8 +89,8 @@ class _MoreScreenState extends State<MoreScreen> {
                                     spacing: 8,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Container(width: 80, height: 12, decoration: skeletonDecoration),
-                                      Container(width: 160, height: 12, decoration: skeletonDecoration),
+                                      Container(width: 76, height: 13, decoration: skeletonDecoration),
+                                      Container(width: 161, height: 13, decoration: skeletonDecoration),
                                     ],
                                   ),
                                 )
@@ -105,7 +105,7 @@ class _MoreScreenState extends State<MoreScreen> {
                         ),
                         PopupMenuButton(
                           icon: Icon(Icons.more_vert),
-                          offset: const Offset(-16, 40),
+                          offset: const Offset(-5, 5),
                           itemBuilder:
                               (ctx) => [
                                 PopupMenuItem(
@@ -126,15 +126,15 @@ class _MoreScreenState extends State<MoreScreen> {
                   SizedBox(height: 8),
                   MoreTitle(title: "Shortcuts"),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
-                    decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
+                    padding: EdgeInsets.fromLTRB(11,24,15,24),
+                    decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(26)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SizedBox(height: 8),
                         LayoutBuilder(
                           builder: (context, constraints) {
-                            double itemWidth = 80;
+                            double itemWidth = 76;
                             double columnCount = MediaQuery.of(context).size.width / (isMobile(context) ? 100 : 120);
                             double spacing = (constraints.maxWidth - columnCount.floor() * itemWidth) / (columnCount.floor() - 1);
                             final tiles = [
@@ -184,13 +184,13 @@ class _MoreScreenState extends State<MoreScreen> {
                             );
                           },
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 15),
                       ],
                     ),
                   ),
                   Spacer(),
                   Container(
-                    padding: EdgeInsets.only(bottom: isMobile(context) ? 8 : 12, top: 16),
+                    padding: EdgeInsets.only(bottom: isMobile(context) ? 8 : 11, top: 18),
                     child: Text("ValuatorX\nApp Version: v1.0.3", textAlign: TextAlign.center, style: TextStyle(color: theme.hintColor)),
                   ),
                 ],
@@ -213,6 +213,6 @@ class MoreTitle extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    return Padding(padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8), child: Text(title, style: textTheme.bodyLarge));
+    return Padding(padding: EdgeInsets.symmetric(vertical: 15, horizontal: 8), child: Text(title, style: textTheme.bodyLarge));
   }
 }

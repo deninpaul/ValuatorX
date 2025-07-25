@@ -15,7 +15,7 @@ class ActionButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8),
       width: isMobile(context) ? 84 : 92,
       child: Column(
-        spacing: 16,
+        spacing: 15,
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -24,7 +24,7 @@ class ActionButton extends StatelessWidget {
             onPressed: onPressed,
             icon: Icon(icon),
           ),
-          Text(label, style: texTheme.bodyMedium!.copyWith(height: 1.5), textAlign: TextAlign.center,),
+          Text(label, style: texTheme.bodyMedium!.copyWith(height: 1.4), textAlign: TextAlign.center,),
         ],
       ),
     );

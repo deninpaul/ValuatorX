@@ -85,14 +85,14 @@ class _LocationFieldState extends State<LocationField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 24,
       children: [
-        Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(widget.icon)),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 15), child: Icon(widget.icon)),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             spacing: 24,
             children: [
               Row(
-                spacing: 16,
+                spacing: 15,
                 children: [
                   Flexible(
                     child: TextFormField(

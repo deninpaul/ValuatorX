@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:valuatorx/utils/common.dart';
 import 'package:vector_math/vector_math.dart' as vector;
-
 
 class CompassScreen extends StatefulWidget {
   const CompassScreen({super.key});
@@ -16,18 +16,31 @@ class CompassScreen extends StatefulWidget {
 
 class _CompassScreenState extends State<CompassScreen> {
   double? _heading;
+  double? _accuracy;
+  String invalidMsg = "";
+  StreamSubscription<CompassEvent>? _compassSubscription;
 
   @override
   void initState() {
     super.initState();
-    // Listen to compass events
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      FlutterCompass.events?.listen((CompassEvent event) {
-        setState(() {
-          _heading = event.heading;
-        });
+      _compassSubscription = FlutterCompass.events?.listen((CompassEvent event) {
+        if (mounted) {
+          setState(() {
+            _heading = event.heading;
+            _accuracy = event.accuracy;
+          });
+        }
       });
+    } else {
+      setState(() => invalidMsg = "Compass isn't available on this platform");
     }
+  }
+
+  @override
+  void dispose() {
+    _compassSubscription?.cancel();
+    super.dispose();
   }
 
   // Helper function to convert heading in degrees to a cardinal direction string
@@ -44,15 +57,15 @@ class _CompassScreenState extends State<CompassScreen> {
     final direction = _getDirection(heading);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final  size = isMobile(context) ? 280.0 : 320.0;
+    final size = isMobile(context) ? 280.0 : 320.0;
 
     return Scaffold(
       backgroundColor: colorScheme.surfaceContainer,
       appBar: AppBar(toolbarHeight: 80, title: Text("Compass", style: headerTheme), backgroundColor: colorScheme.surfaceContainer),
       body: Container(
         width: double.infinity,
-        margin: EdgeInsets.fromLTRB(20,0,20,48),
-        decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
+        margin: EdgeInsets.fromLTRB(20, 0, 20, 48),
+        decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(26)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,16 +74,22 @@ class _CompassScreenState extends State<CompassScreen> {
               padding: EdgeInsets.only(left: 8),
               child: Text(
                 '$headingInDegrees°$direction',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w300, color: colorScheme.primary),
+                style: TextStyle(fontSize: 29, fontWeight: FontWeight.w300, color: colorScheme.primary),
               ),
             ),
-            Icon(Icons.keyboard_arrow_down, color: colorScheme.primary, size: 48),
+            Icon(Icons.keyboard_arrow_down, color: colorScheme.primary, size: 42),
             SizedBox(height: 20),
             Transform.rotate(
               angle: (heading != null) ? vector.radians(-heading) : 0,
-              child: CustomPaint(size: Size( size, size), painter: CompassPainter(theme)),
+              child: CustomPaint(size: Size(size, size), painter: CompassPainter(theme)),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 47),
+            Text(
+              invalidMsg.isNotEmpty ? invalidMsg : (_accuracy == null ? "Unable to determine direction" : "Accuracy: ±$_accuracy°"),
+              style: theme.textTheme.bodyLarge!.copyWith(
+                color: invalidMsg.isNotEmpty || _accuracy == null ? colorScheme.error : colorScheme.onSurfaceVariant,
+              ),
+            ),
           ],
         ),
       ),
@@ -138,7 +157,7 @@ class CompassPainter extends CustomPainter {
       final label = isDirection ? directions[i]! : i.toString();
       final textStyle = TextStyle(
         color: isDirection ? theme.hintColor : colorScheme.onSurfaceVariant,
-        fontSize: isDirection ? 28 : 16,
+        fontSize: isDirection ? 29 : 15,
         fontWeight: isDirection ? FontWeight.normal : FontWeight.w300,
       );
 

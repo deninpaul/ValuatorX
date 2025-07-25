@@ -53,7 +53,7 @@ class DatePickerField extends StatelessWidget {
         if (isChild) const SizedBox(width: 20),
         if (icon != null)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: 15),
             child: Icon(icon),
           ),
         Expanded(

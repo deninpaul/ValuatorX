@@ -178,7 +178,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
                     ? EdgeInsets.symmetric(vertical: 16, horizontal: isDesktop(context) ? 64 : 16)
                     : EdgeInsets.symmetric(vertical: 16),
             width: double.infinity,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(26), color: colorScheme.surface),
             child: Column(
               spacing: 8,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -193,7 +193,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.photo_size_select_actual_outlined, size: 48, color: theme.disabledColor),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 15),
                                     Text(
                                       'No images selected\nTap the button above to add images',
                                       textAlign: TextAlign.center,
@@ -204,9 +204,9 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
                               )
                               : GridView.builder(
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: isDesktop(context) ? 3 : 2,
-                                  crossAxisSpacing: 12,
-                                  mainAxisSpacing: 12,
+                                  crossAxisCount: isDesktop(context) ? 4 : (isMobile(context) ? 2 : 3),
+                                  crossAxisSpacing: 11,
+                                  mainAxisSpacing: 11,
                                   childAspectRatio: 1,
                                 ),
                                 itemCount: imageUrls.length,

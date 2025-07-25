@@ -109,15 +109,15 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                     onSearch: onSearchAction,
                     actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh", style: textTheme.bodyMedium))],
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 15),
                   Row(
-                    spacing: 20,
+                    spacing: 18,
                     children: [
                       Expanded(child: InfoTile(icon: Icons.view_carousel_rounded, title: "Total reports", value: total)),
                       Expanded(child: InfoTile(icon: Icons.timelapse_rounded, title: "In progress", value: inProgress)),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 15),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -131,7 +131,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                       ],
                     ),
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 15),
                   ExpandableList(
                     items: provider.getSearchResults(query: searchQuery, filter: filter),
                     isLoading: provider.isLoading,

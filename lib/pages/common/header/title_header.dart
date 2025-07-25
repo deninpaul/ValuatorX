@@ -27,7 +27,7 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
         expandedTitleScale: 1.175,
         title: Container(
           width: MediaQuery.of(context).size.width * 0.5,
-          padding: const EdgeInsets.only(top: 16.0),
+          padding: const EdgeInsets.only(top: 15.0),
           alignment: Alignment.bottomCenter,
           child: Text(title, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, textWidthBasis: TextWidthBasis.longestLine),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class InfoTile extends StatelessWidget {
   final String title;
@@ -15,9 +16,9 @@ class InfoTile extends StatelessWidget {
     final valueFormated = value.trim().isEmpty ? "-" : value;
 
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(horizontal: isMobile(context) ? 18 : 21, vertical: 18),
       margin: EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
+      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(26)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -29,11 +30,11 @@ class InfoTile extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 20),
+                padding: EdgeInsets.only(left: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 4,
+                  spacing: 2,
                   children: [
                     Text(valueFormated, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, maxLines: 1),
                     Text(

@@ -50,7 +50,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final provider = Provider.of<ValuationProvider>(context);
-    final formPadding = EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 16);
+    final formPadding = EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 15);
 
     onEditAction({String fieldName = "", int fieldTab = 0}) {
       Navigator.push(
@@ -157,12 +157,12 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
               SingleChildScrollView(
                 padding: formPadding,
                 child: Column(
-                  spacing: 12,
+                  spacing: 13,
                   children: [
                     if (!isMobile(context))
                       IntrinsicHeight(
                         child: Row(
-                          spacing: 16,
+                          spacing: 15,
                           children: [
                             Expanded(
                               child: ViewTile(
@@ -285,7 +285,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
               SingleChildScrollView(
                 padding: formPadding,
                 child: Column(
-                  spacing: 16,
+                  spacing: 13,
                   children: [
                     TableViewTile(
                       title: "Property Area",
@@ -310,7 +310,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     if (!isMobile(context))
                       IntrinsicHeight(
                         child: Row(
-                          spacing: 16,
+                          spacing: 15,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
@@ -347,7 +347,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     if (!isMobile(context))
                       IntrinsicHeight(
                         child: Row(
-                          spacing: 16,
+                          spacing: 15,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
@@ -441,7 +441,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
               SingleChildScrollView(
                 padding: formPadding,
                 child: Column(
-                  spacing: 16,
+                  spacing: 13,
                   children: [
                     ViewTile(
                       title: Valuation.HOUSE_NO_DOOR_NO,
@@ -474,7 +474,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     if (!isMobile(context))
                       IntrinsicHeight(
                         child: Row(
-                          spacing: 16,
+                          spacing: 15,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Flexible(
@@ -518,7 +518,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     if (!isMobile(context))
                       IntrinsicHeight(
                         child: Row(
-                          spacing: 16,
+                          spacing: 15,
                           children: [
                             Flexible(
                               flex: 6,

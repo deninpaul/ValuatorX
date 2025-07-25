@@ -143,8 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
-                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(26), color: colorScheme.surface),
+                              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 34),
                               constraints: BoxConstraints(maxWidth: 424),
                               child: Padding(
                                 padding: EdgeInsets.all(20),
@@ -155,13 +155,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Container(
                                       padding: EdgeInsets.all(8),
                                       decoration: BoxDecoration(shape: BoxShape.circle, color: colorScheme.surfaceContainer),
-                                      child: Image.asset("assets/logo_mono.png", width: 48),
+                                      child: Image.asset("assets/logo_mono.png", width: 47),
                                     ),
-                                    SizedBox(height: 32),
+                                    SizedBox(height: 29),
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 8),
                                       child: Column(
-                                        spacing: 16,
+                                        spacing: 15,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text("Welcome to ValuatorX", style: textTheme.headlineMedium!.copyWith(height: 1.35)),
@@ -172,22 +172,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 80),
+                                    SizedBox(height: 76),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 6),
+                                      padding: EdgeInsets.symmetric(horizontal: 5),
                                       child: TextButton(
                                         onPressed: startLogin,
                                         style: TextButton.styleFrom(
                                           backgroundColor: colorScheme.primaryContainer,
                                           foregroundColor: colorScheme.onPrimaryContainer,
-                                          padding: EdgeInsets.all(20),
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                          padding: EdgeInsets.all(21),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(21)),
                                         ),
                                         child: Row(
-                                          spacing: 16,
+                                          spacing: 15,
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Icon(Icons.window, size: 20),
+                                            Icon(Icons.window, size: 21),
                                             Text(
                                               "Sign in with Microsoft",
                                               style: textTheme.bodyMedium!.copyWith(color: colorScheme.onPrimaryContainer),

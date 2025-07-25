@@ -35,42 +35,39 @@ class SummaryTile extends StatelessWidget {
         splashColor: colorScheme.surfaceContainer,
         highlightColor: colorScheme.surfaceContainer,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-            child: Row(
-              spacing: 24,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    spacing: 4,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: textTheme.bodyLarge!.copyWith(color: colorScheme.onSurface, overflow: TextOverflow.visible),
-                        maxLines: isMobile(context) ? 3 : 2,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                      ),
-                      Text(subtitle, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
-                    ],
-                  ),
-                ),
-                Column(
-                  spacing: 7,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: isMobile(context) ? 21 : 24),
+          child: Row(
+            spacing: 24,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  spacing: 5,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Tag(text: tag),
-                    Padding(
-                      padding: EdgeInsets.only(right: 4),
-                      child: Text(info, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
+                    Text(
+                      title,
+                      style: textTheme.bodyLarge!.copyWith(color: colorScheme.onSurface, overflow: TextOverflow.visible),
+                      maxLines: isMobile(context) ? 3 : 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
                     ),
+                    Text(subtitle, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Column(
+                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Tag(text: tag),
+                  Padding(
+                    padding: EdgeInsets.only(right: 5),
+                    child: Text(info, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

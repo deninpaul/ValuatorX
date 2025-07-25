@@ -27,7 +27,7 @@ class BasicField extends StatelessWidget {
       spacing: 24,
       children: [
         if (isChild) SizedBox(width: 20),
-        if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(icon)),
+        if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 15), child: Icon(icon)),
         Expanded(
           child: TextFormField(
             controller: controller,

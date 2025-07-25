@@ -26,12 +26,12 @@ class AreaField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (isChild) SizedBox(width: 20),
-        if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(icon)),
+        if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 15), child: Icon(icon)),
         Expanded(
           child: TextFormField(
             controller: controller,
             enabled: enabled,
-            minLines: 3,
+            minLines: 4,
             maxLines: null,
             autofocus: name == focusField,
             textInputAction: TextInputAction.newline,

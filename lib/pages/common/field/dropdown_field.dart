@@ -55,7 +55,7 @@ class _DropdownFieldState extends State<DropdownField> {
       spacing: 24,
       children: [
         if (widget.isChild) const SizedBox(width: 20),
-        if (widget.icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Icon(widget.icon)),
+        if (widget.icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 15), child: Icon(widget.icon)),
         Expanded(
           child: DropdownButtonFormField<String>(
             autofocus: widget.name == widget.focusField,
@@ -108,7 +108,7 @@ class _CustomOptionDialogState extends State<CustomOptionDialog> {
     return AlertDialog(
       title: const Text('Enter custom option'),
       content: Padding(
-        padding: const EdgeInsets.only(top: 16),
+        padding: const EdgeInsets.only(top: 15),
         child: SizedBox(
           width: 320,
           child: TextField(

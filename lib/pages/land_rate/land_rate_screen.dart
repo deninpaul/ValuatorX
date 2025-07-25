@@ -96,12 +96,12 @@ class _LandRateScreenState extends State<LandRateScreen> {
                         onSearch: onSearchAction,
                         actions: [PopupMenuItem(onTap: fetchAllLandRates, child: Text("Refresh"))],
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 15),
                       Container(
                         height: MediaQuery.of(context).size.height / 1.75,
                         clipBehavior: Clip.hardEdge,
                         padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: colorScheme.surface),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(26), color: colorScheme.surface),
                         child: MapWrapper(
                           mapController: _mapController,
                           children: [
@@ -126,7 +126,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 15),
                       ExpandableList<LandRate>(
                         items: provider.getSearchResults(searchQuery).reversed.toList(),
                         isLoading: provider.isLoading,

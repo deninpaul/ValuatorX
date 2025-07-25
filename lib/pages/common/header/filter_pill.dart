@@ -19,7 +19,7 @@ class FilterPill extends StatelessWidget {
           onSelected(text);
         }
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
       selectedColor: colorScheme.primaryContainer,
     );
   }

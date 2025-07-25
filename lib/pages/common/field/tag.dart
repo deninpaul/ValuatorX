@@ -48,7 +48,7 @@ class _TagState extends State<Tag> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(28), color: tagColor()),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(26), color: tagColor()),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -64,7 +64,7 @@ class _TagState extends State<Tag> {
                             value: widget.text,
                             dropdownColor: colorScheme.surface,
                             style: textTheme.bodyMedium,
-                            icon: const Icon(Icons.expand_more, size: 20,),
+                            icon: Padding(padding: EdgeInsets.only(top: 2), child: Icon(Icons.expand_more, size: 21)),
                             elevation: 0,
                             padding: EdgeInsets.only(left: 4),
                             isDense: true,
@@ -81,17 +81,14 @@ class _TagState extends State<Tag> {
                         ),
                       )
                       : Container(
-                        width: 16,
-                        height: 16,
-                        margin: EdgeInsets.symmetric(horizontal: 50, vertical: 2),
+                        width: 15,
+                        height: 15,
+                        margin: EdgeInsets.symmetric(horizontal: 47, vertical: 2),
                         child: CircularProgressIndicator(strokeWidth: 3),
                       ),
             )
           else
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-              child: Text(widget.text, style: textTheme.bodyMedium),
-            ),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0), child: Text(widget.text, style: textTheme.bodyMedium)),
         ],
       ),
     );

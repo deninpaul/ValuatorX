@@ -56,7 +56,7 @@ class TableViewTile extends StatelessWidget {
       if (values[rowIndex].every((field) => field.isEmpty) && (rowIndex + 1) > minRows) return SizedBox();
 
       return Row(
-        spacing: 16,
+        spacing: 15,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ...List.generate(fieldNames[0].length, (colIndex) {

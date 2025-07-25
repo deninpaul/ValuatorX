@@ -24,14 +24,14 @@ class GroupViewWrapper extends StatelessWidget {
     final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return Container(
-      padding: EdgeInsets.only(bottom: 20, right: 16),
+      padding: EdgeInsets.only(bottom: 18, right: 15),
       decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(20)),
       child: Column(
         spacing: spacing,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 16, top: 24),
+            padding: const EdgeInsets.only(left: 15, top: 24),
             child: Row(spacing: 20, children: [Icon(icon), Text(title, style: textTheme.bodyLarge)]),
           ),
           ...children.map((child) => Padding(padding: contentPadding, child: child)),

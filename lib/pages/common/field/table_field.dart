@@ -52,7 +52,7 @@ class _TableFieldState extends State<TableField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(spacing: 24, children: [Icon(widget.icon), Text(widget.title, style: textTheme.bodyLarge)]),
-        const SizedBox(height: 16),
+        const SizedBox(height: 15),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: ConstrainedBox(

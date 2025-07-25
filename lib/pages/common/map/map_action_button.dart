@@ -25,7 +25,7 @@ class MapActionButton extends StatelessWidget {
         disabledBackgroundColor: colorScheme.surface,
       ),
       child: isLoading
-          ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 3,))
+          ? SizedBox(width: 15, height: 15, child: CircularProgressIndicator(strokeWidth: 3,))
           : Icon(icon, color: colorScheme.onSurfaceVariant),
     );
   }

@@ -49,7 +49,7 @@ class ImageViewer extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Row(
-                  spacing: 16,
+                  spacing: 15,
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -59,7 +59,7 @@ class ImageViewer extends StatelessWidget {
                         icon: const Icon(Icons.delete_outline),
                         label: const Text('Delete image'),
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 24 : 16, horizontal: 32),
+                          padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 24 : 15, horizontal: 32),
                           backgroundColor: colorScheme.errorContainer,
                           foregroundColor: colorScheme.error,
                           textStyle: textTheme.bodyMedium,
@@ -71,7 +71,7 @@ class ImageViewer extends StatelessWidget {
                         icon: const Icon(Icons.open_in_new),
                         label: const Text('Open image'),
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 24 : 16, horizontal: 32),
+                          padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 24 : 15, horizontal: 32),
                           backgroundColor: colorScheme.primaryContainer,
                           foregroundColor: colorScheme.onPrimaryContainer,
                           textStyle: textTheme.bodyMedium,
@@ -83,7 +83,7 @@ class ImageViewer extends StatelessWidget {
                       icon: const Icon(Icons.close),
                       label: const Text('Close'),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 24 : 16, horizontal: 32),
+                        padding: const EdgeInsets.symmetric(vertical: kIsWeb ? 24 : 15, horizontal: 32),
                         backgroundColor: colorScheme.surface,
                         foregroundColor: colorScheme.onSurface,
                         textStyle: textTheme.bodyMedium,

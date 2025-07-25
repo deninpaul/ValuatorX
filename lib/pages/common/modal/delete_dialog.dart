@@ -22,10 +22,10 @@ class _DeleteDialogState extends State<DeleteDialog> {
     return AlertDialog(
       title: Text('Confirm Deletion'),
       content: Column(
+        spacing: 15,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(padding: const EdgeInsets.only(right: 64.0), child: Text('Type DELETE to confirm deletion')),
-          SizedBox(height: 16),
           TextField(
             controller: _controller,
             decoration: InputDecoration(border: OutlineInputBorder()),

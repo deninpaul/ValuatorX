@@ -29,7 +29,7 @@ class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.only(bottom: 16),
+          padding: EdgeInsets.only(bottom: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -70,7 +70,7 @@ class LocationViewTile extends StatelessWidget {
           ),
         ),
         Row(
-          spacing: 16,
+          spacing: 15,
           children: [
             Expanded(child: ViewTile(title: "Latitude", value: latitude, onPressed: onPressed, tabIndex: tabIndex)),
             Expanded(child: ViewTile(title: "Longitude", value: longitude, onPressed: onPressed, tabIndex: tabIndex)),

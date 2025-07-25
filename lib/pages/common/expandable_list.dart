@@ -44,22 +44,18 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final divider = Divider(color: theme.dividerColor.withAlpha(64), indent: 24, endIndent: 24);
+    final double dividerIntent = isMobile(context) ? 21 : 24;
+    final Divider divider = Divider(color: theme.dividerColor.withAlpha(64), indent: dividerIntent, endIndent: dividerIntent);
     final minHeight = MediaQuery.of(context).size.height - 240 - (isMobile(context) ? 96 : 0) + (kIsWeb ? 28 : 0);
 
-    final int itemsToShow =
-        widget.items.isEmpty
-            ? 0
-            : _displayCount > widget.items.length
-            ? widget.items.length
-            : _displayCount;
+    final int itemsToShow = widget.items.isEmpty ? 0 : (_displayCount > widget.items.length ? widget.items.length : _displayCount);
     final bool showViewMoreButton = itemsToShow < widget.items.length;
 
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
       padding: const EdgeInsets.symmetric(vertical: 4),
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(28)),
+      margin: const EdgeInsets.only(bottom: 15),
+      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(26)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -84,7 +80,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
               },
             ),
           if (showViewMoreButton && !widget.isLoading)
-            Padding(padding: const EdgeInsets.only(bottom: 0), child: TextButton(onPressed: _loadMore, child: Text('View More')))
+            Padding(padding: const EdgeInsets.only(bottom: kIsWeb ? 8 : 0), child: TextButton(onPressed: _loadMore, child: Text('View More')))
           else
             SizedBox(height: 24),
         ],

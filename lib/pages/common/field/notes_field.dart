@@ -70,7 +70,7 @@ class _NotesFieldState extends State<NotesField> {
             focusNode: _focusNode,
             config: QuillEditorConfig(
               placeholder: widget.placeholder,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
               autoFocus: false,
               expands: true,
               scrollable: true,
@@ -105,14 +105,14 @@ class _NotesFieldState extends State<NotesField> {
           alignment: Alignment.bottomCenter,
           child: Container(
             margin: EdgeInsets.only(bottom: 24),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
             decoration: BoxDecoration(color: colorScheme.surfaceContainer, borderRadius: BorderRadius.circular(100)),
             child: QuillSimpleToolbar(
               controller: _quillController,
               config: QuillSimpleToolbarConfig(
                 showBoldButton: true,
                 showItalicButton: true,
-                showUnderLineButton: true,
+                showUnderLineButton: !isMobile(context),
                 showStrikeThrough: false,
                 showInlineCode: false,
                 showColorButton: false,
@@ -125,7 +125,7 @@ class _NotesFieldState extends State<NotesField> {
                 showListBullets: true,
                 showListCheck: false,
                 showCodeBlock: false,
-                showQuote: true,
+                showQuote: !isMobile(context),
                 showIndent: false,
                 showLink: false,
                 showUndo: true,
@@ -141,6 +141,7 @@ class _NotesFieldState extends State<NotesField> {
                 showClipboardCopy: false,
                 showClipboardCut: false,
                 showClipboardPaste: false,
+                buttonOptions: QuillSimpleToolbarButtonOptions(base: QuillToolbarBaseButtonOptions(iconSize: isMobile(context) ? 13 : 15)),
               ),
             ),
           ),

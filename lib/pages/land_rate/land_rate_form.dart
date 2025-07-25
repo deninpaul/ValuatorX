@@ -22,7 +22,7 @@ class _LandRateFormState extends State<LandRateForm> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> controllers = {};
   final List<String> fieldKeys = LandRate.editableFields;
-  late final baseValue;
+  late final LandRate baseValue;
   bool ready = false;
 
   @override

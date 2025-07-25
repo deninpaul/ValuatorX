@@ -17,22 +17,22 @@ class ViewTile extends StatelessWidget {
     final valueFormated = value.trim().isEmpty ? "-" : value;
 
     return Material(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(21),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () => onPressed != null ? onPressed!(fieldName: title, fieldTab: tabIndex) : () {},
         splashColor: colorScheme.surfaceContainerHigh,
         highlightColor: colorScheme.surfaceContainerHigh,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(16, 18, 24, 16),
+          padding: EdgeInsets.fromLTRB(18, 18, 18, 18),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              icon != null ? Padding(padding: const EdgeInsets.only(top: 14, right: 24), child: Icon(icon)) : SizedBox(width: 12),
+              icon != null ? Padding(padding: const EdgeInsets.only(top: 15, right: 21), child: Icon(icon)) : SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 7,
+                  spacing: 8,
                   children: [
                     Text(title, style: textTheme.bodySmall!.copyWith(color: theme.hintColor)),
                     SelectableText(valueFormated, style: textTheme.bodyLarge!.copyWith(height: 1.55)),

@@ -16,17 +16,17 @@ class LinkTile extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Column(
-      spacing: 16,
+      spacing: 15,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (icon != null)
           Material(
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(26),
             color: colorScheme.primaryContainer,
             clipBehavior: Clip.hardEdge,
             child: InkWell(
               onTap: onPressed,
-              child: Padding(padding: const EdgeInsets.all(14), child: Icon(icon, color: colorScheme.primary, size: 20)),
+              child: Padding(padding: const EdgeInsets.all(14), child: Icon(icon, color: colorScheme.primary, size: 21)),
             ),
           ),
         GestureDetector(

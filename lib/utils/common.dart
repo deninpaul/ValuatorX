@@ -45,15 +45,7 @@ bool isDesktop(BuildContext context) {
   return width > 1280;
 }
 
-EdgeInsets formPadding(context) => EdgeInsets.symmetric(
-  horizontal:
-      isMobile(context)
-          ? 24
-          : isDesktop(context)
-          ? 240
-          : 48,
-  vertical: 32,
-);
+EdgeInsets formPadding(context) => EdgeInsets.symmetric(horizontal: isMobile(context) ? 24 : (isDesktop(context) ? 240 : 48), vertical: 32);
 
 String normalizeString(String input) {
   return input.toLowerCase().replaceAll(RegExp(r'[^\w]+'), ' ').trim();
@@ -91,5 +83,18 @@ String extractPersons(String input) {
     final rawName = input.trim().split(RegExp(r'[,.\n]')).firstWhere((part) => part.trim().isNotEmpty, orElse: () => '');
     if (rawName.isNotEmpty) results.add(rawName.trim());
   }
-  return results.take(3).join(', ');
+  return results.take(2).join(', ');
+}
+
+String formatCamelCase (String input) {
+  return input.replaceAllMapped(
+    RegExp(r'([a-z])([A-Z])'),
+    (match) => '${match.group(1)} ${match.group(2)}',
+  );
+}
+
+Color darkenColor(Color color, [double amount = .05]) {
+  final hsl = HSLColor.fromColor(color);
+  final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+  return hslDark.toColor();
 }

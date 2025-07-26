@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -9,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:valuatorx/models/land_rate.dart';
 import 'package:valuatorx/pages/common/button/create_button.dart';
 import 'package:valuatorx/pages/common/expandable_list.dart';
+import 'package:valuatorx/pages/common/field/tag.dart';
+import 'package:valuatorx/pages/common/header/filter_pill.dart';
 import 'package:valuatorx/pages/common/map/cluster_icon.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
 import 'package:valuatorx/pages/common/map/map_wrapper.dart';
@@ -31,8 +32,13 @@ class _LandRateScreenState extends State<LandRateScreen> {
   final MapController _mapController = MapController();
   late LandRateProvider provider;
   late LocationProvider locationProvider;
+  String filter = LandRate.TABLE1;
   String searchQuery = "";
   Timer? timer;
+
+  onSelectFilter(String val) {
+    setState(() => filter = val.replaceAll(' ', ''));
+  }
 
   syncData() async {
     provider = Provider.of<LandRateProvider>(context, listen: false);
@@ -53,7 +59,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
 
   @override
   void dispose() {
-    provider.setSelectedItem("", notify: false);
+    provider.setSelectedItem("", "", notify: false);
     timer?.cancel();
     super.dispose();
   }
@@ -65,12 +71,18 @@ class _LandRateScreenState extends State<LandRateScreen> {
     final provider = Provider.of<LandRateProvider>(context);
     final isHomePage = provider.selectedItem.isEmpty;
 
-    viewLandRate(String id) {
-      provider.setSelectedItem(id);
+    viewLandRate(String id, String author) {
+      provider.setSelectedItem(id, author);
     }
 
     onSearchAction(String val) {
       setState(() => searchQuery = val);
+    }
+
+    onOpenCreate() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        provider.setSelectedTable(filter.replaceAll(' ', ''));
+      });
     }
 
     Future<void> fetchAllLandRates() async {
@@ -84,7 +96,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
           isHomePage
               ? Scaffold(
                 backgroundColor: colorScheme.surfaceContainer,
-                floatingActionButton: CreateButton(createPage: LandRateForm(), label: "Add rate"),
+                floatingActionButton: CreateButton(createPage: LandRateForm(), label: "Add rate", onOpen: onOpenCreate),
                 body: RefreshIndicator(
                   onRefresh: fetchAllLandRates,
                   child: ListView(
@@ -106,39 +118,82 @@ class _LandRateScreenState extends State<LandRateScreen> {
                         child: MapWrapper(
                           mapController: _mapController,
                           children: [
-                            MarkerClusterLayerWidget(
-                              options: MarkerClusterLayerOptions(
-                                size: Size(64, 64),
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.all(50),
-                                builder: (context, markers) => ClusterIcon(text: markers.length),
-                                markers: [
-                                  ...provider.landRates.map((rate) {
-                                    return Marker(
-                                      width: 56,
-                                      height: 40,
-                                      point: LatLng(double.tryParse(rate.latitude) ?? 0, double.tryParse(rate.longitude) ?? 0),
-                                      child: NumberedMarker(text: rate.slNo, onPressed: () => viewLandRate(rate.id)),
-                                    );
-                                  }),
-                                ],
-                              ),
+                            ...LandRate.tables.map((table) {
+                              final mapColor = LandRate.getMapColors(colorScheme, table);
+                              return MarkerClusterLayerWidget(
+                                options: MarkerClusterLayerOptions(
+                                  size: Size(64, 64),
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(50),
+                                  builder: (context, markers) {
+                                    return ClusterIcon(text: markers.length, fill: mapColor.clusterFill, stroke: mapColor.clusterStroke);
+                                  },
+                                  markers: [
+                                    ...provider.landRates.where((rate) => rate.author == table).map((rate) {
+                                      return Marker(
+                                        width: 56,
+                                        height: 40,
+                                        point: LatLng(double.tryParse(rate.latitude) ?? 0, double.tryParse(rate.longitude) ?? 0),
+                                        child: NumberedMarker(
+                                          text: rate.slNo,
+                                          onPressed: () => viewLandRate(rate.id, rate.author),
+                                          fill: mapColor.markerFill,
+                                        ),
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          spacing: 8,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            FilterPill(
+                              text: formatCamelCase(LandRate.TABLE1),
+                              selectedText: formatCamelCase(filter),
+                              onSelected: onSelectFilter,
+                            ),
+                            FilterPill(
+                              text: formatCamelCase(LandRate.TABLE2),
+                              selectedText: formatCamelCase(filter),
+                              onSelected: onSelectFilter,
+                            ),
+                            FilterPill(
+                              text: formatCamelCase(LandRate.TABLE3),
+                              selectedText: formatCamelCase(filter),
+                              onSelected: onSelectFilter,
+                            ),
+                            FilterPill(
+                              text: formatCamelCase(LandRate.TABLE4),
+                              selectedText: formatCamelCase(filter),
+                              onSelected: onSelectFilter,
                             ),
                           ],
                         ),
                       ),
                       SizedBox(height: 15),
                       ExpandableList<LandRate>(
-                        items: provider.getSearchResults(searchQuery).reversed.toList(),
+                        items: provider.getSearchResults(searchQuery, filter).reversed.toList(),
                         isLoading: provider.isLoading,
                         itemBuilder: (ctx, landRate, index) {
                           return SummaryTile(
-                            onTapAction: viewLandRate,
                             id: landRate.id.toString(),
                             title: "${landRate.latitude}° ${landRate.longitude}°",
                             subtitle: "${landRate.landRatePerCent}/cent",
                             info: "${landRate.monthOfVisit} ${landRate.yearOfVisit}",
-                            tag: "No.: ${landRate.slNo}",
+                            onTapAction: (id) => viewLandRate(id, landRate.author),
+                            tag: landRate.slNo,
+                            additionalInfo: Tag(
+                              text: formatCamelCase(landRate.author),
+                              color: LandRate.getMapColors(colorScheme, landRate.author).clusterFill,
+                            ),
                           );
                         },
                       ),

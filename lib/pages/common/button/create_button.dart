@@ -5,8 +5,10 @@ import 'package:valuatorx/utils/common.dart';
 class CreateButton extends StatelessWidget {
   final Widget createPage;
   final String label;
+  final VoidCallback onOpen;
 
-  const CreateButton({super.key, required this.createPage, required this.label});
+  const CreateButton({super.key, required this.createPage, required this.label, this.onOpen = _defaultOnOpen});
+  static _defaultOnOpen() {}
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,10 @@ class CreateButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: isMobile(context) ? 8 : 24),
       child: OpenContainer(
         transitionType: ContainerTransitionType.fade,
-        openBuilder: (context, _) => createPage,
+        openBuilder: (context, _) {
+          onOpen();
+          return createPage;
+        },
         closedColor: colorScheme.primaryContainer,
         closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         closedElevation: 8,

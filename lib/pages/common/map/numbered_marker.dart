@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class NumberedMarker extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final Color fill;
 
-  const NumberedMarker({super.key, required this.text, this.onPressed = _defaultOnPressed});
+  const NumberedMarker({super.key, required this.text, this.onPressed = _defaultOnPressed, required this.fill});
 
   static _defaultOnPressed() {}
 
@@ -15,7 +16,7 @@ class NumberedMarker extends StatelessWidget {
     return SizedBox(
       child: GestureDetector(
         onTap: onPressed,
-        child: CustomPaint(painter: _PinPainter(text: text, color: colorScheme.secondaryFixedDim, textColor: colorScheme.onSurface)),
+        child: CustomPaint(painter: _PinPainter(text: text, color: fill, textColor: colorScheme.onSurface)),
       ),
     );
   }

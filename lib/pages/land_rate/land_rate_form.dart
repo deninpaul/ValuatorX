@@ -46,6 +46,7 @@ class _LandRateFormState extends State<LandRateForm> {
 
   LandRate generateLandRate(String id) {
     final values = {for (final key in fieldKeys) key: controllers[key]!.text.trim(), "id": id};
+    values[LandRate.COORDINATES] = "${values[LandRate.LATITUDE]}, ${values[LandRate.LONGITUDE]}";
     return LandRate.fromJson(values);
   }
 
@@ -57,7 +58,10 @@ class _LandRateFormState extends State<LandRateForm> {
         await provider.getLandRates(context, refresh: false);
       }
     }
-    baseValue = widget.editMode ? provider.getSelectedLandRate() : LandRate.fromJson({LandRate.SL_NO: provider.generateIndex()});
+    baseValue =
+        widget.editMode
+            ? provider.getSelectedLandRate()
+            : LandRate.fromJson({LandRate.AUTHOR: provider.selectedTable, LandRate.SL_NO: provider.generateIndex()});
     final values = baseValue.toJson();
     for (final key in fieldKeys) {
       controllers[key]!.text = values[key];
@@ -92,6 +96,11 @@ class _LandRateFormState extends State<LandRateForm> {
   Widget build(BuildContext context) {
     final modeName = widget.editMode ? "Edit" : "New";
     final provider = Provider.of<LandRateProvider>(context);
+
+    void updateSerialNumber(String newAuthor) {
+      provider.setSelectedTable(newAuthor);
+      controllers[LandRate.SL_NO]!.text = provider.generateIndex();
+    }
 
     return PopScope(
       canPop: false,
@@ -128,9 +137,19 @@ class _LandRateFormState extends State<LandRateForm> {
                   enabled: false,
                   focusField: widget.focusField,
                 ),
+                DropdownField(
+                  name: LandRate.AUTHOR,
+                  controller: controllers[LandRate.AUTHOR]!,
+                  options: LandRate.tables,
+                  focusField: widget.focusField,
+                  allowCustomValues: false,
+                  onComplete: updateSerialNumber,
+                  enabled: !widget.editMode,
+                  isChild: true,
+                ),
                 LocationField(
-                  latitudeController: controllers["Lattitude"]!,
-                  longitudeController: controllers["Longitude"]!,
+                  latitudeController: controllers[LandRate.LATITUDE]!,
+                  longitudeController: controllers[LandRate.LONGITUDE]!,
                   focusField: widget.focusField,
                 ),
                 BasicField(

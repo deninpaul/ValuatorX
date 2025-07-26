@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 
 class ClusterIcon extends StatelessWidget {
-  const ClusterIcon({super.key, required this.text});
-
   final int text;
-
+  final Color fill;
+  final Color stroke;
+  const ClusterIcon({super.key, required this.text, required this.fill, required this.stroke});
+  
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: colorScheme.surfaceContainer,
+        color: fill,
         border: Border.all(
           width: 8,
           strokeAlign: BorderSide.strokeAlignOutside,
-          color: colorScheme.primary.withAlpha(64),
+          color: stroke.withAlpha(64),
         ),
       ),
       alignment: Alignment.center,

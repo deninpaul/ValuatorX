@@ -15,6 +15,7 @@ class LocationViewTile extends StatelessWidget {
   final String label;
   final int tabIndex;
   final IconData icon;
+  final Color? markerColor;
   final Function({String fieldName, int fieldTab})? onPressed;
   const LocationViewTile({
     super.key,
@@ -25,6 +26,7 @@ class LocationViewTile extends StatelessWidget {
     this.icon = Icons.location_on_outlined,
     this.onPressed,
     this.tabIndex = 0,
+    this.markerColor
   });
 
   resetLocation(LatLng location) {
@@ -63,7 +65,16 @@ class LocationViewTile extends StatelessWidget {
                 zoom: 18,
                 actions: [MapActionButton(onPressed: () => resetLocation(location), icon: Icons.replay)],
                 children: [
-                  MarkerLayer(markers: [Marker(point: location, width: 56, height: 40, child: NumberedMarker(text: label))]),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: location,
+                        width: 56,
+                        height: 40,
+                        child: NumberedMarker(text: label, fill: markerColor ?? colorScheme.secondaryFixedDim),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

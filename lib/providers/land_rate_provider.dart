@@ -10,16 +10,17 @@ class LandRateProvider extends ChangeNotifier {
   bool isCreating = false;
   bool isDeleting = false;
   String selectedItem = "";
+  String selectedTable = "";
 
-  final LandRateService service = LandRateService();
+  final Map<String, LandRateService> services = {for (final table in LandRate.tables) table: LandRateService(tableName: table)};
 
   getLandRates(BuildContext context, {bool refresh = true}) async {
     try {
       if (refresh) setLoading(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      var result = await service.getExcelTable(client: client);
-      landRates = result.map((item) => LandRate.fromJson(item)).toList();
+      var result = await Future.wait(LandRate.tables.map((table) => services[table]!.getExcelTable(client: client)));
+      landRates = result.expand((list) => list).map((item) => LandRate.fromJson(item)).toList();
       debugPrint("Fetched ${landRates.length} Land Rate record(s) from Excel successfully.");
       notifyListeners();
     } catch (e) {
@@ -30,11 +31,14 @@ class LandRateProvider extends ChangeNotifier {
   }
 
   LandRate getSelectedLandRate() {
-    return landRates.firstWhere((landRate) => landRate.id.toString() == selectedItem);
+    return landRates.firstWhere((landRate) => landRate.id.toString() == selectedItem && landRate.author == selectedTable, orElse: () => LandRate.fromJson({}));
   }
 
-  List<LandRate> getSearchResults(String query) {
-    return landRates.where((val) => "${val.longitude} ${val.latitude} ${val.id}".toLowerCase().contains(query.toLowerCase())).toList();
+  List<LandRate> getSearchResults(String query, String filter) {
+    return landRates
+        .where((val) => "${val.longitude} ${val.latitude} ${val.slNo}".toLowerCase().contains(query.toLowerCase()))
+        .where((val) => !LandRate.tables.contains(filter) || val.author == filter)
+        .toList();
   }
 
   addLandRate(BuildContext context, LandRate newLandRate) async {
@@ -42,7 +46,7 @@ class LandRateProvider extends ChangeNotifier {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      await service.addToExcelTable(client: client, values: newLandRate.toList());
+      await services[newLandRate.author]!.addToExcelTable(client: client, values: newLandRate.toList());
       debugPrint("New Land Rate added to Excel table successfully.");
       await getLandRates(context, refresh: false);
     } catch (e) {
@@ -57,7 +61,7 @@ class LandRateProvider extends ChangeNotifier {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      await service.updateExcelTableRow(client: client, index: landRate.id.toString(), values: landRate.toList());
+      await services[landRate.author]!.updateExcelTableRow(client: client, index: landRate.id.toString(), values: landRate.toList());
       debugPrint("Land Rate ${landRate.slNo} updated in Excel table successfully.");
       await getLandRates(context, refresh: false);
     } catch (e) {
@@ -72,7 +76,7 @@ class LandRateProvider extends ChangeNotifier {
       setDeleting(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();
-      await service.deleteExcelTableRow(client: client, index: landRate.id.toString());
+      await services[landRate.author]!.deleteExcelTableRow(client: client, index: landRate.id.toString());
       debugPrint("Land Rate ${landRate.slNo} deleted from Excel table successfully.");
       await getLandRates(context, refresh: false);
     } catch (e) {
@@ -83,15 +87,20 @@ class LandRateProvider extends ChangeNotifier {
   }
 
   String generateIndex() {
-    final ids = landRates.map((e) => int.tryParse(e.id)).whereType<int>().toList();
-    return (ids.isEmpty ? 0 : ids.last + 1).toString();
+    final ids = landRates.where((rate) => rate.author == selectedTable).map((e) => int.tryParse(e.slNo)).whereType<int>().toList();
+    return (ids.isEmpty ? 1 : ids.last + 1).toString();
   }
 
-  void setSelectedItem(String value, {bool notify = true}) {
-    selectedItem = value;
+  void setSelectedItem(String id, String table, {bool notify = true}) {
+    selectedItem = id;
+    selectedTable = table;
     if (notify) {
       notifyListeners();
     }
+  }
+
+  void setSelectedTable(String table) {
+    selectedTable = table;
   }
 
   void setLoading(bool value, {bool notify = true}) {

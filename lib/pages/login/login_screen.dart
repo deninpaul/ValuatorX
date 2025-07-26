@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final provider = Provider.of<AuthProvider>(context, listen: false);
     final loginUrl = provider.startAuthFlow();
     if (kIsWeb) {
-      openWindow(loginUrl.toString(), "Microsoft Login", "width=600,height=700");
+      openWindow(loginUrl.toString(), "Microsoft Login", "width=500,height=700");
     } else {
       setState(() => showWebView = true);
       webViewController.loadRequest(loginUrl);

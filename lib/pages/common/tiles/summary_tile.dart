@@ -10,6 +10,7 @@ class SummaryTile extends StatelessWidget {
   final String tag;
   final bool showDivider;
   final Function onTapAction;
+  final Widget? additionalInfo;
   const SummaryTile({
     super.key,
     this.showDivider = true,
@@ -19,6 +20,7 @@ class SummaryTile extends StatelessWidget {
     required this.subtitle,
     required this.info,
     required this.tag,
+    this.additionalInfo,
   });
 
   @override
@@ -60,7 +62,7 @@ class SummaryTile extends StatelessWidget {
                 spacing: 8,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Tag(text: tag),
+                  Row(spacing: 4, children: [additionalInfo ?? SizedBox.shrink(), Tag(text: tag)]),
                   Padding(
                     padding: EdgeInsets.only(right: 5),
                     child: Text(info, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),

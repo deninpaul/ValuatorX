@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class DropdownField extends StatefulWidget {
   final TextEditingController controller;
@@ -8,6 +9,9 @@ class DropdownField extends StatefulWidget {
   final bool required;
   final bool isChild;
   final String focusField;
+  final bool allowCustomValues;
+  final bool enabled;
+  final void Function(String) onComplete;
 
   const DropdownField({
     super.key,
@@ -18,7 +22,12 @@ class DropdownField extends StatefulWidget {
     this.required = false,
     this.isChild = false,
     this.focusField = "",
+    this.enabled = true,
+    this.allowCustomValues = true,
+    this.onComplete = _defaultOnComplete
   });
+
+  static void _defaultOnComplete(String val) {}
 
   @override
   State<DropdownField> createState() => _DropdownFieldState();
@@ -30,25 +39,27 @@ class _DropdownFieldState extends State<DropdownField> {
   @override
   void initState() {
     super.initState();
-    _allOptions = [...widget.options, "Other (Custom)"];
+    _allOptions = [...widget.options, if (widget.allowCustomValues) "Other (Custom)"];
   }
 
   void showCustomInputDialog() {
-  showDialog(
-    context: context,
-    builder: (context) => CustomOptionDialog(
-      label: widget.name,
-      onSubmit: (value) {
-        widget.controller.text = value;
-        setState(() {});
-      },
-    ),
-  );
-}
+    showDialog(
+      context: context,
+      builder:
+          (context) => CustomOptionDialog(
+            label: widget.name,
+            onSubmit: (value) {
+              widget.controller.text = value;
+              setState(() {});
+            },
+          ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     bool isCustomValue = widget.controller.text.isNotEmpty && !widget.options.contains(widget.controller.text);
 
     return Row(
@@ -67,20 +78,21 @@ class _DropdownFieldState extends State<DropdownField> {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Text(
-                        option == "Other (Custom)" && isCustomValue ? "Other: ${widget.controller.text}" : option,
-                        style: textTheme.bodyLarge!.copyWith(height: 1.3)
+                        option == "Other (Custom)" && isCustomValue ? "Other: ${widget.controller.text}" : formatCamelCase(option),
+                        style: textTheme.bodyLarge!.copyWith(height: 1.3, color: widget.enabled ? theme.primaryColor : theme.disabledColor),
                       ),
                     ),
                   );
                 }).toList(),
-            onChanged: (newValue) {
+            onChanged: widget.enabled ? (newValue) {
               if (newValue == "Other (Custom)") {
                 showCustomInputDialog();
               } else if (newValue != null) {
                 widget.controller.text = newValue;
+                widget.onComplete(newValue);
                 setState(() {});
               }
-            },
+            } : null,
             decoration: InputDecoration(labelText: widget.name, border: const OutlineInputBorder()),
             validator: (v) => widget.required && (widget.controller.text.isEmpty) ? 'Required' : null,
             isExpanded: true,

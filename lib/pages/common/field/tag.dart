@@ -6,6 +6,7 @@ class Tag extends StatefulWidget {
   final bool isLoading;
   final bool isEditable;
   final bool disabled;
+  final Color? color;
   final Function(String) onStatusChange;
 
   const Tag({
@@ -15,6 +16,7 @@ class Tag extends StatefulWidget {
     this.isEditable = false,
     this.isLoading = false,
     this.disabled = false,
+    this.color
   });
   static _defaultOnStatusChange(String s) {}
 
@@ -48,7 +50,7 @@ class _TagState extends State<Tag> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(26), color: tagColor()),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(26), color: widget.color ?? tagColor()),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

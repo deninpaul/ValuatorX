@@ -4,7 +4,8 @@ class FilterPill extends StatelessWidget {
   final String text;
   final String selectedText;
   final Function(String) onSelected;
-  const FilterPill({super.key, required this.text, this.selectedText = "", required this.onSelected});
+  final Color? color;
+  const FilterPill({super.key, required this.text, this.selectedText = "", required this.onSelected, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class FilterPill extends StatelessWidget {
         }
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
-      selectedColor: colorScheme.primaryContainer,
+      selectedColor: color ?? colorScheme.primaryContainer,
     );
   }
 }

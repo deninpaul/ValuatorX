@@ -79,7 +79,7 @@ class _DropdownFieldState extends State<DropdownField> {
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Text(
                         option == "Other (Custom)" && isCustomValue ? "Other: ${widget.controller.text}" : formatCamelCase(option),
-                        style: textTheme.bodyLarge!.copyWith(height: 1.3, color: widget.enabled ? theme.primaryColor : theme.disabledColor),
+                        style: textTheme.bodyLarge!.copyWith(height: 1.3, color: widget.enabled ? theme.colorScheme.onSurface : theme.disabledColor),
                       ),
                     ),
                   );

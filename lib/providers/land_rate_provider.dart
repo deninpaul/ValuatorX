@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/models/land_rate.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:valuatorx/services/land_rate_service.dart';
+import 'package:valuatorx/utils/common.dart';
 
 class LandRateProvider extends ChangeNotifier {
   List<LandRate> landRates = [];
@@ -31,13 +33,34 @@ class LandRateProvider extends ChangeNotifier {
   }
 
   LandRate getSelectedLandRate() {
-    return landRates.firstWhere((landRate) => landRate.id.toString() == selectedItem && landRate.author == selectedTable, orElse: () => LandRate.fromJson({}));
+    return landRates.firstWhere(
+      (landRate) => landRate.id.toString() == selectedItem && landRate.author == selectedTable,
+      orElse: () => LandRate.fromJson({}),
+    );
   }
 
   List<LandRate> getSearchResults(String query, String filter) {
+    final parsedLatLng = parseLatLng(query);
+    final parsedInt = int.tryParse(query);
+    if (parsedLatLng != null) {
+      final distance = Distance();
+      return landRates
+          .where((val) {
+            try {
+              return distance(parsedLatLng, LatLng(double.parse(val.latitude), double.parse(val.longitude))) <= 2000;
+            } catch (e) {
+              return false;
+            }
+          })
+          .where((val) => val.author == filter)
+          .toList();
+    }
+    if (parsedInt != null) {
+      return landRates.where((val) => int.tryParse(val.slNo) == parsedInt).where((val) => val.author == filter).toList();
+    }
     return landRates
-        .where((val) => "${val.longitude} ${val.latitude} ${val.slNo}".toLowerCase().contains(query.toLowerCase()))
-        .where((val) => !LandRate.tables.contains(filter) || val.author == filter)
+        .where((val) => "${val.landType} ${val.road} ${val.slNo}".toLowerCase().contains(query.toLowerCase()))
+        .where((val) => val.author == filter)
         .toList();
   }
 

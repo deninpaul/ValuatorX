@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:markdown_quill/markdown_quill.dart';
 import 'package:markdown/markdown.dart' as markdown;
 
@@ -86,15 +87,33 @@ String extractPersons(String input) {
   return results.take(2).join(', ');
 }
 
-String formatCamelCase (String input) {
-  return input.replaceAllMapped(
-    RegExp(r'([a-z])([A-Z])'),
-    (match) => '${match.group(1)} ${match.group(2)}',
-  );
+String formatCamelCase(String input) {
+  return input.replaceAllMapped(RegExp(r'([a-z])([A-Z])'), (match) => '${match.group(1)} ${match.group(2)}');
 }
 
 Color darkenColor(Color color, [double amount = .05]) {
   final hsl = HSLColor.fromColor(color);
   final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
   return hslDark.toColor();
+}
+
+bool isValidLatLng(String input) {
+  final pattern = RegExp(r'^\s*(-?\d+(\.\d+)?)\s*[, \-]\s*(-?\d+(\.\d+)?)\s*$');
+  final match = pattern.firstMatch(input);
+  if (match == null) return false;
+  final lat = double.tryParse(match.group(1)!);
+  final lng = double.tryParse(match.group(3)!);
+  if (lat == null || lng == null) return false;
+  return lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+}
+
+LatLng? parseLatLng(String input) {
+  final match = RegExp(r'^(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)$').firstMatch(input.trim());
+  if (match != null) {
+    final lat = double.tryParse(match.group(1)!);
+    final lng = double.tryParse(match.group(2)!);
+    final isValid = lat != null && lng != null && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+    if (isValid) return LatLng(lat, lng);
+  }
+  return null;
 }

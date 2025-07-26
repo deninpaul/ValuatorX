@@ -67,7 +67,15 @@ class LandRateDetails extends StatelessWidget {
             TitleHeader(
               title: landRate.slNo,
               onBackPressed: onBackAction,
-              actions: [Tag(text: formatCamelCase(landRate.author), color: LandRate.getMapColors(colorScheme, landRate.author).clusterFill)],
+              actions: [
+                Padding(
+                  padding: EdgeInsets.only(right: 11),
+                  child: Tag(
+                    text: formatCamelCase(landRate.author),
+                    color: LandRate.getMapColors(colorScheme, landRate.author).clusterFill,
+                  ),
+                ),
+              ],
             ),
             ActionsHeader(
               actions: [

@@ -107,6 +107,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                     name: "Valuation",
                     query: searchQuery,
                     onSearch: onSearchAction,
+                    onFocus: isHomePage,
                     actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh", style: textTheme.bodyMedium))],
                   ),
                   SizedBox(height: 15),

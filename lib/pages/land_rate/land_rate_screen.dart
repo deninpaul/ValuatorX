@@ -94,6 +94,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
                         name: "Land Rate",
                         query: searchQuery,
                         onSearch: onSearchAction,
+                        onFocus: isHomePage,
                         actions: [PopupMenuItem(onTap: fetchAllLandRates, child: Text("Refresh"))],
                       ),
                       SizedBox(height: 15),

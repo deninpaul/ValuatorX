@@ -5,7 +5,8 @@ class SearchHeader extends StatefulWidget {
   final String name;
   final List<PopupMenuItem> actions;
   final String query;
-  const SearchHeader({super.key, this.onSearch, required this.name, required this.query, this.actions = const []});
+  final bool onFocus;
+  const SearchHeader({super.key, this.onSearch, required this.name, required this.query, this.actions = const [], this.onFocus = true});
 
   @override
   State<SearchHeader> createState() => _SearchHeaderState();
@@ -32,13 +33,14 @@ class _SearchHeaderState extends State<SearchHeader> {
 
     return PopScope(
       canPop: controller.text.isEmpty,
-      onPopInvokedWithResult: (didPop, result) => onClear(),
+      onPopInvokedWithResult: widget.onFocus ? (didPop, result) => onClear() : null,
       child: Row(
         spacing: 8,
         children: [
           if (widget.onSearch != null)
             Expanded(
               child: SearchBar(
+                enabled: widget.onFocus,
                 controller: controller,
                 onChanged: widget.onSearch,
                 elevation: const WidgetStatePropertyAll(0),
@@ -48,7 +50,7 @@ class _SearchHeaderState extends State<SearchHeader> {
                 trailing: [if (controller.text.isNotEmpty) IconButton(onPressed: onClear, icon: Icon(Icons.close, color: theme.hintColor))],
               ),
             ),
-          PopupMenuButton(icon: Icon(Icons.more_vert), offset: const Offset(0, 48), itemBuilder: (ctx) => [...widget.actions]),
+          PopupMenuButton(icon: Icon(Icons.more_vert), offset: const Offset(-5, 5), itemBuilder: (ctx) => [...widget.actions]),
         ],
       ),
     );

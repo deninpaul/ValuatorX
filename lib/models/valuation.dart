@@ -386,7 +386,12 @@ class Valuation {
 
   String get subtitle => [village, taluk].where((e) => e.trim().isNotEmpty).join(', ');
 
-  String get title => reportReference.isNotEmpty ? "$reportReference - ${extractPersons(mortgagorDetail)}" : extractPersons(mortgagorDetail);
+  String get title =>
+      reportReference.isNotEmpty ? "$reportReference - ${extractPersons(mortgagorDetail)}" : extractPersons(mortgagorDetail);
+
+  bool get siteVisited =>
+      (longitude.isNotEmpty && latitude.isNotEmpty && (houseNumber.trim().isNotEmpty || propertyAreaRate.trim().isNotEmpty)) &&
+      (longitude != "0" && latitude != "0");
 
   static const editableFields = [
     REPORT_REFERENCE,

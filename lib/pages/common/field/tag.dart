@@ -38,7 +38,6 @@ class _TagState extends State<Tag> {
     final textTheme = Theme.of(context).textTheme;
     Color tagColor() {
       switch (widget.text) {
-        case "Backlog":
         case "In progress":
           return colorScheme.secondaryContainer;
         case "Draft":
@@ -85,7 +84,7 @@ class _TagState extends State<Tag> {
                       : Container(
                         width: 15,
                         height: 15,
-                        margin: EdgeInsets.symmetric(horizontal: 47, vertical: 2),
+                        margin: EdgeInsets.symmetric(horizontal: 41, vertical: 2),
                         child: CircularProgressIndicator(strokeWidth: 3),
                       ),
             )

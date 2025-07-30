@@ -52,20 +52,23 @@ class ValuationProvider extends ChangeNotifier {
         [val.reportReference, val.dateOfInspection, val.village, val.taluk, val.mortgagorDetail, val.fileAllocationDetail].join(' '),
       ).contains(query),
     );
-    switch (filter) {
-      case "In progress":
-        result = result.where((val) => val.status == "In progress" || val.status == "Draft");
+    switch (filter.toLowerCase()) {
+      case "in progress":
+        result = result.where((val) => val.status.toLowerCase() == "in progress" || val.status.toLowerCase() == "draft");
         break;
-      case "Completed":
-        result = result.where((val) => val.status == "Completed");
+      case "site visited":
+        result = result.where((val) => val.siteVisited && val.status.toLowerCase() != "completed");
         break;
-      case "Drafts":
-        result = result.where((val) => val.status == "Draft");
-      case "Trash":
-        result = result.where((val) => val.status == "Trash");
-      case "All":
+      case "completed":
+        result = result.where((val) => val.status.toLowerCase() == "completed");
+        break;
+      case "drafts":
+        result = result.where((val) => val.status.toLowerCase() == "draft");
+      case "trash":
+        result = result.where((val) => val.status.toLowerCase() == "trash");
+      case "all":
       default:
-        result = result.where((val) => val.status != "Trash");
+        result = result.where((val) => val.status.toLowerCase() != "trash");
     }
     return result.toList();
   }

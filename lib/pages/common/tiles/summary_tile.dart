@@ -6,6 +6,7 @@ class SummaryTile extends StatelessWidget {
   final String id;
   final String title;
   final String subtitle;
+  final Widget? subtitleInfo;
   final String info;
   final String tag;
   final bool showDivider;
@@ -21,6 +22,7 @@ class SummaryTile extends StatelessWidget {
     required this.info,
     required this.tag,
     this.additionalInfo,
+    this.subtitleInfo,
   });
 
   @override
@@ -28,6 +30,7 @@ class SummaryTile extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
+    final subtitleInfoKey = GlobalKey();
 
     return Material(
       color: Colors.transparent,
@@ -45,7 +48,7 @@ class SummaryTile extends StatelessWidget {
               Expanded(
                 child: Column(
                   spacing: 5,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
                       title,
@@ -54,7 +57,33 @@ class SummaryTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
                     ),
-                    Text(subtitle, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final subtitleInfoBox = subtitleInfoKey.currentContext?.findRenderObject() as RenderBox?;
+                        final subtitleInfoWidth = subtitleInfoBox?.size.width ?? 0;
+                        final maxTextWidth = constraints.maxWidth - (subtitleInfo != null ? (subtitleInfoWidth + 56) : 0);
+                        return Row(
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: maxTextWidth),
+                              child: Text(
+                                subtitle,
+                                style: textTheme.bodyMedium!.copyWith(color: theme.hintColor),
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                                maxLines: 1,
+                              ),
+                            ),
+                            if (subtitleInfo != null) ...[
+                              SizedBox(width: 7),
+                              Container(height: 2.5, width: 2.5, decoration: BoxDecoration(shape: BoxShape.circle, color: theme.hintColor)),
+                              SizedBox(width: 7),
+                              KeyedSubtree(key: subtitleInfoKey, child: subtitleInfo!),
+                            ],
+                          ],
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

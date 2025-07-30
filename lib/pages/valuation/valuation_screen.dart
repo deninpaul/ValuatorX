@@ -79,8 +79,9 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final provider = Provider.of<ValuationProvider>(context);
     final isHomePage = provider.selectedItem == "";
     final total = provider.allValutions.length.toString().padLeft(2, '0');
@@ -88,6 +89,24 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
 
     viewValuation(String id) {
       provider.setSelectedItem(id);
+    }
+
+    Widget siteVisitIndicator() {
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(21),
+         color: colorScheme.secondaryContainer,
+        ),
+        child: Row(
+          spacing: 2,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.hiking_outlined, size: 12, color: theme.hintColor),
+            Icon(Icons.check_circle_outline, size: 12, color: theme.hintColor),
+          ],
+        ),
+      );
     }
 
     return Stack(
@@ -127,6 +146,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                       children: [
                         FilterPill(text: Valuation.statusOptions[0], selectedText: filter, onSelected: onSelectFilter),
                         FilterPill(text: "All", selectedText: filter, onSelected: onSelectFilter),
+                        FilterPill(text: "Site visited", selectedText: filter, onSelected: onSelectFilter),
                         FilterPill(text: Valuation.statusOptions[1], selectedText: filter, onSelected: onSelectFilter),
                         FilterPill(text: "Drafts", selectedText: filter, onSelected: onSelectFilter),
                       ],
@@ -146,6 +166,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                         info: valuation.dateOfInspection,
                         tag: valuation.status,
                         onTapAction: viewValuation,
+                        subtitleInfo: valuation.siteVisited ? siteVisitIndicator() : null,
                       );
                     },
                   ),

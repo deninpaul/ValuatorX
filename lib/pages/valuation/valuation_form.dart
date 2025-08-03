@@ -18,12 +18,26 @@ import 'package:valuatorx/pages/common/image/image_picker.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
 import 'package:valuatorx/utils/common.dart';
 
+enum Mode { create, edit, templateCreate, templateEdit }
+
 class ValuationForm extends StatefulWidget {
-  final bool editMode;
+  final Mode mode;
   final bool isDraft;
   final String focusField;
   final int focusTabIndex;
-  const ValuationForm({super.key, this.editMode = false, this.isDraft = false, this.focusField = "", this.focusTabIndex = 0});
+  final Valuation? template;
+  final VoidCallback onExit;
+  const ValuationForm({
+    super.key,
+    this.mode = Mode.create,
+    this.isDraft = false,
+    this.focusField = "",
+    this.template,
+    this.focusTabIndex = 0,
+    this.onExit = _defaultOnExit,
+  });
+
+  static void _defaultOnExit() {}
 
   @override
   State<ValuationForm> createState() => _ValuationFormState();
@@ -33,17 +47,19 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   final _formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> controllers = {};
   final List<String> fieldKeys = Valuation.editableFields;
-  final List<String> tabs = ["General Details", "Land Details", "Building Details", "Notes", "Photo"];
-
   late TabController _tabController;
-  late String draftId;
   late Valuation baseValue;
-
+  bool get editMode => widget.mode == Mode.edit || widget.mode == Mode.templateEdit;
+  bool get templateMode => widget.mode == Mode.templateCreate || widget.mode == Mode.templateEdit;
   bool showDraftDialog = false;
   bool ready = false;
+  String? draftId;
   Timer? timer;
 
+  List<String> get tabs => ["General Details", "Land Details", "Building Details", "Notes", if (!templateMode) "Photo"];
+
   Valuation generateValuation(String? id, {String? status}) {
+    status = status ?? (templateMode ? 'Template' : (!editMode || widget.isDraft ? Valuation.statusOptions[0] : null));
     final values = {
       for (final key in fieldKeys) key: controllers[key]!.text.trim(),
       Valuation.STATUS: status ?? controllers[Valuation.STATUS]!.text.trim(),
@@ -55,9 +71,12 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   Future<void> populateForm() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     baseValue =
-        widget.editMode
+        editMode
             ? provider.getSelectedValuation()
-            : Valuation.fromJson({Valuation.DATE_OF_INSPECTION: DateFormat('dd/MM/yyyy').format(DateTime.now())});
+            : Valuation.fromJson({
+              if (widget.template != null) ...widget.template!.toJson(),
+              if (!templateMode) Valuation.DATE_OF_INSPECTION: DateFormat('dd/MM/yyyy').format(DateTime.now()),
+            });
     final values = baseValue.toJson();
     for (final key in fieldKeys) {
       controllers[key]!.text = values[key];
@@ -71,7 +90,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
 
   Future<void> syncToDraft() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
-    draftId = widget.editMode ? provider.getSelectedValuation().id : await provider.generateDraftIndex();
+    draftId = editMode ? provider.getSelectedValuation().id : await provider.generateDraftIndex();
     timer = Timer.periodic(const Duration(seconds: 5), (_) async {
       if (!mounted) return;
       final valuation = generateValuation(draftId, status: "Draft");
@@ -89,7 +108,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
 
   Future<void> loadDraft() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
-    final values = await provider.getDraft(draftId);
+    final values = await provider.getDraft(draftId!);
     for (final key in fieldKeys) {
       controllers[key]!.text = values[key];
     }
@@ -104,12 +123,10 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
 
   Future<void> submitForm() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
-    final id = widget.editMode && !widget.isDraft ? provider.getSelectedValuation().id : provider.generateIndex();
-    final valuation = generateValuation(id, status: !widget.editMode ? Valuation.statusOptions[0] : null);
+    final id = editMode && !widget.isDraft ? provider.getSelectedValuation().id : provider.generateIndex();
+    final valuation = generateValuation(id);
     final done =
-        widget.editMode && !widget.isDraft
-            ? await provider.updateValuation(context, valuation)
-            : await provider.addValuations(context, valuation);
+        editMode && !widget.isDraft ? await provider.updateValuation(context, valuation) : await provider.addValuations(context, valuation);
     if (done) {
       await provider.deleteDraft(draftId);
       if (widget.isDraft) {
@@ -122,15 +139,14 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
 
   Future<void> cancelForm() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
-    final id = widget.editMode && !widget.isDraft ? provider.getSelectedValuation().id : provider.generateIndex();
+    final id = editMode && !widget.isDraft ? provider.getSelectedValuation().id : provider.generateIndex();
     final valuation = generateValuation(id);
     if (!valuation.equal(baseValue)) {
       await showDialog<bool>(
         context: context,
         builder:
-            (ctx) => DiscardDialog(
-              actions: {"Discard": cancelDraft, if (widget.editMode) "Save changes": submitForm else "Save as draft": saveDraft},
-            ),
+            (_) =>
+                DiscardDialog(actions: {"Discard": cancelDraft, if (editMode) "Save changes": submitForm else "Save as draft": saveDraft}),
       );
     } else {
       Navigator.pop(context);
@@ -146,7 +162,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     _tabController = TabController(length: tabs.length, vsync: this, initialIndex: widget.focusTabIndex);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       populateForm();
-      syncToDraft();
+      if (!templateMode) syncToDraft();
     });
   }
 
@@ -162,14 +178,14 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final modeName = widget.editMode ? "Edit" : "New";
+    final title = "${editMode ? "Edit" : "New"} Valuation ${templateMode ? "Template" : "Report"}";
     final provider = Provider.of<ValuationProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: 72,
-        title: Text("$modeName Valuation Report", style: headerTheme),
+        title: Text(title, style: headerTheme),
         leading: IconButton(icon: Icon(Icons.close), onPressed: cancelForm),
         actions: [
           SaveButton(formKey: _formKey, onSubmit: submitForm, enabled: ready, creating: provider.isCreating),
@@ -204,20 +220,29 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                       spacing: 24,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if (templateMode)
+                          BasicField(
+                            name: 'Template Name',
+                            controller: controllers[Valuation.DATE_OF_INSPECTION]!,
+                            icon: Icons.file_copy_outlined,
+                            focusField: widget.focusField,
+                            required: true,
+                          ),
                         BasicField(
                           name: Valuation.REPORT_REFERENCE,
                           controller: controllers[Valuation.REPORT_REFERENCE]!,
-                          icon: Icons.person_outline,
+                          icon: Icons.numbers,
                           focusField: widget.focusField,
                           required: true,
                         ),
-                        DatePickerField(
-                          name: Valuation.DATE_OF_INSPECTION,
-                          controller: controllers[Valuation.DATE_OF_INSPECTION]!,
-                          icon: Icons.calendar_today_outlined,
-                          focusField: widget.focusField,
-                          required: true,
-                        ),
+                        if (!templateMode)
+                          DatePickerField(
+                            name: Valuation.DATE_OF_INSPECTION,
+                            controller: controllers[Valuation.DATE_OF_INSPECTION]!,
+                            icon: Icons.calendar_today_outlined,
+                            focusField: widget.focusField,
+                            required: true,
+                          ),
                         BasicField(
                           name: Valuation.FILE_ALLOCATION_DETAIL,
                           controller: controllers[Valuation.FILE_ALLOCATION_DETAIL]!,
@@ -542,10 +567,11 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                     padding: formPadding(context),
                     child: ready ? NotesField(controller: controllers[Valuation.REMARKS]!) : CircularProgressIndicator(),
                   ),
-                  Padding(
-                    padding: formPadding(context),
-                    child: ImagePickerField(controller: controllers[Valuation.PHOTOS]!, editMode: true),
-                  ),
+                  if (!templateMode)
+                    Padding(
+                      padding: formPadding(context),
+                      child: ImagePickerField(controller: controllers[Valuation.PHOTOS]!, editMode: true),
+                    ),
                 ],
               ),
             ),

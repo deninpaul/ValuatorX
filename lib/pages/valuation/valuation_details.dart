@@ -55,12 +55,12 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
     onEditAction({String fieldName = "", int fieldTab = 0}) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ValuationForm(editMode: true, focusField: fieldName, focusTabIndex: fieldTab)),
+        MaterialPageRoute(builder: (context) => ValuationForm(mode: Mode.edit, focusField: fieldName, focusTabIndex: fieldTab)),
       );
     }
 
     onResumeAction() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ValuationForm(editMode: true, isDraft: true)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ValuationForm(mode: Mode.edit, isDraft: true)));
     }
 
     onGenerateReport() async {

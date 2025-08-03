@@ -46,7 +46,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
     final colorScheme = theme.colorScheme;
     final double dividerIntent = isMobile(context) ? 21 : 24;
     final Divider divider = Divider(color: theme.dividerColor.withAlpha(64), indent: dividerIntent, endIndent: dividerIntent);
-    final minHeight = MediaQuery.of(context).size.height - 240 - (isMobile(context) ? 96 : 0) + (kIsWeb ? 28 : 0);
+    final minHeight = MediaQuery.of(context).size.height - 300 - (isMobile(context) ? 96 : 0) + (kIsWeb ? 28 : 0);
 
     final int itemsToShow = widget.items.isEmpty ? 0 : (_displayCount > widget.items.length ? widget.items.length : _displayCount);
     final bool showViewMoreButton = itemsToShow < widget.items.length;
@@ -69,6 +69,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
               itemBuilder: (context, index) => SkeletonListTile(),
             )
           else
+            if (itemsToShow > 0)
             ListView.separated(
               primary: false,
               shrinkWrap: true,
@@ -78,7 +79,17 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
               itemBuilder: (context, index) {
                 return widget.itemBuilder(context, widget.items[index], index);
               },
-            ),
+            )
+            else
+              Container(height: minHeight - 32, alignment: Alignment.center, child: Column(
+                spacing: 11,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.folder_copy_outlined, size: 24, color: theme.hintColor,),
+                  Text('No items to show', style: theme.textTheme.bodyLarge!.copyWith(color: theme.hintColor),),
+                ],
+              ),)
+            ,
           if (showViewMoreButton && !widget.isLoading)
             Padding(padding: const EdgeInsets.only(bottom: kIsWeb ? 8 : 0), child: TextButton(onPressed: _loadMore, child: Text('View More')))
           else

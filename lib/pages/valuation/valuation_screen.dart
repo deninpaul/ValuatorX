@@ -11,6 +11,7 @@ import 'package:valuatorx/pages/common/tiles/info_tile.dart';
 import 'package:valuatorx/pages/common/tiles/summary_tile.dart';
 import 'package:valuatorx/pages/valuation/valuation_details.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
+import 'package:valuatorx/pages/valuation/valuation_templates.dart';
 import 'package:valuatorx/providers/valuation_provider.dart';
 
 class Valuations extends StatefulWidget {
@@ -24,6 +25,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
   late ValuationProvider provider;
   String searchQuery = "";
   String filter = Valuation.statusOptions[0];
+  bool isTemplate = false;
   Timer? timer;
 
   void onSearchAction(String val) {
@@ -32,6 +34,10 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
 
   void onSelectFilter(String val) {
     setState(() => filter = val);
+  }
+
+  void onViewTemplate() {
+    setState(() => isTemplate = true);
   }
 
   Future<void> fetchAllValuations({bool refresh = true}) async {
@@ -48,6 +54,10 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
   void stopSync() {
     timer?.cancel();
     timer = null;
+  }
+
+  void onTemplateBackAction() {
+    setState(() => isTemplate = false);
   }
 
   @override
@@ -91,13 +101,15 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
       provider.setSelectedItem(id);
     }
 
+    openValuationForm(String selected) {
+      if (selected.isEmpty) return ValuationForm();
+      return ValuationForm(template: provider.allValutions.firstWhere((val) => val.id == selected));
+    }
+
     Widget siteVisitIndicator() {
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(21),
-         color: colorScheme.secondaryContainer,
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(21), color: colorScheme.secondaryContainer),
         child: Row(
           spacing: 2,
           mainAxisSize: MainAxisSize.min,
@@ -112,11 +124,15 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
     return Stack(
       children: [
         HorizontalTransition(
-          visible: isHomePage,
+          visible: isHomePage && !isTemplate,
           reverse: true,
           child: Scaffold(
             backgroundColor: colorScheme.surfaceContainer,
-            floatingActionButton: CreateButton(createPage: ValuationForm(), label: "New report"),
+            floatingActionButton: CreateButton(
+              label: "New report",
+              onOpen: openValuationForm,
+              options: provider.templates.map((val) => CreateButtonOption(id: val.id, label: val.templateTile)).toList(),
+            ),
             body: RefreshIndicator(
               onRefresh: fetchAllValuations,
               child: ListView(
@@ -127,7 +143,10 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                     query: searchQuery,
                     onSearch: onSearchAction,
                     onFocus: isHomePage,
-                    actions: [PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh", style: textTheme.bodyMedium))],
+                    actions: [
+                      PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh", style: textTheme.bodyMedium)),
+                      PopupMenuItem(onTap: onViewTemplate, child: Text("View templates", style: textTheme.bodyMedium)),
+                    ],
                   ),
                   SizedBox(height: 15),
                   Row(
@@ -175,7 +194,12 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
             ),
           ),
         ),
-        HorizontalTransition(visible: !isHomePage, destroyOnHide: true, child: ValuationDetails(valuation: provider.getSelectedValuation())),
+        HorizontalTransition(
+          visible: !isHomePage,
+          destroyOnHide: true,
+          child: ValuationDetails(valuation: provider.getSelectedValuation()),
+        ),
+        HorizontalTransition(visible: isTemplate, destroyOnHide: true, child: ValuationTemplates(onBack: onTemplateBackAction)),
       ],
     );
   }

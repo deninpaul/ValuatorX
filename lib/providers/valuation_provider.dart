@@ -9,13 +9,15 @@ import 'package:valuatorx/services/valuation_service.dart';
 import 'package:valuatorx/utils/common.dart';
 
 class ValuationProvider extends ChangeNotifier {
-  List<Valuation> get allValutions => drafts.reversed.toList() + valuations.reversed.toList();
   List<Valuation> valuations = [];
   List<Valuation> drafts = [];
   bool isLoading = false;
   bool isCreating = false;
   bool isDeleting = false;
   String selectedItem = "";
+
+  List<Valuation> get allValutions => drafts.reversed.toList() + valuations.reversed.toList();
+  List<Valuation> get templates => valuations.where((val) => val.status == 'Template').toList();
 
   final ValuationService service = ValuationService();
   final OneDriveService driveService = OneDriveService();
@@ -52,23 +54,31 @@ class ValuationProvider extends ChangeNotifier {
         [val.reportReference, val.dateOfInspection, val.village, val.taluk, val.mortgagorDetail, val.fileAllocationDetail].join(' '),
       ).contains(query),
     );
-    switch (filter.toLowerCase()) {
-      case "in progress":
-        result = result.where((val) => val.status.toLowerCase() == "in progress" || val.status.toLowerCase() == "draft");
-        break;
-      case "site visited":
-        result = result.where((val) => val.siteVisited && val.status.toLowerCase() != "completed");
-        break;
-      case "completed":
-        result = result.where((val) => val.status.toLowerCase() == "completed");
-        break;
-      case "drafts":
-        result = result.where((val) => val.status.toLowerCase() == "draft");
-      case "trash":
-        result = result.where((val) => val.status.toLowerCase() == "trash");
-      case "all":
-      default:
-        result = result.where((val) => val.status.toLowerCase() != "trash");
+    if (filter.toLowerCase() == "template") {
+      result = result.where((val) => val.status.toLowerCase() == "template");
+    } else {
+      result = result.where((val) => val.status.toLowerCase() != "template");
+      switch (filter.toLowerCase()) {
+        case "in progress":
+          result = result.where((val) => val.status.toLowerCase() == "in progress" || val.status.toLowerCase() == "draft");
+          break;
+        case "site visited":
+          result = result.where((val) => val.siteVisited && val.status.toLowerCase() != "completed");
+          break;
+        case "completed":
+          result = result.where((val) => val.status.toLowerCase() == "completed");
+          break;
+        case "drafts":
+          result = result.where((val) => val.status.toLowerCase() == "draft");
+          break;
+        case "trash":
+          result = result.where((val) => val.status.toLowerCase() == "trash");
+          break;
+        case "all":
+        default:
+          result = result.where((val) => val.status.toLowerCase() != "trash");
+          break;
+      }
     }
     return result.toList();
   }
@@ -166,7 +176,11 @@ class ValuationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteDraft(String id) async {
+  Future<void> deleteDraft(String? id) async {
+    if (id == null) {
+      debugPrint("Failed to delete draft. id not provided.");
+      return;
+    }
     try {
       await draftService.delete(id);
       debugPrint("Deleted draft $id from drafts.");
@@ -199,7 +213,7 @@ class ValuationProvider extends ChangeNotifier {
     return "draft_0";
   }
 
-  Future<void> generateReport(BuildContext context, Valuation valuation, void Function(String message, {Status newStatus}) onStatusUpdate) async {
+  Future generateReport(BuildContext context, Valuation valuation, void Function(String message, {Status newStatus}) onStatusUpdate) async {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();

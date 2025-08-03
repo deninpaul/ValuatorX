@@ -12,6 +12,7 @@ class SummaryTile extends StatelessWidget {
   final bool showDivider;
   final Function onTapAction;
   final Widget? additionalInfo;
+  final List<Widget>? actions;
   const SummaryTile({
     super.key,
     this.showDivider = true,
@@ -23,6 +24,7 @@ class SummaryTile extends StatelessWidget {
     required this.tag,
     this.additionalInfo,
     this.subtitleInfo,
+    this.actions,
   });
 
   @override
@@ -87,17 +89,19 @@ class SummaryTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Column(
-                spacing: 8,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(spacing: 4, children: [additionalInfo ?? SizedBox.shrink(), Tag(text: tag)]),
-                  Padding(
-                    padding: EdgeInsets.only(right: 5),
-                    child: Text(info, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
-                  ),
-                ],
-              ),
+              if (tag.isNotEmpty && info.isNotEmpty)
+                Column(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(spacing: 4, children: [additionalInfo ?? SizedBox.shrink(), Tag(text: tag)]),
+                    Padding(
+                      padding: EdgeInsets.only(right: 5),
+                      child: Text(info, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor)),
+                    ),
+                  ],
+                ),
+              if (actions != null) ...actions!,
             ],
           ),
         ),

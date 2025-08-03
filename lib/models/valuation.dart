@@ -386,8 +386,12 @@ class Valuation {
 
   String get subtitle => [village, taluk].where((e) => e.trim().isNotEmpty).join(', ');
 
-  String get title =>
-      reportReference.isNotEmpty ? "$reportReference - ${extractPersons(mortgagorDetail)}" : extractPersons(mortgagorDetail);
+  String get title {
+    final personDetails = extractPersons(mortgagorDetail);
+    return reportReference.isNotEmpty ? (personDetails.isEmpty ? reportReference : "$reportReference - $personDetails") : personDetails;
+  }
+
+  String get templateTile => dateOfInspection;
 
   bool get siteVisited =>
       (longitude.isNotEmpty && latitude.isNotEmpty && (houseNumber.trim().isNotEmpty || propertyAreaRate.trim().isNotEmpty)) &&
@@ -468,7 +472,7 @@ class Valuation {
 
   static const buildingTypeOptions = ["Residential", "Commercial", "Industrial", "-"];
 
-  static const constructionTypeOptions = ["Loan bearing", "RCC Framed Structure", "Combined load bearing structure", "Steel structure", "-"];
+  static const constructionTypeOptions = ["To be executed", "Loan bearing", "RCC Framed Structure", "Combined load bearing structure", "Steel structure", "-"];
 
   static const qualityOfConstructionOptions = ["Excellent", "Good", "Normal", "Poor", "-"];
 
@@ -476,17 +480,17 @@ class Valuation {
 
   static const interiorConditionOptions = ["Excellent", "Good", "Normal", "Poor", "-"];
 
-  static const foundationOptions = ["Random Rubble Masonry for foundation and basement", "Isolated footing with stub columns and plinth beam", "Combined foundation of strip footing, columns, random masonry and plinth beam", "-"];
+  static const foundationOptions = ["To be executed", "Random Rubble Masonry for foundation and basement", "Isolated footing with stub columns and plinth beam", "Combined foundation of strip footing, columns, random masonry and plinth beam", "-"];
 
-  static const wallOptions = ["Lateriate Masonry in cement mortor with plaster", "Brick Masonry in cement mortor with plaster", "Concrete Block Masonry in cement mortor with plaster", "-"];
+  static const wallOptions = ["To be executed", "Lateriate Masonry in cement mortor with plaster", "Brick Masonry in cement mortor with plaster", "Concrete Block Masonry in cement mortor with plaster", "-"];
 
-  static const roofOptions = ["Reinforced Concrete Slab", "Power coated GI Profile sheet on steel truss", "Mangalore tile on wooden truss", "-"];
+  static const roofOptions = ["To be executed", "Reinforced Concrete Slab", "Power coated GI Profile sheet on steel truss", "Mangalore tile on wooden truss", "-"];
 
-  static const ceilingOptions = ["Cement mortor Plaster with acrylic paint", "False ceiling with acrylic paint", "-"];
+  static const ceilingOptions = ["To be executed", "Cement mortor Plaster with acrylic paint", "False ceiling with acrylic paint", "-"];
 
-  static const windowOptions = ["Wooden frame with glazed shutter", "Aluminimum frame with glazed shutter", "Steel frame with glazed steel shutter", "Concrete frame with aluminimum glazed shutter", "-"];
+  static const windowOptions = ["To be executed", "Wooden frame with glazed shutter", "Aluminimum frame with glazed shutter", "Steel frame with glazed steel shutter", "Concrete frame with aluminimum glazed shutter", "-"];
 
-  static const doorOptions = ["Wooden frame with panelled wooden door", "Wooden frame with modular door", "Wooden frame with laminate plywood door", "-"];
+  static const doorOptions = ["To be executed", "Wooden frame with panelled wooden door", "Wooden frame with modular door", "Wooden frame with laminate plywood door", "-"];
 
-  static const rccProtectionOptions = ["Cement mortar screed laid to slope", "GI powder coated tiled profile sheet on steel truss", "Designed mangalore tiles on steel truss", "Mangalore tiles laid on slope roof", "-"];
+  static const rccProtectionOptions = ["To be executed", "Cement mortar screed laid to slope", "GI powder coated tiled profile sheet on steel truss", "Designed mangalore tiles on steel truss", "Mangalore tiles laid on slope roof", "-"];
 }

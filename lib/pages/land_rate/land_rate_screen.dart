@@ -101,6 +101,11 @@ class _LandRateScreenState extends State<LandRateScreen> {
       await provider.getLandRates(context);
     }
 
+    openLandRateForm(String selected) {
+      onOpenCreate();
+      return LandRateForm();
+    }
+
     return Stack(
       children: [
         HorizontalTransition(
@@ -108,7 +113,7 @@ class _LandRateScreenState extends State<LandRateScreen> {
           reverse: true,
           child: Scaffold(
             backgroundColor: colorScheme.surfaceContainer,
-            floatingActionButton: CreateButton(createPage: LandRateForm(), label: "Add rate", onOpen: onOpenCreate),
+            floatingActionButton: CreateButton(onOpen: openLandRateForm, label: "Add rate"),
             body: RefreshIndicator(
               onRefresh: fetchAllLandRates,
               child: ListView(

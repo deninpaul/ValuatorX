@@ -13,7 +13,7 @@ class OneDriveService {
     fileEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/_ID_";
   }
 
-  uploadFile({required Client client, required String name, required Uint8List file, contentType = "image/jpeg"}) async {
+  Future<String> uploadFile({required Client client, required String name, required Uint8List file, contentType = "image/jpeg"}) async {
     try {
       final response = await client.put(
         Uri.parse(uploadEndpoint.replaceAll("_NAME_", name)),
@@ -43,7 +43,7 @@ class OneDriveService {
     }
   }
 
-  getFileDownloadLink({required Client client, required String id}) async {
+  Future<String> getFileDownloadLink({required Client client, required String id}) async {
     try {
       final response = await client.get(Uri.parse(fileEndpoint.replaceAll("_ID_", id)));
       if (response.statusCode != 200) {

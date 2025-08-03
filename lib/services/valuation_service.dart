@@ -15,7 +15,7 @@ class ValuationService extends ExcelService {
   final _reportPath = "/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads";
   final _templateId = "01OTD6NSKJH6IV3JKRMBGKWNTKXJLS2CGK";
 
-  createNewReportWorksheet({required Client client, required String fileName}) async {
+  Future createNewReportWorksheet({required Client client, required String fileName}) async {
     try {
       // Create new file based of template
       fileName = '${fileName.replaceAll(RegExp(r'[\"*:<>?/\\|]'), '').replaceAll(RegExp(r'^\.+|\.+$'), '').trim()}.xlsx';

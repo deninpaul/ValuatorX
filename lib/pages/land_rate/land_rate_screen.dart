@@ -37,11 +37,11 @@ class _LandRateScreenState extends State<LandRateScreen> {
   String searchQuery = "";
   Timer? timer;
 
-  onSelectFilter(String val) {
+  void onSelectFilter(String val) {
     setState(() => filter = val.replaceAll(' ', ''));
   }
 
-  syncData() async {
+  Future<void> syncData() async {
     provider = Provider.of<LandRateProvider>(context, listen: false);
     timer = Timer.periodic(const Duration(seconds: 15), (_) => provider.getLandRates(context, refresh: false));
   }
@@ -72,8 +72,12 @@ class _LandRateScreenState extends State<LandRateScreen> {
     final provider = Provider.of<LandRateProvider>(context);
     final isHomePage = provider.selectedItem.isEmpty;
 
-    viewLandRate(String id, String author) {
+    viewLandRate(String id, String author) async {
       provider.setSelectedItem(id, author);
+      final landRate = provider.getSelectedLandRate();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mapController.move(LatLng(double.parse(landRate.latitude), double.parse(landRate.longitude)), _mapController.camera.zoom);
+      });
     }
 
     onSearchAction(String val) {
@@ -126,7 +130,9 @@ class _LandRateScreenState extends State<LandRateScreen> {
                     child: MapWrapper(
                       mapController: _mapController,
                       enableCenterMarker: enableCenterMarker,
-                      interactionOptions: InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate & ~InteractiveFlag.scrollWheelZoom),
+                      interactionOptions: InteractionOptions(
+                        flags: InteractiveFlag.all & ~InteractiveFlag.rotate & ~InteractiveFlag.scrollWheelZoom,
+                      ),
                       children: [
                         ...LandRate.tables.map((table) {
                           final mapColor = LandRate.getMapColors(colorScheme, table);
@@ -165,10 +171,30 @@ class _LandRateScreenState extends State<LandRateScreen> {
                       spacing: 8,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        FilterPill(text: formatCamelCase(LandRate.TABLE1), selectedText: formatCamelCase(filter), onSelected: onSelectFilter, color: LandRate.getMapColors(colorScheme, LandRate.TABLE1).clusterFill,),
-                        FilterPill(text: formatCamelCase(LandRate.TABLE2), selectedText: formatCamelCase(filter), onSelected: onSelectFilter, color: LandRate.getMapColors(colorScheme, LandRate.TABLE2).clusterFill,),
-                        FilterPill(text: formatCamelCase(LandRate.TABLE3), selectedText: formatCamelCase(filter), onSelected: onSelectFilter, color: LandRate.getMapColors(colorScheme, LandRate.TABLE3).clusterFill,),
-                        FilterPill(text: formatCamelCase(LandRate.TABLE4), selectedText: formatCamelCase(filter), onSelected: onSelectFilter, color: LandRate.getMapColors(colorScheme, LandRate.TABLE4).clusterFill,),
+                        FilterPill(
+                          text: formatCamelCase(LandRate.TABLE1),
+                          selectedText: formatCamelCase(filter),
+                          onSelected: onSelectFilter,
+                          color: LandRate.getMapColors(colorScheme, LandRate.TABLE1).clusterFill,
+                        ),
+                        FilterPill(
+                          text: formatCamelCase(LandRate.TABLE2),
+                          selectedText: formatCamelCase(filter),
+                          onSelected: onSelectFilter,
+                          color: LandRate.getMapColors(colorScheme, LandRate.TABLE2).clusterFill,
+                        ),
+                        FilterPill(
+                          text: formatCamelCase(LandRate.TABLE3),
+                          selectedText: formatCamelCase(filter),
+                          onSelected: onSelectFilter,
+                          color: LandRate.getMapColors(colorScheme, LandRate.TABLE3).clusterFill,
+                        ),
+                        FilterPill(
+                          text: formatCamelCase(LandRate.TABLE4),
+                          selectedText: formatCamelCase(filter),
+                          onSelected: onSelectFilter,
+                          color: LandRate.getMapColors(colorScheme, LandRate.TABLE4).clusterFill,
+                        ),
                       ],
                     ),
                   ),
@@ -195,9 +221,13 @@ class _LandRateScreenState extends State<LandRateScreen> {
                 ],
               ),
             ),
-          )
+          ),
         ),
-        HorizontalTransition(visible: !isHomePage, destroyOnHide: true, child: LandRateDetails(landRate: provider.getSelectedLandRate(), key: const ValueKey('details')))
+        HorizontalTransition(
+          visible: !isHomePage,
+          destroyOnHide: true,
+          child: LandRateDetails(landRate: provider.getSelectedLandRate(), key: const ValueKey('details')),
+        ),
       ],
     );
   }

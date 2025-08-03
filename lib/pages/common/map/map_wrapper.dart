@@ -15,6 +15,7 @@ class MapWrapper extends StatefulWidget {
   final MapController mapController;
   final double borderRadius;
   final bool enableCenterMarker;
+  final bool enableControls;
   final LatLng center;
   final double zoom;
   final InteractionOptions interactionOptions;
@@ -28,11 +29,12 @@ class MapWrapper extends StatefulWidget {
     this.children = const [],
     this.actions = const [],
     this.enableCenterMarker = false,
+    this.enableControls = false,
     this.center = const LatLng(0, 0),
     this.zoom = 15,
     this.editMode = false,
     this.onPositionChanged = _defaultOnPositionChanged,
-    this.interactionOptions = const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate)
+    this.interactionOptions = const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
   });
 
   static void _defaultOnPositionChanged(MapCamera cam, bool hasGesture) {}
@@ -44,7 +46,9 @@ class MapWrapper extends StatefulWidget {
 class _MapWrapperState extends State<MapWrapper> {
   String? cachePath;
 
-  getCachePath() async {
+  MapController get controller => widget.mapController;
+
+  Future<void> getCachePath() async {
     if (!kIsWeb) {
       final cacheDirectory = await getTemporaryDirectory();
       setState(() => cachePath = cacheDirectory.path);
@@ -67,13 +71,14 @@ class _MapWrapperState extends State<MapWrapper> {
         ? ClipRRect(
           borderRadius: BorderRadius.circular(widget.borderRadius),
           child: FlutterMap(
-            mapController: widget.mapController,
+            mapController: controller,
             options: MapOptions(
               initialZoom: widget.zoom,
               initialCenter: initialCenter,
               backgroundColor: colorScheme.surface,
               onPositionChanged: widget.onPositionChanged,
               interactionOptions: widget.interactionOptions,
+              onLongPress: (tapPosition, point) => controller.move(point, controller.camera.zoom),
             ),
             children: [
               TileLayer(
@@ -94,13 +99,23 @@ class _MapWrapperState extends State<MapWrapper> {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 6,
+                  spacing: 5,
                   children: [
                     MapActionButton(
-                      onPressed: () => provider.moveToMyLocation(widget.mapController, zoom: 18),
+                      onPressed: () => provider.moveToMyLocation(controller, zoom: 18),
                       icon: Icons.gps_fixed,
                       isLoading: provider.isLoading,
                     ),
+                    if (widget.enableControls) ...[
+                      MapActionButton(
+                        onPressed: () => controller.move(controller.camera.center, controller.camera.zoom + 1),
+                        icon: Icons.add,
+                      ),
+                      MapActionButton(
+                        onPressed: () => controller.move(controller.camera.center, controller.camera.zoom - 1),
+                        icon: Icons.remove,
+                      ),
+                    ],
                     ...widget.actions,
                   ],
                 ),

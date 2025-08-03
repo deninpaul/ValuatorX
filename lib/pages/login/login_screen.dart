@@ -17,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showWebView = false;
   late WebViewController webViewController;
 
-  setupWebView() {
+  void setupWebView() {
     final provider = Provider.of<AuthProvider>(context, listen: false);
     webViewController =
         WebViewController()
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
   }
 
-  setupRedirectListener() {
+  void setupRedirectListener() {
     final provider = Provider.of<AuthProvider>(context, listen: false);
     listenWindowMessage((event) async {
       final data = event.data;
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  startLogin() {
+  void startLogin() {
     final provider = Provider.of<AuthProvider>(context, listen: false);
     final loginUrl = provider.startAuthFlow();
     if (kIsWeb) {
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  onBackAction() {
+  void onBackAction() {
     setState(() {
       showWebView = false;
       Provider.of<AuthProvider>(context, listen: false).isLoading = false;

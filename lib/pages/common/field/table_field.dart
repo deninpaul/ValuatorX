@@ -115,7 +115,7 @@ class _TableFieldState extends State<TableField> {
     );
   }
 
-  removeIcon(index, ThemeData theme) => SizedBox(
+  Widget removeIcon(int index, ThemeData theme) => SizedBox(
     width: 36,
     child:
         (index < widget.minRows)

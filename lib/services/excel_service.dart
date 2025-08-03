@@ -42,7 +42,7 @@ class ExcelService {
     }
   }
 
-  addToExcelTable({required Client client, required List values}) async {
+  Future<void> addToExcelTable({required Client client, required List values}) async {
     try {
       final response = await client.post(
         Uri.parse(addTableEndpoint),
@@ -58,7 +58,7 @@ class ExcelService {
     }
   }
 
-  updateExcelTableRow({required Client client, required String index, required List values}) async {
+  Future<void> updateExcelTableRow({required Client client, required String index, required List values}) async {
     try {
       final response = await client.patch(
         Uri.parse(tableRowEndpoint.replaceAll("_ID_", index)),
@@ -74,7 +74,7 @@ class ExcelService {
     }
   }
 
-  deleteExcelTableRow({required Client client, required String index}) async {
+  Future<void> deleteExcelTableRow({required Client client, required String index}) async {
     try {
       final response = await client.delete(Uri.parse(tableRowEndpoint.replaceAll("_ID_", index)));
       if (response.statusCode != 204) {
@@ -100,7 +100,7 @@ class ExcelService {
     return tableValue;
   }
 
-  getWorkbookLink({required Client client}) async {
+  Future<String> getWorkbookLink({required Client client}) async {
     try {
       final response = await client.get(Uri.parse(fileEndpoint.replaceAll("_ID_", fileId)));
       if (response.statusCode != 200) {
@@ -116,7 +116,7 @@ class ExcelService {
     }
   }
 
-  addValuesToRange({required Client client, required List<List<String>> values, required String range, String? id, String? sheet}) async {
+  Future<void> addValuesToRange({required Client client, required List<List<String>> values, required String range, String? id, String? sheet}) async {
     id = id ?? fileId;
     sheet = sheet ?? sheetName;
     try {

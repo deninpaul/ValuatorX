@@ -52,7 +52,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     return Valuation.fromJson(values);
   }
 
-  populateForm() async {
+  Future<void> populateForm() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     baseValue =
         widget.editMode
@@ -69,7 +69,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     });
   }
 
-  syncToDraft() async {
+  Future<void> syncToDraft() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     draftId = widget.editMode ? provider.getSelectedValuation().id : await provider.generateDraftIndex();
     timer = Timer.periodic(const Duration(seconds: 5), (_) async {
@@ -81,13 +81,13 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     });
   }
 
-  saveDraft() async {
+  Future<void> saveDraft() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     final valuation = generateValuation(draftId, status: "Draft");
     await provider.createOrUpdateDraft(valuation);
   }
 
-  loadDraft() async {
+  Future<void> loadDraft() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     final values = await provider.getDraft(draftId);
     for (final key in fieldKeys) {
@@ -96,13 +96,13 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     setState(() => showDraftDialog = false);
   }
 
-  cancelDraft() async {
+  Future<void> cancelDraft() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     await provider.deleteDraft(draftId);
     setState(() => showDraftDialog = false);
   }
 
-  submitForm() async {
+  Future<void> submitForm() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     final id = widget.editMode && !widget.isDraft ? provider.getSelectedValuation().id : provider.generateIndex();
     final valuation = generateValuation(id, status: !widget.editMode ? Valuation.statusOptions[0] : null);
@@ -120,7 +120,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     }
   }
 
-  cancelForm() async {
+  Future<void> cancelForm() async {
     final provider = Provider.of<ValuationProvider>(context, listen: false);
     final id = widget.editMode && !widget.isDraft ? provider.getSelectedValuation().id : provider.generateIndex();
     final valuation = generateValuation(id);

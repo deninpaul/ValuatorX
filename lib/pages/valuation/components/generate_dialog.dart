@@ -16,7 +16,7 @@ class _GenerateDialogState extends State<GenerateDialog> {
   String message = "Generating";
   Status status = Status.loading;
 
-  onUpdateLoadingMessage(String newMessage, {Status newStatus = Status.loading}) {
+  void onUpdateLoadingMessage(String newMessage, {Status newStatus = Status.loading}) {
     setState(() {
       status = newStatus;
       message = newMessage;

@@ -1,11 +1,12 @@
+// ignore_for_file: strict_top_level_inference
 String? getAuthCodeFromUrl() => null;
 
-goToUrl(Uri url) {}
+void goToUrl(Uri url) {}
 
 String getUrl() => "";
 
-openWindow(url, name, options) {}
+void openWindow(url, name, options) {}
 
-listenWindowMessage(Function onMessageRecieved) {}
+void listenWindowMessage(Function onMessageRecieved) {}
 
-initWeb() {}
+void initWeb() {}

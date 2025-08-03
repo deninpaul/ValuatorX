@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false);
   }
 
-  onSelectTab(int index) {
+  void onSelectTab(int index) {
     setState(() => previousIndex = selectedIndex);
     setState(() => selectedIndex = index);
     clearSearch();

@@ -26,10 +26,10 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
         centerTitle: true,
         expandedTitleScale: 1.175,
         title: Container(
-          width: MediaQuery.of(context).size.width * 0.5,
+          width: MediaQuery.of(context).size.width * 0.44,
           padding: const EdgeInsets.only(top: 15.0),
           alignment: Alignment.bottomCenter,
-          child: Text(title, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, textWidthBasis: TextWidthBasis.longestLine),
+          child: Text(title, style: textTheme.bodyLarge, overflow: TextOverflow.fade, softWrap: false, textWidthBasis: TextWidthBasis.longestLine),
         ),
       ),
     );

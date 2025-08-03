@@ -21,7 +21,7 @@ class ValuationProvider extends ChangeNotifier {
   final OneDriveService driveService = OneDriveService();
   final DraftService draftService = DraftService(boxName: "valuations");
 
-  getValuations(BuildContext context, {bool refresh = true}) async {
+  Future<void> getValuations(BuildContext context, {bool refresh = true}) async {
     await Future.delayed(Duration.zero);
     try {
       if (refresh) setLoading(true);
@@ -73,7 +73,7 @@ class ValuationProvider extends ChangeNotifier {
     return result.toList();
   }
 
-  addValuations(BuildContext context, Valuation newValuation) async {
+  Future<bool> addValuations(BuildContext context, Valuation newValuation) async {
     var success = false;
     try {
       setCreating(true);
@@ -113,7 +113,7 @@ class ValuationProvider extends ChangeNotifier {
     return success;
   }
 
-  deleteValuation(BuildContext context, Valuation valuation) async {
+  Future<void> deleteValuation(BuildContext context, Valuation valuation) async {
     try {
       setDeleting(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -134,7 +134,7 @@ class ValuationProvider extends ChangeNotifier {
     return (ids.isEmpty ? 0 : ids.last + 1).toString();
   }
 
-  getDrafts() async {
+  Future<void> getDrafts() async {
     try {
       var result = await draftService.getAllDrafts();
       drafts = result.map(((item) => Valuation.fromJson(item))).toList();
@@ -156,7 +156,7 @@ class ValuationProvider extends ChangeNotifier {
     return {};
   }
 
-  createOrUpdateDraft(Valuation valuation) async {
+  Future<void> createOrUpdateDraft(Valuation valuation) async {
     try {
       await draftService.put(valuation.id, valuation.toJson());
       debugPrint("Saved draft ${valuation.id} to drafts.");
@@ -166,7 +166,7 @@ class ValuationProvider extends ChangeNotifier {
     }
   }
 
-  deleteDraft(String id) async {
+  Future<void> deleteDraft(String id) async {
     try {
       await draftService.delete(id);
       debugPrint("Deleted draft $id from drafts.");
@@ -199,7 +199,7 @@ class ValuationProvider extends ChangeNotifier {
     return "draft_0";
   }
 
-  generateReport(BuildContext context, Valuation valuation, void Function(String message, {Status newStatus}) onStatusUpdate) async {
+  Future<void> generateReport(BuildContext context, Valuation valuation, void Function(String message, {Status newStatus}) onStatusUpdate) async {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final client = await authProvider.getClient();

@@ -18,7 +18,7 @@ class Tag extends StatefulWidget {
     this.disabled = false,
     this.color
   });
-  static _defaultOnStatusChange(String s) {}
+  static void _defaultOnStatusChange(String s) {}
 
   @override
   State<Tag> createState() => _TagState();

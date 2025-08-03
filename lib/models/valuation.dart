@@ -377,7 +377,7 @@ class Valuation {
     return list;
   }
 
-  equal(Valuation val) {
+  bool equal(Valuation val) {
     final mapA = toJson()..remove(STATUS)..remove(ID);
     final mapB = val.toJson()..remove(STATUS)..remove(ID);
     const eq = DeepCollectionEquality();

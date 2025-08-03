@@ -16,7 +16,7 @@ void showSnackbar(String message) {
   scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(content: Text(message)));
 }
 
-defaultTransition(Color color, {SharedAxisTransitionType orientation = SharedAxisTransitionType.horizontal}) {
+dynamic defaultTransition(Color color, {SharedAxisTransitionType orientation = SharedAxisTransitionType.horizontal}) {
   return (child, animation, secondaryAnimation) => SharedAxisTransition(
     animation: animation,
     secondaryAnimation: secondaryAnimation,
@@ -46,7 +46,7 @@ bool isDesktop(BuildContext context) {
   return width > 1280;
 }
 
-EdgeInsets formPadding(context) => EdgeInsets.symmetric(horizontal: isMobile(context) ? 24 : (isDesktop(context) ? 240 : 48), vertical: 32);
+EdgeInsets formPadding(BuildContext context) => EdgeInsets.symmetric(horizontal: isMobile(context) ? 24 : (isDesktop(context) ? 240 : 48), vertical: 32);
 
 String normalizeString(String input) {
   return input.toLowerCase().replaceAll(RegExp(r'[^\w]+'), ' ').trim();

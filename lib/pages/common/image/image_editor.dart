@@ -161,7 +161,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     return finalBytes;
   }
 
-  _getCurrentLocation() async {
+  Future<void> _getCurrentLocation() async {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
@@ -220,7 +220,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
 
   String get fileName => "${widget.file.path.split('/').last.split('.')[0]}_${Random().nextInt(1000)}.jpg";
 
-  saveImage() async {
+  Future<void> saveImage() async {
     setState(() => isProcessingImage = imprintLocationDetails && locationData != null);
     try {
       final provider = Provider.of<MediaProvider>(context, listen: false);

@@ -26,11 +26,11 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
   String filter = Valuation.statusOptions[0];
   Timer? timer;
 
-  onSearchAction(String val) {
+  void onSearchAction(String val) {
     setState(() => searchQuery = val);
   }
 
-  onSelectFilter(String val) {
+  void onSelectFilter(String val) {
     setState(() => filter = val);
   }
 

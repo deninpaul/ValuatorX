@@ -8,7 +8,7 @@ class CreateButton extends StatelessWidget {
   final VoidCallback onOpen;
 
   const CreateButton({super.key, required this.createPage, required this.label, this.onOpen = _defaultOnOpen});
-  static _defaultOnOpen() {}
+  static void _defaultOnOpen() {}
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-ThemeData theme(context) {
+ThemeData theme(BuildContext context) {
   final colorScheme = Theme.of(context).colorScheme;
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light),

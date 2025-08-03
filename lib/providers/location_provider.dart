@@ -8,7 +8,7 @@ class LocationProvider extends ChangeNotifier {
   LatLng currentLocation = LatLng(0, 0);
   bool isEmpty = true;
 
-  moveToMyLocation(MapController controller, {double zoom = 15}) async {
+  Future<void> moveToMyLocation(MapController controller, {double zoom = 15}) async {
     try {
       setLoading(true);
       currentLocation = await getCurrentPosition();

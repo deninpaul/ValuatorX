@@ -28,7 +28,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
   List<String> imageUrls = [];
   bool ready = false;
 
-  pickImage(ImageSource source) async {
+  Future<void> pickImage(ImageSource source) async {
     try {
       final XFile? pickedFile = await picker.pickImage(source: source, maxWidth: 1080, maxHeight: 1080, imageQuality: 80);
       if (pickedFile != null) {
@@ -45,7 +45,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
     }
   }
 
-  onDeleteAction(int index) async {
+  Future<void> onDeleteAction(int index) async {
     final confirmed = await showDialog<bool>(context: context, barrierDismissible: true, builder: (context) => const ConfirmDeleteDialog());
     if (confirmed == true) {
       final ids = parseStringtoArray(widget.controller!.text);
@@ -54,7 +54,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
     }
   }
 
-  onOpenAction(int index) async {
+  Future<void> onOpenAction(int index) async {
     final ids = parseStringtoArray(widget.value ?? "");
     final id = ids.removeAt(index);
     final provider = Provider.of<MediaProvider>(context, listen: false);
@@ -92,7 +92,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
     return string.split(',').where((s) => s.isNotEmpty).toList();
   }
 
-  getImages() async {
+  Future<void> getImages() async {
     setState(() => ready = false);
     final value = editMode ? widget.controller!.text : (widget.value ?? "");
     final ids = parseStringtoArray(value);

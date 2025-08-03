@@ -7,7 +7,7 @@ class NumberedMarker extends StatelessWidget {
 
   const NumberedMarker({super.key, required this.text, this.onPressed = _defaultOnPressed, required this.fill});
 
-  static _defaultOnPressed() {}
+  static void _defaultOnPressed() {}
 
   @override
   Widget build(BuildContext context) {

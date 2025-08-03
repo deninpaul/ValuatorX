@@ -16,7 +16,7 @@ class LandRateProvider extends ChangeNotifier {
 
   final Map<String, LandRateService> services = {for (final table in LandRate.tables) table: LandRateService(tableName: table)};
 
-  getLandRates(BuildContext context, {bool refresh = true}) async {
+  Future<void> getLandRates(BuildContext context, {bool refresh = true}) async {
     try {
       if (refresh) setLoading(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -64,7 +64,7 @@ class LandRateProvider extends ChangeNotifier {
         .toList();
   }
 
-  addLandRate(BuildContext context, LandRate newLandRate) async {
+  Future<void> addLandRate(BuildContext context, LandRate newLandRate) async {
     try {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -79,7 +79,7 @@ class LandRateProvider extends ChangeNotifier {
     }
   }
 
-  updateLandRate(BuildContext context, LandRate landRate) async {
+  Future<void> updateLandRate(BuildContext context, LandRate landRate) async {
     try {
       setCreating(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -94,7 +94,7 @@ class LandRateProvider extends ChangeNotifier {
     }
   }
 
-  deleteLandRate(BuildContext context, LandRate landRate) async {
+  Future<void> deleteLandRate(BuildContext context, LandRate landRate) async {
     try {
       setDeleting(true);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);

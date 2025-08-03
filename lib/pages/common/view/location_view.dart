@@ -29,7 +29,7 @@ class LocationViewTile extends StatelessWidget {
     this.markerColor
   });
 
-  resetLocation(LatLng location) {
+  void resetLocation(LatLng location) {
     Future.delayed(Duration(milliseconds: 100), () {
       mapController.move(location, 18);
     });

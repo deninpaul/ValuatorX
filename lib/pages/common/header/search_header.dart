@@ -21,7 +21,7 @@ class _SearchHeaderState extends State<SearchHeader> {
     super.initState();
   }
 
-  onClear() {
+  void onClear() {
     widget.onSearch!("");
     controller.text = "";
   }

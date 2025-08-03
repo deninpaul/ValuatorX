@@ -123,7 +123,7 @@ class LandRate {
     return [slNo, coordinates, landRatePerCent, landType, landSizeRemarks, monthOfVisit, yearOfVisit, road];
   }
 
-  equal(LandRate val) {
+  bool equal(LandRate val) {
     final mapA = toJson()..remove(ID);
     final mapB = val.toJson()..remove(ID);
     const eq = DeepCollectionEquality();

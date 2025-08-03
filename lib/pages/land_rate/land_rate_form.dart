@@ -50,7 +50,7 @@ class _LandRateFormState extends State<LandRateForm> {
     return LandRate.fromJson(values);
   }
 
-  populateForm() async {
+  Future<void> populateForm() async {
     final provider = Provider.of<LandRateProvider>(context, listen: false);
     if (!widget.editMode) {
       if (provider.landRates.isEmpty) {
@@ -70,7 +70,7 @@ class _LandRateFormState extends State<LandRateForm> {
     setState(() => ready = true);
   }
 
-  submitForm() async {
+  Future<void> submitForm() async {
     final provider = Provider.of<LandRateProvider>(context, listen: false);
     final id = widget.editMode ? provider.getSelectedLandRate().id : provider.generateIndex();
     final newLandRate = generateLandRate(id);
@@ -81,7 +81,7 @@ class _LandRateFormState extends State<LandRateForm> {
     }
   }
 
-  cancelForm() async {
+  Future<void> cancelForm() async {
     final provider = Provider.of<LandRateProvider>(context, listen: false);
     final id = widget.editMode ? provider.getSelectedLandRate().id : provider.generateIndex();
     final newLandRate = generateLandRate(id);

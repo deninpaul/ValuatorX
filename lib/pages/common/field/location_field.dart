@@ -55,7 +55,7 @@ class _LocationFieldState extends State<LocationField> {
     });
   }
 
-  _onLatitudeChanged(String value) {
+  void _onLatitudeChanged(String value) {
     try {
       _mapController.move(LatLng(double.parse(value), _mapController.camera.center.longitude), _mapController.camera.zoom);
     } catch (e) {
@@ -63,7 +63,7 @@ class _LocationFieldState extends State<LocationField> {
     }
   }
 
-  _onLongitudeChanged(String value) {
+  void _onLongitudeChanged(String value) {
     try {
       _mapController.move(LatLng(_mapController.camera.center.latitude, double.parse(value)), _mapController.camera.zoom);
     } catch (e) {
@@ -71,7 +71,7 @@ class _LocationFieldState extends State<LocationField> {
     }
   }
 
-  _onPositionChanged(MapCamera position, bool hasGesture) {
+  void _onPositionChanged(MapCamera position, bool hasGesture) {
     final center = position.center;
     widget.latitudeController.text = center.latitude.toStringAsFixed(6);
     widget.longitudeController.text = center.longitude.toStringAsFixed(6);
@@ -127,6 +127,7 @@ class _LocationFieldState extends State<LocationField> {
                   borderRadius: 24,
                   zoom: 18,
                   enableCenterMarker: true,
+                  enableControls: true,
                   mapController: _mapController,
                   onPositionChanged: _onPositionChanged,
                   interactionOptions: InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate & ~InteractiveFlag.drag & ~InteractiveFlag.scrollWheelZoom),

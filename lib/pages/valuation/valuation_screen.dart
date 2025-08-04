@@ -131,6 +131,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
             floatingActionButton: CreateButton(
               label: "New report",
               onOpen: openValuationForm,
+              isLoading: provider.isLoading,
               options: provider.templates.map((val) => CreateButtonOption(id: val.id, label: val.templateTile)).toList(),
             ),
             body: RefreshIndicator(

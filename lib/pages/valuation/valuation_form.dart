@@ -146,7 +146,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
         context: context,
         builder:
             (_) =>
-                DiscardDialog(actions: {"Discard": cancelDraft, if (editMode) "Save changes": submitForm else "Save as draft": saveDraft}),
+                DiscardDialog(actions: {"Discard": cancelDraft, if (editMode) "Save changes": submitForm else if (!templateMode) "Save as draft": saveDraft}),
       );
     } else {
       Navigator.pop(context);
@@ -224,16 +224,35 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                           BasicField(
                             name: 'Template Name',
                             controller: controllers[Valuation.DATE_OF_INSPECTION]!,
-                            icon: Icons.file_copy_outlined,
+                            icon: Icons.description_outlined,
                             focusField: widget.focusField,
                             required: true,
                           ),
                         BasicField(
                           name: Valuation.REPORT_REFERENCE,
                           controller: controllers[Valuation.REPORT_REFERENCE]!,
-                          icon: Icons.numbers,
+                          icon: Icons.grid_3x3_outlined,
                           focusField: widget.focusField,
                           required: true,
+                        ),
+                        BasicField(
+                          name: Valuation.BANK_DETAIL,
+                          controller: controllers[Valuation.BANK_DETAIL]!,
+                          icon: Icons.account_balance_outlined,
+                          focusField: widget.focusField,
+                        ),
+                        DropdownField(
+                          name: Valuation.TYPE_OF_LOAN,
+                          controller: controllers[Valuation.TYPE_OF_LOAN]!,
+                          icon: Icons.paid_outlined,
+                          focusField: widget.focusField,
+                          options: Valuation.typeOfLoanOptions,
+                        ),
+                        BasicField(
+                          name: "File Allocation Details",
+                          controller: controllers[Valuation.FILE_ALLOCATION_DETAIL]!,
+                          icon: Icons.business_outlined,
+                          focusField: widget.focusField,
                         ),
                         if (!templateMode)
                           DatePickerField(
@@ -243,12 +262,6 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                             focusField: widget.focusField,
                             required: true,
                           ),
-                        BasicField(
-                          name: Valuation.FILE_ALLOCATION_DETAIL,
-                          controller: controllers[Valuation.FILE_ALLOCATION_DETAIL]!,
-                          icon: Icons.business_outlined,
-                          focusField: widget.focusField,
-                        ),
                         Divider(),
                         AreaField(
                           name: Valuation.MORTGAGOR_DETAIL,
@@ -280,6 +293,13 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                           controller: controllers[Valuation.DEED_DOCUMENT_DETAILS]!,
                           icon: Icons.assignment_ind_outlined,
                           focusField: widget.focusField,
+                        ),
+                        DropdownField(
+                          name: Valuation.LAND_CATEGORY,
+                          controller: controllers[Valuation.LAND_CATEGORY]!,
+                          icon: Icons.landscape_outlined,
+                          focusField: widget.focusField,
+                          options: Valuation.landCategoryOptions,
                         ),
                         AreaField(
                           name: Valuation.POCCESSION_CERTIFICATE_DETAILS,

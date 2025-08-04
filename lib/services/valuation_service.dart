@@ -13,7 +13,7 @@ class ValuationService extends ExcelService {
 
   final _driveId = "b!bjWHx8vaSUGa2c_fZH7AoTlNAe4QjSFKrgLAyq8Smcgfz6YLhZb1T7j74-c_w8yy";
   final _reportPath = "/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads";
-  final _templateId = "01OTD6NSKJH6IV3JKRMBGKWNTKXJLS2CGK";
+  final _templateId = "01OTD6NSJAS6L7SDOXRZBZFNQNIHTN723N";
 
   Future createNewReportWorksheet({required Client client, required String fileName}) async {
     try {

@@ -46,7 +46,8 @@ bool isDesktop(BuildContext context) {
   return width > 1280;
 }
 
-EdgeInsets formPadding(BuildContext context) => EdgeInsets.symmetric(horizontal: isMobile(context) ? 24 : (isDesktop(context) ? 240 : 48), vertical: 32);
+EdgeInsets formPadding(BuildContext context) =>
+    EdgeInsets.symmetric(horizontal: isMobile(context) ? 24 : (isDesktop(context) ? 240 : 48), vertical: 32);
 
 String normalizeString(String input) {
   return input.toLowerCase().replaceAll(RegExp(r'[^\w]+'), ' ').trim();

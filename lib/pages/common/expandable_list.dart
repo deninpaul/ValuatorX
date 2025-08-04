@@ -46,7 +46,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
     final colorScheme = theme.colorScheme;
     final double dividerIntent = isMobile(context) ? 21 : 24;
     final Divider divider = Divider(color: theme.dividerColor.withAlpha(64), indent: dividerIntent, endIndent: dividerIntent);
-    final minHeight = MediaQuery.of(context).size.height - 300 - (isMobile(context) ? 96 : 0) + (kIsWeb ? 28 : 0);
+    final minHeight = MediaQuery.of(context).size.height - 300 + (kIsWeb ? 28 : 0);
 
     final int itemsToShow = widget.items.isEmpty ? 0 : (_displayCount > widget.items.length ? widget.items.length : _displayCount);
     final bool showViewMoreButton = itemsToShow < widget.items.length;
@@ -54,7 +54,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
       padding: const EdgeInsets.symmetric(vertical: 4),
-      margin: const EdgeInsets.only(bottom: 15),
+      margin: EdgeInsets.only(bottom: isMobile(context) ? 0 : 15),
       decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(26)),
       child: Column(
         mainAxisSize: MainAxisSize.min,

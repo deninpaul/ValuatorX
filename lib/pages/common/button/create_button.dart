@@ -7,8 +7,9 @@ class CreateButton extends StatefulWidget {
   final String label;
   final Widget Function(String option) onOpen;
   final List<CreateButtonOption> options;
+  final bool isLoading;
 
-  const CreateButton({super.key, required this.label, this.options = const [], required this.onOpen});
+  const CreateButton({super.key, required this.label, this.options = const [], required this.onOpen, this.isLoading = false});
 
   @override
   State<CreateButton> createState() => _CreateButtonState();
@@ -44,7 +45,11 @@ class _CreateButtonState extends State<CreateButton> {
           child: Text(
             label,
             textAlign: TextAlign.right,
-            style: theme.textTheme.labelLarge!.copyWith(fontWeight: FontWeight.normal, overflow: TextOverflow.ellipsis, color: colorScheme.onPrimaryContainer),
+            style: theme.textTheme.labelLarge!.copyWith(
+              fontWeight: FontWeight.normal,
+              overflow: TextOverflow.ellipsis,
+              color: colorScheme.onPrimaryContainer,
+            ),
           ),
         ),
       );
@@ -72,7 +77,7 @@ class _CreateButtonState extends State<CreateButton> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 180),
+                    constraints: BoxConstraints(maxWidth: 160),
                     child: Column(
                       spacing: 0,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -96,7 +101,7 @@ class _CreateButtonState extends State<CreateButton> {
             ),
           ),
           OpenContainer(
-            transitionType: ContainerTransitionType.fade,
+            transitionType: ContainerTransitionType.fadeThrough,
             openBuilder: (context, _) {
               return widget.onOpen(option);
             },
@@ -112,14 +117,15 @@ class _CreateButtonState extends State<CreateButton> {
               return widget.options.isEmpty
                   ? FloatingActionButton.extended(
                     elevation: 0,
-                    onPressed: widget.options.isEmpty ? openContainer : toggleMenu,
+                    foregroundColor: widget.isLoading ? theme.disabledColor : colorScheme.onPrimaryContainer,
+                    onPressed: !widget.isLoading ? (widget.options.isEmpty ? openContainer : toggleMenu) : null,
                     icon: const Icon(Icons.add, size: 16),
                     label: Text(widget.label, style: TextStyle(fontWeight: FontWeight.normal)),
                   )
                   : TextButton(
-                    onPressed: toggleMenu,
+                    onPressed: !widget.isLoading ? toggleMenu : null,
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: kIsWeb ? 26 : 18, horizontal: 18),
+                      padding: kIsWeb ? EdgeInsets.fromLTRB(15, 26, 20, 26) : EdgeInsets.fromLTRB(15, 18, 20, 18),
                       backgroundColor: Colors.transparent,
                       shape: BeveledRectangleBorder(),
                       elevation: 0,
@@ -141,8 +147,6 @@ class _CreateButtonState extends State<CreateButton> {
                           if (!open && showLabel)
                             Text(
                               widget.label,
-                              overflow: TextOverflow.clip,
-                              softWrap: true,
                               style: TextStyle(fontWeight: FontWeight.normal),
                             ),
                         ],

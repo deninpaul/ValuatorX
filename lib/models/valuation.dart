@@ -10,11 +10,14 @@ class Valuation {
   final String reportReference;
   final String fileAllocationDetail;
   final String dateOfInspection;
+  final String bankDetails;
+  final String typeOfLoan;
   final String mortgagorDetail;
   final String mortgagorNumber;
   final String deedOwnerDetail;
   final String legalReportDetail;
   final String deedDocumentDetails;
+  final String landCategory;
   final String possessionCertificateDetails;
   final String locationSketchDetails;
   final String propertyTaxCertificateDetails;
@@ -82,11 +85,14 @@ class Valuation {
     required this.status,
     required this.reportLink,
     required this.fileAllocationDetail,
+    required this.bankDetails,
+    required this.typeOfLoan,
     required this.mortgagorDetail,
     required this.mortgagorNumber,
     required this.deedOwnerDetail,
     required this.legalReportDetail,
     required this.deedDocumentDetails,
+    required this.landCategory,
     required this.possessionCertificateDetails,
     required this.locationSketchDetails,
     required this.propertyTaxCertificateDetails,
@@ -153,11 +159,14 @@ class Valuation {
   static const String DATE_OF_INSPECTION = "Date of Inspection";
   static const String STATUS = "Status";
   static const String FILE_ALLOCATION_DETAIL = "Bank/File Allocation Details";
+  static const String BANK_DETAIL = "Bank Details";
+  static const String TYPE_OF_LOAN = "Type of Loan";
   static const String MORTGAGOR_DETAIL = "Mortgagor Details";
   static const String MORTGAGOR_MOBILE = "Mortgagor Phone No.";
   static const String DEED_OWNER_DETAIL = "Deed Owner Details";
   static const String LEGAL_REPORT_REFERENCE = "Legal Report Date/Clause No.";
   static const String DEED_DOCUMENT_DETAILS = "Deed Number/Data/SRO";
+  static const String LAND_CATEGORY = "Land Category";
   static const String POCCESSION_CERTIFICATE_DETAILS = "Poccession Certificate Details";
   static const String LOCATION_SKETCH_DETAILS = "Location Sketch Details";
   static const String PROPERTY_TAX_CERTICATE_DETAILS = "Property Tax Certicate Details";
@@ -226,11 +235,14 @@ class Valuation {
       fileAllocationDetail: (json[FILE_ALLOCATION_DETAIL] ?? "").toString(),
       dateOfInspection: (json[DATE_OF_INSPECTION] ?? "").toString(),
       status: (json[STATUS] ?? "").toString(),
+      bankDetails: (json[BANK_DETAIL] ?? "").toString(),
+      typeOfLoan: (json[TYPE_OF_LOAN] ?? "").toString(),
       mortgagorDetail: (json[MORTGAGOR_DETAIL] ?? "").toString(),
       mortgagorNumber: (json[MORTGAGOR_MOBILE] ?? "").toString(),
       deedOwnerDetail: (json[DEED_OWNER_DETAIL] ?? "").toString(),
       legalReportDetail: (json[LEGAL_REPORT_REFERENCE] ?? "").toString(),
       deedDocumentDetails: (json[DEED_DOCUMENT_DETAILS] ?? "").toString(),
+      landCategory: (json[LAND_CATEGORY] ?? "").toString(),
       possessionCertificateDetails: (json[POCCESSION_CERTIFICATE_DETAILS] ?? "").toString(),
       locationSketchDetails: (json[LOCATION_SKETCH_DETAILS] ?? "").toString(),
       propertyTaxCertificateDetails: (json[PROPERTY_TAX_CERTICATE_DETAILS] ?? "").toString(),
@@ -301,10 +313,13 @@ class Valuation {
       DATE_OF_INSPECTION: dateOfInspection,
       STATUS: status,
       FILE_ALLOCATION_DETAIL: fileAllocationDetail,
+      BANK_DETAIL: bankDetails,
+      TYPE_OF_LOAN: typeOfLoan,
       MORTGAGOR_DETAIL: mortgagorDetail,
       MORTGAGOR_MOBILE: mortgagorNumber,
       DEED_OWNER_DETAIL: deedOwnerDetail,
       DEED_DOCUMENT_DETAILS: deedDocumentDetails,
+      LAND_CATEGORY: landCategory,
       LEGAL_REPORT_REFERENCE: legalReportDetail,
       POCCESSION_CERTIFICATE_DETAILS: possessionCertificateDetails,
       LOCATION_SKETCH_DETAILS: locationSketchDetails,
@@ -402,10 +417,13 @@ class Valuation {
     DATE_OF_INSPECTION,
     STATUS,
     FILE_ALLOCATION_DETAIL,
+    BANK_DETAIL,
+    TYPE_OF_LOAN,
     MORTGAGOR_DETAIL,
     MORTGAGOR_MOBILE,
     DEED_OWNER_DETAIL,
     DEED_DOCUMENT_DETAILS,
+    LAND_CATEGORY,
     LEGAL_REPORT_REFERENCE,
     POCCESSION_CERTIFICATE_DETAILS,
     LOCATION_SKETCH_DETAILS,
@@ -493,4 +511,8 @@ class Valuation {
   static const doorOptions = ["To be executed", "Wooden frame with panelled wooden door", "Wooden frame with modular door", "Wooden frame with laminate plywood door", "-"];
 
   static const rccProtectionOptions = ["To be executed", "Cement mortar screed laid to slope", "GI powder coated tiled profile sheet on steel truss", "Designed mangalore tiles on steel truss", "Mangalore tiles laid on slope roof", "-"];
+
+  static const typeOfLoanOptions = ["Education Loan", "Loan against Property", "Housing Loan", "Reserved Price", "-"];
+
+  static const landCategoryOptions = ["Purayidam", "Wet Land", "Parambu", "Nanja", "Wet Land Converted", "-"];
 }

@@ -61,7 +61,12 @@ class _CompassScreenState extends State<CompassScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surfaceContainer,
-      appBar: AppBar(toolbarHeight: 80, title: Text("Compass", style: headerTheme), backgroundColor: colorScheme.surfaceContainer),
+      appBar: AppBar(
+        toolbarHeight: 80,
+        centerTitle: false,
+        title: Text("Compass", style: headerTheme),
+        backgroundColor: colorScheme.surfaceContainer,
+      ),
       body: Container(
         width: double.infinity,
         margin: EdgeInsets.fromLTRB(20, 0, 20, 48),

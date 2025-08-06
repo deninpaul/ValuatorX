@@ -82,7 +82,7 @@ class _MapWrapperState extends State<MapWrapper> {
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://api.maptiler.com/maps/bright-v2/{z}/{x}/{y}.png?key=TuYo6WbyTRwcTXZfInOZ',
+                urlTemplate: 'https://api.maptiler.com/maps/bright-v2/{z}/{x}/{y}.png?key=ecxs4tp0frLAtNfGKGEX',
                 userAgentPackageName: 'in.samanto.valuatorx',
                 tileProvider: CachedTileProvider(store: HiveCacheStore(cachePath, hiveBoxName: "mapCache")),
               ),

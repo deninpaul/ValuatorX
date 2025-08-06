@@ -101,6 +101,7 @@ class _CreateButtonState extends State<CreateButton> {
             ),
           ),
           OpenContainer(
+            tappable: !widget.isLoading,
             transitionType: ContainerTransitionType.fadeThrough,
             openBuilder: (context, _) {
               return widget.onOpen(option);
@@ -117,15 +118,15 @@ class _CreateButtonState extends State<CreateButton> {
               return widget.options.isEmpty
                   ? FloatingActionButton.extended(
                     elevation: 0,
-                    foregroundColor: widget.isLoading ? theme.disabledColor : colorScheme.onPrimaryContainer,
-                    onPressed: !widget.isLoading ? (widget.options.isEmpty ? openContainer : toggleMenu) : null,
+                    foregroundColor: colorScheme.onPrimaryContainer,
+                    onPressed: widget.options.isEmpty ? openContainer : toggleMenu,
                     icon: const Icon(Icons.add, size: 16),
                     label: Text(widget.label, style: TextStyle(fontWeight: FontWeight.normal)),
                   )
                   : TextButton(
-                    onPressed: !widget.isLoading ? toggleMenu : null,
+                    onPressed: toggleMenu,
                     style: TextButton.styleFrom(
-                      padding: kIsWeb ? EdgeInsets.fromLTRB(15, 26, 20, 26) : EdgeInsets.fromLTRB(15, 18, 20, 18),
+                      padding: kIsWeb ? EdgeInsets.fromLTRB(15, 26, !open ? 20 : 15, 26) : EdgeInsets.fromLTRB(15, 18, !open ? 20 : 15, 18),
                       backgroundColor: Colors.transparent,
                       shape: BeveledRectangleBorder(),
                       elevation: 0,
@@ -142,13 +143,9 @@ class _CreateButtonState extends State<CreateButton> {
                             turns: !open ? 0 : 0.125,
                             curve: Curves.easeOutCubic,
                             duration: Duration(milliseconds: 150),
-                            child: Icon(Icons.add, size: 16),
+                            child: Icon(Icons.add, size: !open ? 16 : 18),
                           ),
-                          if (!open && showLabel)
-                            Text(
-                              widget.label,
-                              style: TextStyle(fontWeight: FontWeight.normal),
-                            ),
+                          if (!open && showLabel) Text(widget.label, style: TextStyle(fontWeight: FontWeight.normal)),
                         ],
                       ),
                     ),

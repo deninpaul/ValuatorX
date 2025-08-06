@@ -44,6 +44,7 @@ class ValuationTemplates extends StatelessWidget {
         backgroundColor: colorScheme.surfaceContainer,
         floatingActionButton: CreateButton(onOpen: (_) => ValuationForm(mode: Mode.templateCreate), label: "Create template"),
         appBar: AppBar(
+          centerTitle: false,
           backgroundColor: colorScheme.surfaceContainer,
           title: Text('Templates', style: headerTheme),
           leading: IconButton(icon: Icon(Icons.arrow_back_outlined), onPressed: onBack),

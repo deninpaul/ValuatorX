@@ -44,7 +44,7 @@ class SummaryTile extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: isMobile(context) ? 21 : 24),
           child: Row(
-            spacing: 24,
+            spacing: 18,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(

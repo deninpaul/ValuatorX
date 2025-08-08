@@ -6,18 +6,12 @@ class MapActionButton extends StatelessWidget {
   final IconData icon;
   final double elevation;
 
-  const MapActionButton({
-    super.key,
-    required this.onPressed,
-    required this.icon,
-    this.isLoading = false,
-    this.elevation = 2
-  });
+  const MapActionButton({super.key, required this.onPressed, required this.icon, this.isLoading = false, this.elevation = 2});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return ElevatedButton(
       onPressed: !isLoading ? onPressed : null,
       style: ElevatedButton.styleFrom(
@@ -25,11 +19,12 @@ class MapActionButton extends StatelessWidget {
         shape: const CircleBorder(),
         padding: const EdgeInsets.all(12),
         disabledBackgroundColor: colorScheme.surface,
-        elevation: elevation
+        elevation: elevation,
       ),
-      child: isLoading
-          ? SizedBox(width: 15, height: 15, child: CircularProgressIndicator(strokeWidth: 3,))
-          : Icon(icon, color: colorScheme.onSurfaceVariant),
+      child:
+          isLoading
+              ? SizedBox(width: 15, height: 15, child: CircularProgressIndicator(strokeWidth: 3))
+              : Icon(icon, color: colorScheme.onSurfaceVariant),
     );
   }
 }

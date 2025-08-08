@@ -16,7 +16,7 @@ class Tag extends StatefulWidget {
     this.isEditable = false,
     this.isLoading = false,
     this.disabled = false,
-    this.color
+    this.color,
   });
   static void _defaultOnStatusChange(String s) {}
 

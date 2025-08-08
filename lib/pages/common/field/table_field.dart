@@ -46,7 +46,7 @@ class _TableFieldState extends State<TableField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final widgetWidth = MediaQuery.of(context).size.width - (isMobile(context) ? 40 : isDesktop(context) ? 480 : 96);
+    final widgetWidth = MediaQuery.of(context).size.width - (isMobile(context) ? 40 : (isDesktop(context) ? 480 : 96));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -26,7 +26,7 @@ class LocationViewTile extends StatelessWidget {
     this.icon = Icons.location_on_outlined,
     this.onPressed,
     this.tabIndex = 0,
-    this.markerColor
+    this.markerColor,
   });
 
   void resetLocation(LatLng location) {

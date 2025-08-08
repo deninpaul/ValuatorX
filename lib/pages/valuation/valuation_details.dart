@@ -478,7 +478,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                       onPressed: onEditAction,
                       tabIndex: 2,
                     ),
-                     ViewTile(
+                    ViewTile(
                       title: Valuation.BUILDING_DESCRIPTION,
                       value: widget.valuation.buildingDescription,
                       onPressed: onEditAction,

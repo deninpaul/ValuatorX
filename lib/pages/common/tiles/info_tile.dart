@@ -6,7 +6,7 @@ class InfoTile extends StatelessWidget {
   final String value;
   final IconData? icon;
 
-  const InfoTile({super.key, this.title = "", this.value = "", this.icon });
+  const InfoTile({super.key, this.title = "", this.value = "", this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -28,25 +28,20 @@ class InfoTile extends StatelessWidget {
               padding: EdgeInsets.all(8),
               child: Icon(icon, color: colorScheme.primary),
             ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 2,
-                  children: [
-                    Text(valueFormated, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, maxLines: 1),
-                    Text(
-                      title,
-                      style: textTheme.bodyMedium!.copyWith(color: theme.hintColor),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
-                ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                spacing: 2,
+                children: [
+                  Text(valueFormated, style: textTheme.bodyLarge, overflow: TextOverflow.ellipsis, maxLines: 1),
+                  Text(title, style: textTheme.bodyMedium!.copyWith(color: theme.hintColor), overflow: TextOverflow.ellipsis, maxLines: 1),
+                ],
               ),
             ),
+          ),
         ],
       ),
     );

@@ -24,7 +24,7 @@ class DropdownField extends StatefulWidget {
     this.focusField = "",
     this.enabled = true,
     this.allowCustomValues = true,
-    this.onComplete = _defaultOnComplete
+    this.onComplete = _defaultOnComplete,
   });
 
   static void _defaultOnComplete(String val) {}
@@ -79,20 +79,26 @@ class _DropdownFieldState extends State<DropdownField> {
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Text(
                         option == "Other (Custom)" && isCustomValue ? "Other: ${widget.controller.text}" : formatCamelCase(option),
-                        style: textTheme.bodyLarge!.copyWith(height: 1.3, color: widget.enabled ? theme.colorScheme.onSurface : theme.disabledColor),
+                        style: textTheme.bodyLarge!.copyWith(
+                          height: 1.3,
+                          color: widget.enabled ? theme.colorScheme.onSurface : theme.disabledColor,
+                        ),
                       ),
                     ),
                   );
                 }).toList(),
-            onChanged: widget.enabled ? (newValue) {
-              if (newValue == "Other (Custom)") {
-                showCustomInputDialog();
-              } else if (newValue != null) {
-                widget.controller.text = newValue;
-                widget.onComplete(newValue);
-                setState(() {});
-              }
-            } : null,
+            onChanged:
+                widget.enabled
+                    ? (newValue) {
+                      if (newValue == "Other (Custom)") {
+                        showCustomInputDialog();
+                      } else if (newValue != null) {
+                        widget.controller.text = newValue;
+                        widget.onComplete(newValue);
+                        setState(() {});
+                      }
+                    }
+                    : null,
             decoration: InputDecoration(labelText: widget.name, border: const OutlineInputBorder()),
             validator: (v) => widget.required && (widget.controller.text.isEmpty) ? 'Required' : null,
             isExpanded: true,

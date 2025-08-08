@@ -16,8 +16,10 @@ class ExcelService {
     tableRowsEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows";
     tableHeadersEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/headerRowRange";
     addTableEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows/add";
-    tableRowEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
-    fileUploadEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
+    tableRowEndpoint =
+        "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
+    fileUploadEndpoint =
+        "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
     fileEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/_ID_";
   }
 
@@ -116,7 +118,13 @@ class ExcelService {
     }
   }
 
-  Future<void> addValuesToRange({required Client client, required List<List<String>> values, required String range, String? id, String? sheet}) async {
+  Future<void> addValuesToRange({
+    required Client client,
+    required List<List<String>> values,
+    required String range,
+    String? id,
+    String? sheet,
+  }) async {
     id = id ?? fileId;
     sheet = sheet ?? sheetName;
     try {

@@ -34,7 +34,9 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
       if (pickedFile != null) {
         final file = File(pickedFile.path);
         final fileBytes = await pickedFile.readAsBytes();
-        final result = await Navigator.of(context).push<String>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file, fileBytes: fileBytes)));
+        final result = await Navigator.of(
+          context,
+        ).push<String>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file, fileBytes: fileBytes)));
         if (result != null) {
           setState(() => ready = false);
           setState(() => widget.controller!.text += ",$result,");

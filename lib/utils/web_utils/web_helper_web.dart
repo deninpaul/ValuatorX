@@ -11,6 +11,7 @@ String getUrl() => html.window.location.href;
 
 html.WindowBase openWindow(url, name, options) => html.window.open(url, name, options);
 
-StreamSubscription<html.MessageEvent> listenWindowMessage(void Function(html.MessageEvent)? onMessageRecieved) => html.window.onMessage.listen(onMessageRecieved);
+StreamSubscription<html.MessageEvent> listenWindowMessage(void Function(html.MessageEvent)? onMessageRecieved) =>
+    html.window.onMessage.listen(onMessageRecieved);
 
 void initWeb() => setUrlStrategy(PathUrlStrategy());

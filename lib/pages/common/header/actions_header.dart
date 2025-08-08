@@ -7,13 +7,7 @@ class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
   final double collapsedHeight;
   final bool pinned;
 
-  const ActionsHeader({
-    super.key,
-    required this.actions,
-    this.expandedHeight = 136,
-    this.collapsedHeight = 56,
-    this.pinned = false,
-  });
+  const ActionsHeader({super.key, required this.actions, this.expandedHeight = 136, this.collapsedHeight = 56, this.pinned = false});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +24,7 @@ class ActionsHeader extends StatelessWidget implements PreferredSizeWidget {
         background: Container(
           alignment: Alignment.bottomCenter,
           padding: EdgeInsets.only(bottom: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: actions,
-          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: actions),
         ),
       ),
     );

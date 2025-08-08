@@ -130,7 +130,9 @@ class _LocationFieldState extends State<LocationField> {
                   enableControls: true,
                   mapController: _mapController,
                   onPositionChanged: _onPositionChanged,
-                  interactionOptions: InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate & ~InteractiveFlag.drag & ~InteractiveFlag.scrollWheelZoom),
+                  interactionOptions: InteractionOptions(
+                    flags: InteractiveFlag.all & ~InteractiveFlag.rotate & ~InteractiveFlag.drag & ~InteractiveFlag.scrollWheelZoom,
+                  ),
                 ),
               ),
             ],

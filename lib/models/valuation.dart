@@ -393,8 +393,14 @@ class Valuation {
   }
 
   bool equal(Valuation val) {
-    final mapA = toJson()..remove(STATUS)..remove(ID);
-    final mapB = val.toJson()..remove(STATUS)..remove(ID);
+    final mapA =
+        toJson()
+          ..remove(STATUS)
+          ..remove(ID);
+    final mapB =
+        val.toJson()
+          ..remove(STATUS)
+          ..remove(ID);
     const eq = DeepCollectionEquality();
     return eq.equals(mapA, mapB);
   }
@@ -490,7 +496,14 @@ class Valuation {
 
   static const buildingTypeOptions = ["Residential", "Commercial", "Industrial", "-"];
 
-  static const constructionTypeOptions = ["To be executed", "Loan bearing", "RCC Framed Structure", "Combined load bearing structure", "Steel structure", "-"];
+  static const constructionTypeOptions = [
+    "To be executed",
+    "Loan bearing",
+    "RCC Framed Structure",
+    "Combined load bearing structure",
+    "Steel structure",
+    "-",
+  ];
 
   static const qualityOfConstructionOptions = ["Excellent", "Good", "Normal", "Poor", "-"];
 
@@ -498,19 +511,57 @@ class Valuation {
 
   static const interiorConditionOptions = ["Excellent", "Good", "Normal", "Poor", "-"];
 
-  static const foundationOptions = ["To be executed", "Random Rubble Masonry for foundation and basement", "Isolated footing with stub columns and plinth beam", "Combined foundation of strip footing, columns, random masonry and plinth beam", "-"];
+  static const foundationOptions = [
+    "To be executed",
+    "Random Rubble Masonry for foundation and basement",
+    "Isolated footing with stub columns and plinth beam",
+    "Combined foundation of strip footing, columns, random masonry and plinth beam",
+    "-",
+  ];
 
-  static const wallOptions = ["To be executed", "Lateriate Masonry in cement mortor with plaster", "Brick Masonry in cement mortor with plaster", "Concrete Block Masonry in cement mortor with plaster", "-"];
+  static const wallOptions = [
+    "To be executed",
+    "Lateriate Masonry in cement mortor with plaster",
+    "Brick Masonry in cement mortor with plaster",
+    "Concrete Block Masonry in cement mortor with plaster",
+    "-",
+  ];
 
-  static const roofOptions = ["To be executed", "Reinforced Concrete Slab", "Power coated GI Profile sheet on steel truss", "Mangalore tile on wooden truss", "-"];
+  static const roofOptions = [
+    "To be executed",
+    "Reinforced Concrete Slab",
+    "Power coated GI Profile sheet on steel truss",
+    "Mangalore tile on wooden truss",
+    "-",
+  ];
 
   static const ceilingOptions = ["To be executed", "Cement mortor Plaster with acrylic paint", "False ceiling with acrylic paint", "-"];
 
-  static const windowOptions = ["To be executed", "Wooden frame with glazed shutter", "Aluminimum frame with glazed shutter", "Steel frame with glazed steel shutter", "Concrete frame with aluminimum glazed shutter", "-"];
+  static const windowOptions = [
+    "To be executed",
+    "Wooden frame with glazed shutter",
+    "Aluminimum frame with glazed shutter",
+    "Steel frame with glazed steel shutter",
+    "Concrete frame with aluminimum glazed shutter",
+    "-",
+  ];
 
-  static const doorOptions = ["To be executed", "Wooden frame with panelled wooden door", "Wooden frame with modular door", "Wooden frame with laminate plywood door", "-"];
+  static const doorOptions = [
+    "To be executed",
+    "Wooden frame with panelled wooden door",
+    "Wooden frame with modular door",
+    "Wooden frame with laminate plywood door",
+    "-",
+  ];
 
-  static const rccProtectionOptions = ["To be executed", "Cement mortar screed laid to slope", "GI powder coated tiled profile sheet on steel truss", "Designed mangalore tiles on steel truss", "Mangalore tiles laid on slope roof", "-"];
+  static const rccProtectionOptions = [
+    "To be executed",
+    "Cement mortar screed laid to slope",
+    "GI powder coated tiled profile sheet on steel truss",
+    "Designed mangalore tiles on steel truss",
+    "Mangalore tiles laid on slope roof",
+    "-",
+  ];
 
   static const typeOfLoanOptions = ["Education Loan", "Loan against Property", "Housing Loan", "Reserved Price", "-"];
 

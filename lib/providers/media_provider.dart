@@ -28,7 +28,7 @@ class MediaProvider extends ChangeNotifier {
         try {
           final String downloadLink = await driveService.getFileDownloadLink(client: client, id: id);
           downloadLinks.add(downloadLink);
-        } catch(e) {
+        } catch (e) {
           debugPrint(e.toString());
           continue;
         }

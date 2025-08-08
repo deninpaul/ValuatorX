@@ -126,7 +126,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   SizedBox(height: 8),
                   MoreTitle(title: "Shortcuts"),
                   Container(
-                    padding: EdgeInsets.fromLTRB(11,24,15,24),
+                    padding: EdgeInsets.fromLTRB(11, 24, 15, 24),
                     decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(26)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,7 +139,10 @@ class _MoreScreenState extends State<MoreScreen> {
                             double spacing = (constraints.maxWidth - columnCount.floor() * itemWidth) / (columnCount.floor() - 1);
                             final tiles = [
                               LinkTile(
-                                onPressed: () => onOpenURL('https://samantoassociates-my.sharepoint.com/my?id=%2Fpersonal%2Fantopaul%5Fsamanto%5Fin%2FDocuments%2FSAMANTO%20ASSOCIATES%20%28P%29%20Ltd'),
+                                onPressed:
+                                    () => onOpenURL(
+                                      'https://samantoassociates-my.sharepoint.com/my?id=%2Fpersonal%2Fantopaul%5Fsamanto%5Fin%2FDocuments%2FSAMANTO%20ASSOCIATES%20%28P%29%20Ltd',
+                                    ),
                                 title: "Onedrive",
                                 subTitle: "Open",
                                 icon: Icons.cloud,

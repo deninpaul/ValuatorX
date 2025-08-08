@@ -29,10 +29,13 @@ class _DiscardDialogState extends State<DiscardDialog> {
               Navigator.pop(context);
               Navigator.pop(context);
             },
-            child: loadingAction != action.key ? Text(action.key) : Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32),
-              child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
-            ),
+            child:
+                loadingAction != action.key
+                    ? Text(action.key)
+                    : Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 32),
+                      child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
+                    ),
           ),
         ),
       ],

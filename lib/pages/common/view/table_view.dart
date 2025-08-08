@@ -42,7 +42,7 @@ class TableViewTile extends StatelessWidget {
             return needsScrolling
                 ? SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: _buildTableRows(rowsToDisplay, isScrollable: true)),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: _buildTableRows(rowsToDisplay, isScrollable: true)),
                 )
                 : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: _buildTableRows(rowsToDisplay, isScrollable: false));
           },

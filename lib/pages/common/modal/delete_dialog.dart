@@ -40,7 +40,11 @@ class _DeleteDialogState extends State<DeleteDialog> {
       actions: [
         TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
         TextButton(
-          style: TextButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10), backgroundColor: colorScheme.primary, disabledBackgroundColor: theme.disabledColor),
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+            backgroundColor: colorScheme.primary,
+            disabledBackgroundColor: theme.disabledColor,
+          ),
           onPressed:
               _isMatching
                   ? () async {

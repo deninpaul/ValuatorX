@@ -145,8 +145,12 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
       await showDialog<bool>(
         context: context,
         builder:
-            (_) =>
-                DiscardDialog(actions: {"Discard": cancelDraft, if (editMode) "Save changes": submitForm else if (!templateMode) "Save as draft": saveDraft}),
+            (_) => DiscardDialog(
+              actions: {
+                "Discard": cancelDraft,
+                if (editMode) "Save changes": submitForm else if (!templateMode) "Save as draft": saveDraft,
+              },
+            ),
       );
     } else {
       Navigator.pop(context);

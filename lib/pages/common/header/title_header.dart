@@ -19,7 +19,7 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: colorScheme.surfaceContainer,
       surfaceTintColor: colorScheme.surfaceContainer,
       scrolledUnderElevation: 0,
-      leading: IconButton(onPressed: onBackPressed, icon: Icon(Icons.arrow_back_outlined), padding: EdgeInsets.zero,),
+      leading: IconButton(onPressed: onBackPressed, icon: Icon(Icons.arrow_back_outlined), padding: EdgeInsets.zero),
       automaticallyImplyLeading: false,
       actions: actions,
       flexibleSpace: FlexibleSpaceBar(
@@ -29,7 +29,13 @@ class TitleHeader extends StatelessWidget implements PreferredSizeWidget {
           width: MediaQuery.of(context).size.width * 0.44,
           padding: const EdgeInsets.only(top: 15.0),
           alignment: Alignment.bottomCenter,
-          child: Text(title, style: textTheme.bodyLarge, overflow: TextOverflow.fade, softWrap: false, textWidthBasis: TextWidthBasis.longestLine),
+          child: Text(
+            title,
+            style: textTheme.bodyLarge,
+            overflow: TextOverflow.fade,
+            softWrap: false,
+            textWidthBasis: TextWidthBasis.longestLine,
+          ),
         ),
       ),
     );

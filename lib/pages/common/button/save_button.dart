@@ -13,17 +13,19 @@ class SaveButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return TextButton(
-      onPressed: enabled ? () async {
-        if (formKey.currentState!.validate() && !creating) {
-          await onSubmit();
-          Navigator.of(context).pop();
-        }
-      } : null,
-      style:
-       TextButton.styleFrom(
+      onPressed:
+          enabled
+              ? () async {
+                if (formKey.currentState!.validate() && !creating) {
+                  await onSubmit();
+                  Navigator.of(context).pop();
+                }
+              }
+              : null,
+      style: TextButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: kIsWeb ? 12 : 0),
         backgroundColor: theme.colorScheme.primary,
-        disabledBackgroundColor: theme.disabledColor
+        disabledBackgroundColor: theme.disabledColor,
       ),
       child:
           creating

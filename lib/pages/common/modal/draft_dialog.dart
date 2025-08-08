@@ -10,7 +10,12 @@ class DraftDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final padding = isMobile(context) ?  EdgeInsets.fromLTRB(16, 20, 16, 4) : isDesktop(context) ? EdgeInsets.fromLTRB(240, 20, 240, 4) : EdgeInsets.fromLTRB(48, 20, 48, 4);
+    final padding =
+        isMobile(context)
+            ? EdgeInsets.fromLTRB(16, 20, 16, 4)
+            : isDesktop(context)
+            ? EdgeInsets.fromLTRB(240, 20, 240, 4)
+            : EdgeInsets.fromLTRB(48, 20, 48, 4);
 
     return Padding(
       padding: padding,

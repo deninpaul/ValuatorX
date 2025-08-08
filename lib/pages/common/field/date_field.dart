@@ -51,11 +51,7 @@ class DatePickerField extends StatelessWidget {
       spacing: 24,
       children: [
         if (isChild) const SizedBox(width: 20),
-        if (icon != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Icon(icon),
-          ),
+        if (icon != null) Padding(padding: const EdgeInsets.symmetric(vertical: 15), child: Icon(icon)),
         Expanded(
           child: GestureDetector(
             onTap: enabled ? () => _selectDate(context) : null,
@@ -64,13 +60,8 @@ class DatePickerField extends StatelessWidget {
                 controller: controller,
                 enabled: enabled,
                 autofocus: name == focusField,
-                decoration: InputDecoration(
-                  labelText: name,
-                  border: const OutlineInputBorder(),
-                  suffixIcon: const Icon(Icons.date_range),
-                ),
-                validator: (value) =>
-                    required && (value == null || value.isEmpty) ? 'Required field' : null,
+                decoration: InputDecoration(labelText: name, border: const OutlineInputBorder(), suffixIcon: const Icon(Icons.date_range)),
+                validator: (value) => required && (value == null || value.isEmpty) ? 'Required field' : null,
               ),
             ),
           ),

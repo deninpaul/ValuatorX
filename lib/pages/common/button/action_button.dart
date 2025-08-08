@@ -24,7 +24,7 @@ class ActionButton extends StatelessWidget {
             onPressed: onPressed,
             icon: Icon(icon),
           ),
-          Text(label, style: texTheme.bodyMedium!.copyWith(height: 1.4), textAlign: TextAlign.center,),
+          Text(label, style: texTheme.bodyMedium!.copyWith(height: 1.4), textAlign: TextAlign.center),
         ],
       ),
     );

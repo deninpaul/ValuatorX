@@ -10,7 +10,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> {
-  void _checkAuth() async{
+  void _checkAuth() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (await authProvider.isAuthenticated && mounted) {
       Navigator.of(context).pushReplacementNamed('/home');
@@ -27,10 +27,6 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }

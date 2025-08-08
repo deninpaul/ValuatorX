@@ -8,10 +8,7 @@ ThemeData theme(BuildContext context) {
     useMaterial3: true,
     iconTheme: IconThemeData(size: 21),
     iconButtonTheme: IconButtonThemeData(style: IconButton.styleFrom(iconSize: 21)),
-    navigationRailTheme: NavigationRailThemeData(
-      selectedIconTheme: IconThemeData(size: 21),
-      unselectedIconTheme: IconThemeData(size: 21),
-    ),
+    navigationRailTheme: NavigationRailThemeData(selectedIconTheme: IconThemeData(size: 21), unselectedIconTheme: IconThemeData(size: 21)),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedIconTheme: IconThemeData(size: 21),
       unselectedIconTheme: IconThemeData(size: 21),

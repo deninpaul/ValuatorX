@@ -68,8 +68,7 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
               separatorBuilder: (ctx, index) => divider,
               itemBuilder: (context, index) => SkeletonListTile(),
             )
-          else
-            if (itemsToShow > 0)
+          else if (itemsToShow > 0)
             ListView.separated(
               primary: false,
               shrinkWrap: true,
@@ -80,18 +79,24 @@ class _ExpandableListState<T> extends State<ExpandableList<T>> {
                 return widget.itemBuilder(context, widget.items[index], index);
               },
             )
-            else
-              Container(height: minHeight - 32, alignment: Alignment.center, child: Column(
+          else
+            Container(
+              height: minHeight - 32,
+              alignment: Alignment.center,
+              child: Column(
                 spacing: 11,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.folder_copy_outlined, size: 24, color: theme.hintColor,),
-                  Text('No items to show', style: theme.textTheme.bodyLarge!.copyWith(color: theme.hintColor),),
+                  Icon(Icons.folder_copy_outlined, size: 24, color: theme.hintColor),
+                  Text('No items to show', style: theme.textTheme.bodyLarge!.copyWith(color: theme.hintColor)),
                 ],
-              ),)
-            ,
+              ),
+            ),
           if (showViewMoreButton && !widget.isLoading)
-            Padding(padding: const EdgeInsets.only(bottom: kIsWeb ? 8 : 0), child: TextButton(onPressed: _loadMore, child: Text('View More')))
+            Padding(
+              padding: const EdgeInsets.only(bottom: kIsWeb ? 8 : 0),
+              child: TextButton(onPressed: _loadMore, child: Text('View More')),
+            )
           else
             SizedBox(height: 24),
         ],

@@ -7,11 +7,5 @@ class TabItem {
   final Icon selectedIcon;
   final Widget child;
 
-  const TabItem({
-    required this.name,
-    required this.title,
-    required this.icon,
-    required this.selectedIcon,
-    required this.child,
-  });
+  const TabItem({required this.name, required this.title, required this.icon, required this.selectedIcon, required this.child});
 }

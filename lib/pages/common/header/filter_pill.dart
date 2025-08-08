@@ -14,7 +14,7 @@ class FilterPill extends StatelessWidget {
     return FilterChip(
       selected: selectedText == text,
       showCheckmark: false,
-      label: Text(text, style: TextStyle(fontWeight: FontWeight.normal),),
+      label: Text(text, style: TextStyle(fontWeight: FontWeight.normal)),
       onSelected: (bool val) {
         if (val == true) {
           onSelected(text);

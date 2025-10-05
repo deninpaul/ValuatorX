@@ -19,7 +19,7 @@ class ExcelService {
     tableRowEndpoint =
         "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
     fileUploadEndpoint =
-        "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
+        "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/GENERAL/Apps/Uploads/_NAME_:/content";
     fileEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/_ID_";
   }
 

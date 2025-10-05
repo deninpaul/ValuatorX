@@ -10,7 +10,7 @@ class OneDriveService {
   OneDriveService() {
     userId = "a328ee73-9709-4f7c-bb40-ae497e488a66";
     uploadEndpoint =
-        "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads/_NAME_:/content";
+        "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/GENERAL/Apps/Uploads/_NAME_:/content";
     fileEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/_ID_";
   }
 

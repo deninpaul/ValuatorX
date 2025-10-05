@@ -5,15 +5,15 @@ import 'package:valuatorx/services/excel_service.dart';
 class ValuationService extends ExcelService {
   ValuationService()
     : super(
-        fileId: "01OTD6NSNAPSCJTVO6YVHLAW2OINAZQBPV",
+        fileId: "01OTD6NSJZ2Y3U2XBEA5EKFSSGHELBADG5",
         userId: "a328ee73-9709-4f7c-bb40-ae497e488a66",
         tableName: "Valuations",
         sheetName: "Data",
       );
 
   final _driveId = "b!bjWHx8vaSUGa2c_fZH7AoTlNAe4QjSFKrgLAyq8Smcgfz6YLhZb1T7j74-c_w8yy";
-  final _reportPath = "/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/Apps/Uploads";
-  final _templateId = "01OTD6NSJAS6L7SDOXRZBZFNQNIHTN723N";
+  final _reportPath = "/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/GENERAL/Apps/Uploads";
+  final _templateId = "01OTD6NSL45WSFMTT37RBJ6JCXOIPXL3IG";
 
   Future createNewReportWorksheet({required Client client, required String fileName}) async {
     try {

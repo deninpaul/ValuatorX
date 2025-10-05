@@ -143,13 +143,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? Container(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   color: colorScheme.surfaceContainer,
-                  child: BottomNavigationBar(
+                  child: NavigationBar(
                     elevation: 0,
-                    onTap: onSelectTab,
-                    currentIndex: selectedIndex,
+                    height: 68,
+                    onDestinationSelected: onSelectTab,
+                    selectedIndex: selectedIndex,
                     backgroundColor: colorScheme.surfaceContainer,
-                    landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-                    items: [...tabs.map((tab) => BottomNavigationBarItem(icon: tab.icon, activeIcon: tab.selectedIcon, label: tab.name))],
+                    labelTextStyle: WidgetStateProperty.resolveWith(
+                      (states) => textTheme.labelMedium!.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: states.contains(WidgetState.selected) ? FontWeight.w500 : FontWeight.normal,
+                      ),
+                    ),
+                    destinations: [
+                      ...tabs.map((tab) => NavigationDestination(icon: tab.icon, selectedIcon: tab.selectedIcon, label: tab.name)),
+                    ],
                   ),
                 )
                 : null,

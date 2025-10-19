@@ -62,38 +62,41 @@ class _CreateButtonState extends State<CreateButton> {
         crossAxisAlignment: CrossAxisAlignment.end,
         spacing: 8,
         children: [
-          AnimatedSlide(
-            offset: Offset(0.02, open ? 0 : 0.2),
-            duration: Duration(milliseconds: 150),
-            curve: Curves.easeOutCubic,
-            child: AnimatedOpacity(
-              opacity: open ? 1 : 0,
+          IgnorePointer(
+            ignoring: !open,
+            child: AnimatedSlide(
+              offset: Offset(0.02, open ? 0 : 0.2),
               duration: Duration(milliseconds: 150),
-              curve: Curves.easeOutExpo,
-              child: Card(
-                color: colorScheme.primaryContainer,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(24)),
-                elevation: 6,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 160),
-                    child: Column(
-                      spacing: 0,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        ...widget.options.map(
-                          (option) => Column(
-                            spacing: 0,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              optionWidget(option.id, option.label),
-                              Divider(endIndent: 13, indent: 13, color: colorScheme.onPrimaryContainer.withAlpha(32)),
-                            ],
+              curve: Curves.easeOutCubic,
+              child: AnimatedOpacity(
+                opacity: open ? 1 : 0,
+                duration: Duration(milliseconds: 150),
+                curve: Curves.easeOutExpo,
+                child: Card(
+                  color: colorScheme.primaryContainer,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(24)),
+                  elevation: 6,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 160),
+                      child: Column(
+                        spacing: 0,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ...widget.options.map(
+                            (option) => Column(
+                              spacing: 0,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                optionWidget(option.id, option.label),
+                                Divider(endIndent: 13, indent: 13, color: colorScheme.onPrimaryContainer.withAlpha(32)),
+                              ],
+                            ),
                           ),
-                        ),
-                        optionWidget("", "Blank form"),
-                      ],
+                          optionWidget("", "Blank form"),
+                        ],
+                      ),
                     ),
                   ),
                 ),

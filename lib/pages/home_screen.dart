@@ -93,7 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(statusBarColor: colorScheme.surfaceContainer, statusBarIconBrightness: Brightness.dark),
+      value: SystemUiOverlayStyle(
+        statusBarColor: colorScheme.surfaceContainer,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: colorScheme.surfaceContainer,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
       child: Scaffold(
         backgroundColor: colorScheme.surfaceContainer,
         body: SafeArea(

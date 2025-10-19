@@ -92,81 +92,77 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: colorScheme.surfaceContainer,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: colorScheme.surfaceContainer,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: colorScheme.surfaceContainer,
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 0,
         backgroundColor: colorScheme.surfaceContainer,
-        body: SafeArea(
-          child:
-              isMobile(context)
-                  ? selectedPage()
-                  : Row(
-                    children: <Widget>[
-                      NavigationRail(
-                        groupAlignment: -1,
-                        selectedIndex: selectedIndex,
-                        labelType: NavigationRailLabelType.all,
-                        backgroundColor: colorScheme.surfaceContainer,
-                        onDestinationSelected: onSelectTab,
-                        leading: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 16, 0, 32),
-                          child: Opacity(opacity: 0.9, child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 40)),
-                        ),
-                        trailing: Expanded(
-                          child: Container(
-                            alignment: Alignment.bottomCenter,
-                            padding: EdgeInsets.only(bottom: 32),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [IconButton(icon: Icon(Icons.logout), onPressed: signOut), Text("Log out")],
-                            ),
-                          ),
-                        ),
-                        destinations:
-                            tabs
-                                .map(
-                                  (tab) => NavigationRailDestination(
-                                    padding: EdgeInsets.all(8),
-                                    icon: tab.icon,
-                                    selectedIcon: tab.selectedIcon,
-                                    label: Text(tab.name, style: textTheme.bodyMedium),
-                                  ),
-                                )
-                                .toList(),
-                      ),
-                      Expanded(child: selectedPage()),
-                    ],
-                  ),
-        ),
-        bottomNavigationBar:
-            isMobile(context)
-                ? Container(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  color: colorScheme.surfaceContainer,
-                  child: NavigationBar(
-                    elevation: 0,
-                    height: 68,
-                    onDestinationSelected: onSelectTab,
+        surfaceTintColor: colorScheme.surfaceContainer,
+      ),
+      body:
+          isMobile(context)
+              ? selectedPage()
+              : Row(
+                children: <Widget>[
+                  NavigationRail(
+                    groupAlignment: -1,
                     selectedIndex: selectedIndex,
+                    labelType: NavigationRailLabelType.all,
                     backgroundColor: colorScheme.surfaceContainer,
-                    labelTextStyle: WidgetStateProperty.resolveWith(
-                      (states) => textTheme.labelMedium!.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: states.contains(WidgetState.selected) ? FontWeight.w500 : FontWeight.normal,
+                    onDestinationSelected: onSelectTab,
+                    leading: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 32),
+                      child: Opacity(opacity: 0.9, child: Image.asset('assets/logo_mono.png', fit: BoxFit.contain, height: 40)),
+                    ),
+                    trailing: Expanded(
+                      child: Container(
+                        alignment: Alignment.bottomCenter,
+                        padding: EdgeInsets.only(bottom: 32),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [IconButton(icon: Icon(Icons.logout), onPressed: signOut), Text("Log out")],
+                        ),
                       ),
                     ),
-                    destinations: [
-                      ...tabs.map((tab) => NavigationDestination(icon: tab.icon, selectedIcon: tab.selectedIcon, label: tab.name)),
-                    ],
+                    destinations:
+                        tabs
+                            .map(
+                              (tab) => NavigationRailDestination(
+                                padding: EdgeInsets.all(8),
+                                icon: tab.icon,
+                                selectedIcon: tab.selectedIcon,
+                                label: Text(tab.name, style: textTheme.bodyMedium),
+                              ),
+                            )
+                            .toList(),
                   ),
-                )
-                : null,
-      ),
+                  Expanded(child: selectedPage()),
+                ],
+              ),
+      bottomNavigationBar:
+          isMobile(context)
+              ? Container(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                color: colorScheme.surfaceContainer,
+                child: NavigationBar(
+                  elevation: 0,
+                  height: 68,
+                  onDestinationSelected: onSelectTab,
+                  selectedIndex: selectedIndex,
+                  backgroundColor: colorScheme.surfaceContainer,
+                  labelTextStyle: WidgetStateProperty.resolveWith(
+                    (states) => textTheme.labelMedium!.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: states.contains(WidgetState.selected) ? FontWeight.w500 : FontWeight.normal,
+                    ),
+                  ),
+                  destinations: [
+                    ...tabs.map((tab) => NavigationDestination(icon: tab.icon, selectedIcon: tab.selectedIcon, label: tab.name)),
+                  ],
+                ),
+              )
+              : null,
     );
   }
 }

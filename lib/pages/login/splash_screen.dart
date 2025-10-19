@@ -27,6 +27,6 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return Scaffold(appBar: AppBar(toolbarHeight: 0), body: Center(child: CircularProgressIndicator()));
   }
 }

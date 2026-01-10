@@ -5,12 +5,14 @@ import 'package:valuatorx/pages/common/status_icon.dart';
 import 'package:valuatorx/providers/auth_provider.dart';
 import 'package:valuatorx/services/draft_service.dart';
 import 'package:valuatorx/services/onedrive_service.dart';
+import 'package:valuatorx/services/valuation_archive_service.dart';
 import 'package:valuatorx/services/valuation_service.dart';
 import 'package:valuatorx/utils/common.dart';
 
 class ValuationProvider extends ChangeNotifier {
   List<Valuation> valuations = [];
   List<Valuation> drafts = [];
+  List<Valuation> archived = [];
   bool isLoading = false;
   bool isCreating = false;
   bool isDeleting = false;
@@ -20,6 +22,7 @@ class ValuationProvider extends ChangeNotifier {
   List<Valuation> get templates => valuations.where((val) => val.status == 'Template').toList();
 
   final ValuationService service = ValuationService();
+  final ValuationArchiveService archiveService = ValuationArchiveService();
   final OneDriveService driveService = OneDriveService();
   final DraftService draftService = DraftService(boxName: "valuations");
 
@@ -211,6 +214,39 @@ class ValuationProvider extends ChangeNotifier {
       debugPrint("Failed to generate draft id: ${e.toString()}");
     }
     return "draft_0";
+  }
+
+  Future<void> getArchivedValuations(BuildContext context, {bool refresh = true}) async {
+    await Future.delayed(Duration.zero);
+    try {
+      if (refresh) setLoading(true);
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final client = await authProvider.getClient();
+      final result = await archiveService.getExcelTable(client: client);
+      archived = result.map((item) => Valuation.fromJson(item)).toList();
+      debugPrint("Fetched ${archived.length} archived Valuation record(s) from Excel successfully.");
+      notifyListeners();
+    } catch (e) {
+      if (refresh) {
+        archived = [];
+      }
+      debugPrint("Failed to fetch archived Valuations: ${e.toString()}");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Valuation getSelectedArchivedValuation() {
+    return archived.firstWhere((report) => report.id == selectedItem, orElse: () => Valuation.fromJson({}));
+  }
+
+  List<Valuation> getArchivedSearchResults({String query = "", String filter = ""}) {
+    query = normalizeString(query);
+    return archived.reversed.where(
+      (val) => normalizeString(
+        [val.reportReference, val.dateOfInspection, val.village, val.taluk, val.mortgagorDetail, val.fileAllocationDetail].join(' '),
+      ).contains(query),
+    ).toList();
   }
 
   Future generateReport(BuildContext context, Valuation valuation, void Function(String message, {Status newStatus}) onStatusUpdate) async {

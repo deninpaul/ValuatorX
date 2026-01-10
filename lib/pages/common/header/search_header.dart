@@ -6,7 +6,8 @@ class SearchHeader extends StatefulWidget {
   final List<PopupMenuItem> actions;
   final String query;
   final bool onFocus;
-  const SearchHeader({super.key, this.onSearch, required this.name, required this.query, this.actions = const [], this.onFocus = true});
+  final VoidCallback? onBack;
+  const SearchHeader({super.key, this.onSearch, required this.name, required this.query, this.actions = const [], this.onFocus = true, this.onBack});
 
   @override
   State<SearchHeader> createState() => _SearchHeaderState();
@@ -37,6 +38,8 @@ class _SearchHeaderState extends State<SearchHeader> {
       child: Row(
         spacing: 8,
         children: [
+          if (widget.onBack != null)
+            IconButton(icon: Icon(Icons.arrow_back_outlined, color: colorScheme.onPrimaryContainer,), onPressed: widget.onBack),
           if (widget.onSearch != null)
             Expanded(
               child: SearchBar(
@@ -50,7 +53,8 @@ class _SearchHeaderState extends State<SearchHeader> {
                 trailing: [if (controller.text.isNotEmpty) IconButton(onPressed: onClear, icon: Icon(Icons.close, color: theme.hintColor))],
               ),
             ),
-          PopupMenuButton(icon: Icon(Icons.more_vert), offset: const Offset(-5, 5), itemBuilder: (ctx) => [...widget.actions]),
+          if (widget.actions.isNotEmpty)
+            PopupMenuButton(icon: Icon(Icons.more_vert, color: colorScheme.onSurfaceVariant,), offset: const Offset(-5, 5), itemBuilder: (ctx) => [...widget.actions]),
         ],
       ),
     );

@@ -9,6 +9,7 @@ import 'package:valuatorx/pages/common/header/filter_pill.dart';
 import 'package:valuatorx/pages/common/header/search_header.dart';
 import 'package:valuatorx/pages/common/tiles/info_tile.dart';
 import 'package:valuatorx/pages/common/tiles/summary_tile.dart';
+import 'package:valuatorx/pages/valuation/valuation_archive.dart';
 import 'package:valuatorx/pages/valuation/valuation_details.dart';
 import 'package:valuatorx/pages/valuation/valuation_form.dart';
 import 'package:valuatorx/pages/valuation/valuation_templates.dart';
@@ -38,6 +39,11 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
 
   void onViewTemplate() {
     setState(() => isTemplate = true);
+  }
+
+  void onOpenArchive() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ValuationArchive()));
+    provider.setSelectedItem("");
   }
 
   Future<void> fetchAllValuations({bool refresh = true}) async {
@@ -147,6 +153,7 @@ class _ValuationsState extends State<Valuations> with WidgetsBindingObserver {
                     actions: [
                       PopupMenuItem(onTap: fetchAllValuations, child: Text("Refresh", style: textTheme.bodyMedium)),
                       PopupMenuItem(onTap: onViewTemplate, child: Text("View templates", style: textTheme.bodyMedium)),
+                      PopupMenuItem(onTap: onOpenArchive, child: Text("Archived", style: textTheme.bodyMedium)),
                     ],
                   ),
                   SizedBox(height: 15),

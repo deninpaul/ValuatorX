@@ -12,10 +12,11 @@ import 'package:valuatorx/utils/common.dart';
 
 class ImagePickerField extends StatefulWidget {
   final bool editMode;
+  final bool readOnly;
   final String? value;
   final VoidCallback? onEditAction;
   final TextEditingController? controller;
-  const ImagePickerField({super.key, required this.editMode, this.controller, this.value, this.onEditAction});
+  const ImagePickerField({super.key, required this.editMode, this.controller, this.value, this.onEditAction, this.readOnly = false});
 
   @override
   State<ImagePickerField> createState() => _ImagePickerFieldState();
@@ -185,7 +186,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
               spacing: 8,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (!editMode) TextButton(onPressed: widget.onEditAction, child: const Text('Edit images')),
+                if (!editMode) TextButton(onPressed: !widget.readOnly ? widget.onEditAction : null, child: const Text('Edit images')),
                 Expanded(
                   child:
                       ready

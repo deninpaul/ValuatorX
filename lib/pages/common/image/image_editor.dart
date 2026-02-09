@@ -259,6 +259,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(elevation: 0, title: Text("Edit image", style: textTheme.bodyLarge)),
+      bottomNavigationBar: BottomAppBar(elevation: 0, height: 0),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: isDesktop(context) ? MediaQuery.of(context).size.width * 0.21 : 16),
         child: Column(

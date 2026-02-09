@@ -31,20 +31,24 @@ class _ImagePickerFieldState extends State<ImagePickerField> with AutomaticKeepA
 
   Future<void> pickImage(ImageSource source) async {
     try {
-      final XFile? pickedFile = await picker.pickImage(source: source, maxWidth: 1080, maxHeight: 1080, imageQuality: 80);
+      final XFile? pickedFile = await picker.pickImage(source: source, maxWidth: 1080, maxHeight: 1080, imageQuality: 80, requestFullMetadata: false);
       if (pickedFile != null) {
         final file = File(pickedFile.path);
         final fileBytes = await pickedFile.readAsBytes();
+        if (!mounted) return;
         final result = await Navigator.of(
           context,
         ).push<String>(MaterialPageRoute(builder: (context) => LocationDetailsScreen(file: file, fileBytes: fileBytes)));
+        if (!mounted) return;
         if (result != null) {
           setState(() => ready = false);
           setState(() => widget.controller!.text += ",$result,");
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
+      }
     }
   }
 

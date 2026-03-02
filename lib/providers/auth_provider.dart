@@ -115,9 +115,9 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<(String, String, String)> getProfile() async {
+  Future<(String, String, String)> getProfile({bool refresh = false}) async {
     try {
-      if (fullName.isEmpty || email.isEmpty || profile.isEmpty) {
+      if (fullName.isEmpty || email.isEmpty || profile.isEmpty || refresh) {
         setLoading(true);
         final client = await getClient();
         final response = await client.get(Uri.parse('https://graph.microsoft.com/v1.0/me'));

@@ -24,7 +24,7 @@ class _MoreScreenState extends State<MoreScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final (resName, resEmail, resProfile) = await authProvider.getProfile();
+      final (resName, resEmail, resProfile) = await authProvider.getProfile(refresh: true);
       setState(() {
         name = resName;
         email = resEmail;
@@ -154,7 +154,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                 icon: Icons.home_rounded,
                               ),
                               LinkTile(
-                                onPressed: () => onOpenURL('https://vvm.bank.sbi:9445/VVM/portal/'),
+                                onPressed: () => onOpenURL('https://vvm.sbi.bank.in:9445/VVM/portal/login'),
                                 title: "SBI Portal",
                                 subTitle: "Open",
                                 icon: Icons.account_balance,
@@ -164,6 +164,18 @@ class _MoreScreenState extends State<MoreScreen> {
                                 title: "Fair Value \nof Land",
                                 subTitle: "Open",
                                 icon: Icons.paid_rounded,
+                              ),
+                              LinkTile(
+                                onPressed: () => onOpenURL('https://ksmart.lsgkerala.gov.in/ui/property-tax/quick-pay-tax/citizen'),
+                                title: "Ksmart",
+                                subTitle: "Open",
+                                icon: Icons.storefront_rounded,
+                              ),
+                              LinkTile(
+                                onPressed: () => onOpenURL('https://price.kerala.gov.in/price3_pmu/'),
+                                title: "Price PMU",
+                                subTitle: "Open",
+                                icon: Icons.bar_chart,
                               ),
                               LinkTile(
                                 onPressed: () => onOpenURL('https://bhuvan-app1.nrsc.gov.in/bhuvan2d2.0/'),

@@ -70,7 +70,7 @@ class _DropdownFieldState extends State<DropdownField> {
         Expanded(
           child: DropdownButtonFormField<String>(
             autofocus: widget.name == widget.focusField,
-            value: isCustomValue ? "Other (Custom)" : (widget.controller.text.isEmpty ? null : widget.controller.text),
+            initialValue: isCustomValue ? "Other (Custom)" : (widget.controller.text.isEmpty ? null : widget.controller.text),
             items:
                 _allOptions.map((option) {
                   return DropdownMenuItem<String>(

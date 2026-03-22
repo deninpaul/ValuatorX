@@ -328,7 +328,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                     Switch(
                       value: imprintLocationDetails,
                       onChanged: (!imprintLocationDetails || locationData != null) ? toggleDetails : null,
-                      activeColor: colorScheme.primary,
+                      activeThumbColor: colorScheme.primary,
                     ),
                   ],
                 ),

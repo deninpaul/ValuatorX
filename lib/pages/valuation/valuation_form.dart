@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:valuatorx/models/valuation.dart';
+import 'package:valuatorx/pages/common/field/sketch_field.dart';
 import 'package:valuatorx/pages/common/modal/discard_dialog.dart';
 import 'package:valuatorx/pages/common/modal/draft_dialog.dart';
 import 'package:valuatorx/pages/common/field/area_field.dart';
@@ -56,7 +57,14 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   String? draftId;
   Timer? timer;
 
-  List<String> get tabs => ["General Details", "Land Details", "Building Details", "Notes", if (!templateMode) "Photo"];
+  List<String> get tabs => [
+    "General Details",
+    "Land Details",
+    "Building Details",
+    "Notes",
+    if (!templateMode) "Photo",
+    if (!templateMode) "Land Sketch",
+  ];
 
   Valuation generateValuation(String? id, {String? status}) {
     status = status ?? (templateMode ? 'Template' : (!editMode || widget.isDraft ? Valuation.statusOptions[0] : null));
@@ -128,6 +136,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     final done =
         editMode && !widget.isDraft ? await provider.updateValuation(context, valuation) : await provider.addValuations(context, valuation);
     if (done) {
+      timer?.cancel();
       await provider.deleteDraft(draftId);
       if (widget.isDraft) {
         provider.setSelectedItem(id);
@@ -595,6 +604,11 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                     Padding(
                       padding: formPadding(context),
                       child: ImagePickerField(controller: controllers[Valuation.PHOTOS]!, editMode: true),
+                    ),
+                  if (!templateMode)
+                    Padding(
+                      padding: formPadding(context),
+                      child: ready ? SketchField(controller: controllers[Valuation.LAND_SKETCH]!) : CircularProgressIndicator(),
                     ),
                 ],
               ),

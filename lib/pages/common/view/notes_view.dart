@@ -25,55 +25,62 @@ class NotesViewer extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Material(
-      borderRadius: BorderRadius.circular(20),
-      clipBehavior: Clip.hardEdge,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: InkWell(
-              onTap: () => onPressed?.call(fieldName: title, fieldTab: tabIndex),
-              splashColor: colorScheme.surfaceContainerHigh,
-              highlightColor: colorScheme.surfaceContainerHigh,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-            child: QuillEditor.basic(
-              controller: controller,
-              config: QuillEditorConfig(
-                showCursor: false,
-                placeholder: "No notes",
-                scrollable: false,
-                customStyles: DefaultStyles(
-                  paragraph: DefaultTextBlockStyle(
-                    textTheme.bodyLarge!,
-                    const HorizontalSpacing(0, 0),
-                    const VerticalSpacing(8, 8),
-                    const VerticalSpacing(0, 0),
-                    null,
-                  ),
-                  lists: DefaultListBlockStyle(
-                    textTheme.bodyLarge!,
-                    const HorizontalSpacing(0, 0),
-                    const VerticalSpacing(8, 8),
-                    const VerticalSpacing(0, 0),
-                    null,
-                    null,
-                  ),
-                  placeHolder: DefaultTextBlockStyle(
-                    textTheme.bodyLarge!.copyWith(color: colorScheme.outline),
-                    HorizontalSpacing.zero,
-                    VerticalSpacing.zero,
-                    VerticalSpacing.zero,
-                    null,
+    return Column(
+      children: [
+        Expanded(
+          child: Material(
+            borderRadius: BorderRadius.circular(20),
+            clipBehavior: Clip.hardEdge,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: InkWell(
+                    onTap: () => onPressed?.call(fieldName: title, fieldTab: tabIndex),
+                    splashColor: colorScheme.surfaceContainerHigh,
+                    highlightColor: colorScheme.surfaceContainerHigh,
+                    hoverColor: colorScheme.surfaceContainerLow,
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+                  child: QuillEditor.basic(
+                    controller: controller,
+                    config: QuillEditorConfig(
+                      showCursor: false,
+                      placeholder: "No notes",
+                      scrollable: false,
+                      customStyles: DefaultStyles(
+                        paragraph: DefaultTextBlockStyle(
+                          textTheme.bodyLarge!,
+                          const HorizontalSpacing(0, 0),
+                          const VerticalSpacing(8, 8),
+                          const VerticalSpacing(0, 0),
+                          null,
+                        ),
+                        lists: DefaultListBlockStyle(
+                          textTheme.bodyLarge!,
+                          const HorizontalSpacing(0, 0),
+                          const VerticalSpacing(8, 8),
+                          const VerticalSpacing(0, 0),
+                          null,
+                          null,
+                        ),
+                        placeHolder: DefaultTextBlockStyle(
+                          textTheme.bodyLarge!.copyWith(color: colorScheme.outline),
+                          HorizontalSpacing.zero,
+                          VerticalSpacing.zero,
+                          VerticalSpacing.zero,
+                          null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -77,6 +77,7 @@ class Valuation {
   final String buildingReplacementRate;
   final String photos;
   final String remarks;
+  final String sketch;
 
   Valuation({
     required this.id,
@@ -152,6 +153,7 @@ class Valuation {
     required this.buildingReplacementRate,
     required this.photos,
     required this.remarks,
+    required this.sketch
   });
 
   static const String ID = "id";
@@ -227,6 +229,7 @@ class Valuation {
   static const String PHOTOS = "Photos";
   static const String REMARKS = "Remarks";
   static const String REPORT_LINK = "Report link";
+  static const String LAND_SKETCH = "Land Sketch";
 
   factory Valuation.fromJson(Map<String, dynamic> json) {
     return Valuation(
@@ -303,6 +306,7 @@ class Valuation {
       photos: (json[PHOTOS] ?? "").toString(),
       remarks: (json[REMARKS] ?? "").toString(),
       reportLink: (json[REPORT_LINK] ?? "").toString(),
+      sketch: (json[LAND_SKETCH] ?? "").toString()
     );
   }
 
@@ -381,6 +385,7 @@ class Valuation {
       PHOTOS: photos,
       REMARKS: remarks,
       REPORT_LINK: reportLink,
+      LAND_SKETCH: sketch
     };
   }
 
@@ -490,6 +495,7 @@ class Valuation {
     PROPERTY_AREA_RATE,
     PHOTOS,
     REMARKS,
+    LAND_SKETCH
   ];
 
   static const statusOptions = ["In progress", "Completed"];

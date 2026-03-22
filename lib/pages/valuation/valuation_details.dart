@@ -9,6 +9,7 @@ import 'package:valuatorx/pages/common/field/tag.dart';
 import 'package:valuatorx/pages/common/header/actions_header.dart';
 import 'package:valuatorx/pages/common/header/title_header.dart';
 import 'package:valuatorx/pages/common/image/image_picker.dart';
+import 'package:valuatorx/pages/common/view/sketch_view.dart';
 import 'package:valuatorx/pages/common/view/location_view.dart';
 import 'package:valuatorx/pages/common/view/notes_view.dart';
 import 'package:valuatorx/pages/common/view/table_view.dart';
@@ -29,7 +30,7 @@ class ValuationDetails extends StatefulWidget {
 }
 
 class _ValuationDetailsState extends State<ValuationDetails> with TickerProviderStateMixin {
-  final List<String> tabs = ["General Details", "Land Details", "Building Details", "Notes", "Photo"];
+  final List<String> tabs = ["General Details", "Land Details", "Building Details", "Notes", "Photo", "Land Sketch"];
   final TextEditingController tagController = TextEditingController();
   final MapController mapController = MapController();
   late TabController tabController;
@@ -707,17 +708,9 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     ],
                   ),
                 ),
-                SingleChildScrollView(
+                Padding(
                   padding: formPadding,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight:
-                          MediaQuery.of(context).size.height - 440 < 0
-                              ? MediaQuery.of(context).size.height - 200
-                              : MediaQuery.of(context).size.height - 400,
-                    ),
-                    child: NotesViewer(title: Valuation.REMARKS, value: widget.valuation.remarks, onPressed: onEditAction, tabIndex: 3),
-                  ),
+                  child: NotesViewer(title: Valuation.REMARKS, value: widget.valuation.remarks, onPressed: onEditAction, tabIndex: 3),
                 ),
                 Padding(
                   padding: formPadding,
@@ -727,6 +720,10 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     value: widget.valuation.photos,
                     onEditAction: () => onEditAction(fieldTab: 4),
                   ),
+                ),
+                Padding(
+                  padding: formPadding,
+                  child: SketchView(title: Valuation.REMARKS, value: widget.valuation.sketch, onPressed: onEditAction, tabIndex: 5),
                 ),
               ],
             ),

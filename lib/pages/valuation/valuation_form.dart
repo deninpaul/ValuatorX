@@ -193,6 +193,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
   Widget build(BuildContext context) {
     final title = "${editMode ? "Edit" : "New"} Valuation ${templateMode ? "Template" : "Report"}";
     final provider = Provider.of<ValuationProvider>(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -212,6 +213,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
         ],
         bottom: TabBar(controller: _tabController, isScrollable: true, tabs: tabs.map((tab) => Tab(text: tab)).toList()),
       ),
+      bottomNavigationBar: BottomAppBar(elevation: 0, height: 0, color: colorScheme.surface),
       body: Form(
         key: _formKey,
         canPop: false,

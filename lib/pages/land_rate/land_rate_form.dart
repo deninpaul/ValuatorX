@@ -96,6 +96,7 @@ class _LandRateFormState extends State<LandRateForm> {
   Widget build(BuildContext context) {
     final modeName = widget.editMode ? "Edit" : "New";
     final provider = Provider.of<LandRateProvider>(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     void updateSerialNumber(String newAuthor) {
       provider.setSelectedTable(newAuthor);
@@ -118,6 +119,7 @@ class _LandRateFormState extends State<LandRateForm> {
             ),
           ],
         ),
+        bottomNavigationBar: BottomAppBar(elevation: 0, height: 0, color: colorScheme.surface),
         body: SingleChildScrollView(
           padding: formPadding(context),
           child: Form(

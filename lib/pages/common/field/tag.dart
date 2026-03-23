@@ -64,7 +64,7 @@ class _TagState extends State<Tag> {
                           child: DropdownButton<String>(
                             value: widget.text,
                             dropdownColor: colorScheme.surface,
-                            style: textTheme.bodyMedium,
+                            style: textTheme.bodyMedium!.copyWith(color: colorScheme.onSurfaceVariant),
                             icon: Padding(padding: EdgeInsets.only(top: 2), child: Icon(Icons.expand_more, size: 21)),
                             elevation: 0,
                             padding: EdgeInsets.only(left: 4),

@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               )
-              : null,
+              : BottomAppBar(elevation: 0, height: 0),
     );
   }
 }

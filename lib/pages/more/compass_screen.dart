@@ -67,6 +67,7 @@ class _CompassScreenState extends State<CompassScreen> {
         title: Text("Compass", style: headerTheme),
         backgroundColor: colorScheme.surfaceContainer,
       ),
+      bottomNavigationBar: BottomAppBar(elevation: 0, height: 0),
       body: Container(
         width: double.infinity,
         margin: EdgeInsets.fromLTRB(20, 0, 20, 48),

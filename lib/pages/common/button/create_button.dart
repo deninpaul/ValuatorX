@@ -49,6 +49,7 @@ class _CreateButtonState extends State<CreateButton> {
               fontWeight: FontWeight.normal,
               overflow: TextOverflow.ellipsis,
               color: colorScheme.onPrimaryContainer,
+              fontSize: 13
             ),
           ),
         ),
@@ -123,8 +124,8 @@ class _CreateButtonState extends State<CreateButton> {
                     elevation: 0,
                     foregroundColor: colorScheme.onPrimaryContainer,
                     onPressed: widget.options.isEmpty ? openContainer : toggleMenu,
-                    icon: const Icon(Icons.add, size: 16),
-                    label: Text(widget.label, style: TextStyle(fontWeight: FontWeight.normal)),
+                    icon: const Icon(Icons.add, size: 18),
+                    label: Text(widget.label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal)),
                   )
                   : TextButton(
                     onPressed: toggleMenu,
@@ -146,9 +147,9 @@ class _CreateButtonState extends State<CreateButton> {
                             turns: !open ? 0 : 0.125,
                             curve: Curves.easeOutCubic,
                             duration: Duration(milliseconds: 150),
-                            child: Icon(Icons.add, size: !open ? 16 : 18),
+                            child: Icon(Icons.add, size: !open ? 18 : 21),
                           ),
-                          if (!open && showLabel) Text(widget.label, style: TextStyle(fontWeight: FontWeight.normal)),
+                          if (!open && showLabel) Text(widget.label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal)),
                         ],
                       ),
                     ),

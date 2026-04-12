@@ -5,7 +5,8 @@ import 'package:valuatorx/pages/common/sketch/utils/models.dart';
 class CanvasPainter extends CustomPainter {
   final List<Offset> pts;
   final List<CanvasLine> lines;
-  final Map<int, String> labels;
+  final Map<String, String> labels; // lineKey → measurement text
+  final List<CanvasTextLabel> textLabels;
   final VT vt;
   final ColorScheme cs;
 
@@ -21,10 +22,14 @@ class CanvasPainter extends CustomPainter {
   final Set<int> selected;
   final Rect? selRect;
 
+  // Write / Move — whichever mode is active highlights the dragged text label
+  final int? activeTextLabel;
+
   const CanvasPainter({
     required this.pts,
     required this.lines,
     required this.labels,
+    required this.textLabels,
     required this.vt,
     required this.cs,
     this.dragStart,
@@ -35,6 +40,7 @@ class CanvasPainter extends CustomPainter {
     this.mergeTarget,
     this.selected = const {},
     this.selRect,
+    this.activeTextLabel,
   });
 
   Offset _v(Offset s) => toView(s, vt);
@@ -59,7 +65,8 @@ class CanvasPainter extends CustomPainter {
     _drawSelectionRect(canvas);
     _drawPoints(canvas);
     _drawDragStartIndicator(canvas);
-    _drawLabels(canvas);
+    _drawMeasurementLabels(canvas);
+    _drawTextLabels(canvas);
   }
 
   void _drawLines(Canvas canvas) {
@@ -96,7 +103,6 @@ class CanvasPainter extends CustomPainter {
       final isActive = i == activePoint;
       final p = _v(pts[i]);
 
-      // Halo rings
       final halo =
           isMerge
               ? cs.error
@@ -108,7 +114,6 @@ class CanvasPainter extends CustomPainter {
         canvas.drawCircle(p, kPointR + 7, _stroke(halo, 2));
       }
 
-      // Fill
       canvas.drawCircle(
         p,
         kPointR,
@@ -125,7 +130,6 @@ class CanvasPainter extends CustomPainter {
         ),
       );
 
-      // Border
       canvas.drawCircle(
         p,
         kPointR,
@@ -147,25 +151,66 @@ class CanvasPainter extends CustomPainter {
     }
   }
 
-  void _drawLabels(Canvas canvas) {
-    for (final e in labels.entries) {
-      if (e.key >= lines.length) continue;
-      final l = lines[e.key];
-      if (l.a >= pts.length || l.b >= pts.length) continue;
+  // Measurement labels sit at the midpoint of their line.
+  // Labels are now looked up by the line's canonical key.
+  void _drawMeasurementLabels(Canvas canvas) {
+    for (final l in lines) {
+      final text = labels[l.key];
+      if (text == null || l.a >= pts.length || l.b >= pts.length) continue;
       final mid = (_v(pts[l.a]) + _v(pts[l.b])) / 2;
-      final tp = TextPainter(
-        text: TextSpan(text: e.value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87)),
-        textDirection: TextDirection.ltr,
-      )..layout();
-      const pad = 4.0;
-      final rr = RRect.fromRectAndRadius(
-        Rect.fromCenter(center: mid, width: tp.width + pad * 2, height: tp.height + pad * 2),
-        const Radius.circular(4),
+      _paintLabel(
+        canvas,
+        mid,
+        text,
+        bgColor: cs.surface,
+        borderColor: cs.primary.withValues(alpha: 0.4),
+        textColor: Colors.black87,
+        fontSize: 12,
       );
-      canvas.drawRRect(rr, _fill(cs.surface));
-      canvas.drawRRect(rr, _stroke(cs.primary.withValues(alpha: 0.4), 1));
-      tp.paint(canvas, mid - Offset(tp.width / 2, tp.height / 2));
     }
+  }
+
+  void _drawTextLabels(Canvas canvas) {
+    for (int i = 0; i < textLabels.length; i++) {
+      final tl = textLabels[i];
+      final isActive = i == activeTextLabel;
+      _paintLabel(
+        canvas,
+        _v(tl.pos),
+        tl.text,
+        bgColor: isActive ? cs.primaryContainer : cs.surface,
+        borderColor: isActive ? cs.primary : cs.outline.withValues(alpha: 0.6),
+        textColor: isActive ? cs.onPrimaryContainer : cs.onSurface,
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        borderWidth: isActive ? 2.0 : 1.2,
+      );
+    }
+  }
+
+  void _paintLabel(
+    Canvas canvas,
+    Offset center,
+    String text, {
+    required Color bgColor,
+    required Color borderColor,
+    required Color textColor,
+    double fontSize = 12,
+    FontWeight fontWeight = FontWeight.w600,
+    double borderWidth = 1.0,
+  }) {
+    const pad = 5.0;
+    final tp = TextPainter(
+      text: TextSpan(text: text, style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor)),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    final rr = RRect.fromRectAndRadius(
+      Rect.fromCenter(center: center, width: tp.width + pad * 2, height: tp.height + pad * 2),
+      const Radius.circular(5),
+    );
+    canvas.drawRRect(rr, _fill(bgColor));
+    canvas.drawRRect(rr, _stroke(borderColor, borderWidth));
+    tp.paint(canvas, center - Offset(tp.width / 2, tp.height / 2));
   }
 
   @override

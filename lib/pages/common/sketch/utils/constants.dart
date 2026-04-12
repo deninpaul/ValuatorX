@@ -6,4 +6,4 @@ const double kLineSnapR = 11.0;
 const double kMargin = 21.0;
 const double kMinLineLen = 11.0;
 
-enum SketchCanvasMode { draw, move }
+enum SketchCanvasMode { draw, move, write }

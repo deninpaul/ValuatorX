@@ -206,7 +206,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   Spacer(),
                   Container(
                     padding: EdgeInsets.only(bottom: isMobile(context) ? 8 : 11, top: 18),
-                    child: Text("ValuatorX\nApp Version: v1.1.2", textAlign: TextAlign.center, style: TextStyle(color: theme.hintColor)),
+                    child: Text("ValuatorX\nApp Version: v1.2.1", textAlign: TextAlign.center, style: TextStyle(color: theme.hintColor)),
                   ),
                 ],
               ),

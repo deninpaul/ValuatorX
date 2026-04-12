@@ -6,6 +6,8 @@ class CanvasLine {
   int a, b;
   CanvasLine(this.a, this.b);
   CanvasLine copy() => CanvasLine(a, b);
+
+  /// Canonical key stable regardless of which endpoint is [a] or [b].
   String get key => a < b ? '$a-$b' : '$b-$a';
 }
 
@@ -18,22 +20,31 @@ class CanvasSnap {
   const CanvasSnap({required this.pos, this.pointIdx, this.lineIdx});
 }
 
+// ─── Free-floating text label ─────────────────────────────────────────────────
+//
+// [pos] is stored coords (same coordinate space as pts).
+
+class CanvasTextLabel {
+  Offset pos;
+  String text;
+  CanvasTextLabel({required this.pos, required this.text});
+  CanvasTextLabel copy() => CanvasTextLabel(pos: pos, text: text);
+}
+
 // ─── Undo snapshot ───────────────────────────────────────────────────────────
+//
+// [labels] is keyed by CanvasLine.key (e.g. "3-7"), NOT by line list index.
+// This makes measurement labels immune to line reordering / removal.
 
 class CanvasSnapshot {
   final List<Offset> pts;
   final List<CanvasLine> lines;
-  final Map<int, String> labels;
-  CanvasSnapshot(this.pts, this.lines, this.labels);
+  final Map<String, String> labels; // lineKey → measurement text
+  final List<CanvasTextLabel> textLabels;
+  CanvasSnapshot(this.pts, this.lines, this.labels, this.textLabels);
 }
 
 // ─── View transform ──────────────────────────────────────────────────────────
-//
-// Always identity — stored coords ARE screen coords.
-// Centering and scaling are done by mutating stored coords at the right moments.
-//
-//   view_px = stored * scale + translate
-//   stored  = (view_px − translate) / scale
 
 class VT {
   final double scale;

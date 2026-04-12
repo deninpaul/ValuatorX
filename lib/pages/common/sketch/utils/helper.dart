@@ -5,7 +5,6 @@ import 'package:valuatorx/pages/common/sketch/utils/models.dart';
 
 // ─── Bounds clamping ─────────────────────────────────────────────────────────
 
-/// Clamps [p] so the point circle stays fully inside the canvas bounds.
 Offset clampToCanvas(Offset p, Size size) => Offset(p.dx.clamp(kPointR, size.width - kPointR), p.dy.clamp(kPointR, size.height - kPointR));
 
 // ─── Angle snap ──────────────────────────────────────────────────────────────
@@ -33,7 +32,7 @@ Offset closestOnSeg(Offset a, Offset b, Offset p) {
   return a + ab * ((p - a).dx * ab.dx + (p - a).dy * ab.dy).clamp(0.0, len2) / len2;
 }
 
-// ─── Hit testing (all in view-px) ────────────────────────────────────────────
+// ─── Hit testing ─────────────────────────────────────────────────────────────
 
 int? nearestPt(List<Offset> pts, Offset posPx, VT t, double radius, {int? exclude}) {
   int? best;
@@ -67,9 +66,17 @@ CanvasSnap? snapToLine(List<Offset> pts, List<CanvasLine> lines, Offset posPx, V
   return bestIdx != null ? CanvasSnap(pos: toStored(bestPx!, t), lineIdx: bestIdx) : null;
 }
 
+/// Hit-test floating text labels. Returns the index of the topmost hit, or null.
+int? hitTextLabel(List<CanvasTextLabel> textLabels, Offset posPx, VT t, {double padding = 8.0}) {
+  for (int i = textLabels.length - 1; i >= 0; i--) {
+    final center = toView(textLabels[i].pos, t);
+    final rect = Rect.fromCenter(center: center, width: (60 + padding) * 2, height: (14 + padding) * 2);
+    if (rect.contains(posPx)) return i;
+  }
+  return null;
+}
+
 // ─── Move-point snapping ─────────────────────────────────────────────────────
-//
-// Input: rawPx in view-px. Returns stored coords.
 
 Offset snapMovedPt(int idx, Offset rawPx, List<Offset> pts, List<CanvasLine> lines, VT t) {
   double sx = rawPx.dx, sy = rawPx.dy;
@@ -93,7 +100,6 @@ Offset snapMovedPt(int idx, Offset rawPx, List<Offset> pts, List<CanvasLine> lin
     }
   }
 
-  // Diagonal angle snap when no axis snap fired
   if (bx >= kSnapR * 1.5 && by >= kSnapR * 1.5) {
     for (final l in lines) {
       final n =
@@ -108,7 +114,6 @@ Offset snapMovedPt(int idx, Offset rawPx, List<Offset> pts, List<CanvasLine> lin
     }
   }
 
-  // Line snap
   final ls = snapToLine(pts, lines, Offset(sx, sy), t, idx);
   if (ls != null) return ls.pos;
 
@@ -117,9 +122,12 @@ Offset snapMovedPt(int idx, Offset rawPx, List<Offset> pts, List<CanvasLine> lin
 
 // ─── Layout helpers ──────────────────────────────────────────────────────────
 
-/// Mutates [pts] to scale (if any point overflows) and center the bounding box
-/// within [size], keeping [kMargin] padding on all sides.
-void applyLayout(List<Offset> pts, Size size) {
+/// Scales and centers the diagram within [size] with [kMargin] padding.
+///
+/// Bounds and scale are derived from [pts] only — the diagram drives layout.
+/// [textLabels] are then moved by the exact same transform so they stay
+/// positioned relative to the diagram without affecting its scale.
+void applyLayout(List<Offset> pts, Size size, {List<CanvasTextLabel>? textLabels}) {
   if (pts.isEmpty || size == Size.zero) return;
 
   final minX = pts.map((p) => p.dx).reduce(min);
@@ -132,7 +140,6 @@ void applyLayout(List<Offset> pts, Size size) {
   final shapeW = maxX - minX;
   final shapeH = maxY - minY;
 
-  // Scale down only if a point actually breaches a boundary
   double s = 1.0;
   final overflows = minX < kMargin || minY < kMargin || maxX > size.width - kMargin || maxY > size.height - kMargin;
   if (overflows) {
@@ -141,20 +148,28 @@ void applyLayout(List<Offset> pts, Size size) {
     s = s.clamp(0.01, 1.0);
   }
 
-  // Center the (scaled) bounding box
   final dx = kMargin + (availW - shapeW * s) / 2 - minX * s;
   final dy = kMargin + (availH - shapeH * s) / 2 - minY * s;
 
   for (int i = 0; i < pts.length; i++) {
     pts[i] = Offset(pts[i].dx * s + dx, pts[i].dy * s + dy);
   }
+
+  if (textLabels != null) {
+    for (int i = 0; i < textLabels.length; i++) {
+      textLabels[i].pos = Offset(textLabels[i].pos.dx * s + dx, textLabels[i].pos.dy * s + dy);
+    }
+  }
 }
 
 // ─── Orphan cleanup ──────────────────────────────────────────────────────────
+//
+// Labels are keyed by "a-b" canonical line key. When a point is removed the
+// surviving point indices all shift down, so we must rebuild all label keys.
+// Strategy: before removing point [idx], record every label by its (a,b) pair,
+// then after removal re-derive new keys from the updated line list.
 
-/// Removes any point not referenced by at least one line.
-/// Mutates [pts], [lines], [labels], and [sel] in place.
-void pruneOrphanPoints(List<Offset> pts, List<CanvasLine> lines, Map<int, String> labels, Set<int> sel) {
+void pruneOrphanPoints(List<Offset> pts, List<CanvasLine> lines, Map<String, String> labels, Set<int> sel) {
   final referenced = <int>{};
   for (final l in lines) {
     referenced.add(l.a);
@@ -168,20 +183,31 @@ void pruneOrphanPoints(List<Offset> pts, List<CanvasLine> lines, Map<int, String
 
   for (final idx in orphans) {
     pts.removeAt(idx);
-    labels.remove(idx);
 
+    // Shift line endpoints down.
     for (final l in lines) {
       if (l.a > idx) l.a--;
       if (l.b > idx) l.b--;
     }
-    final shiftedLabels = <int, String>{};
+
+    // Rebuild label map: shift any numeric component > idx down by 1.
+    final rebuilt = <String, String>{};
     for (final e in labels.entries) {
-      shiftedLabels[e.key > idx ? e.key - 1 : e.key] = e.value;
+      final parts = e.key.split('-');
+      if (parts.length != 2) continue;
+      int a = int.parse(parts[0]);
+      int b = int.parse(parts[1]);
+      if (a == idx || b == idx) continue; // line involving removed pt — drop label
+      if (a > idx) a--;
+      if (b > idx) b--;
+      final newKey = a < b ? '$a-$b' : '$b-$a';
+      rebuilt[newKey] = e.value;
     }
     labels
       ..clear()
-      ..addAll(shiftedLabels);
+      ..addAll(rebuilt);
 
+    // Fix selection set.
     sel.remove(idx);
     final shifted = sel.where((i) => i > idx).toList();
     sel.removeAll(shifted);
@@ -191,25 +217,27 @@ void pruneOrphanPoints(List<Offset> pts, List<CanvasLine> lines, Map<int, String
 
 // ─── Encoding ────────────────────────────────────────────────────────────────
 //
-// Format: "<points>|<lines>|<labels>"
-//   points : "x1,y1;x2,y2;..."
-//   lines  : "a1-b1;a2-b2;..."
-//   labels : "lineIdx:text;..."
-//
-// Empty canvas → empty string "".
+// Format: "<points>|<lines>|<labels>|<textLabels>"
+//   points     : "x1,y1;x2,y2;..."
+//   lines      : "a1-b1;a2-b2;..."
+//   labels     : "a-b=text;..."   (measurement, keyed by canonical line key)
+//   textLabels : "x,y,encodedText;..."  (URI-encoded text to allow all chars)
 
-String encodeCanvas(List<Offset> pts, List<CanvasLine> lines, Map<int, String> labels) {
-  if (pts.isEmpty) return '';
+String encodeCanvas(List<Offset> pts, List<CanvasLine> lines, Map<String, String> labels, List<CanvasTextLabel> textLabels) {
+  if (pts.isEmpty && textLabels.isEmpty) return '';
   final p = pts.map((o) => '${o.dx.toStringAsFixed(2)},${o.dy.toStringAsFixed(2)}').join(';');
   final l = lines.map((l) => '${l.a}-${l.b}').join(';');
-  final lb = labels.entries.map((e) => '${e.key}:${e.value}').join(';');
-  return '$p|$l|$lb';
+  final lb = labels.entries.map((e) => '${e.key}=${Uri.encodeComponent(e.value)}').join(';');
+  final tl = textLabels
+      .map((t) => '${t.pos.dx.toStringAsFixed(2)},${t.pos.dy.toStringAsFixed(2)},${Uri.encodeComponent(t.text)}')
+      .join(';');
+  return '$p|$l|$lb|$tl';
 }
 
-// ─── Decoding ────────────────────────────────────────────
+// ─── Decoding ────────────────────────────────────────────────────────────────
 
-({List<Offset> pts, List<CanvasLine> lines, Map<int, String> labels}) decodeCanvas(String s) {
-  if (s.isEmpty) return (pts: [], lines: [], labels: {});
+({List<Offset> pts, List<CanvasLine> lines, Map<String, String> labels, List<CanvasTextLabel> textLabels}) decodeCanvas(String s) {
+  if (s.isEmpty) return (pts: [], lines: [], labels: {}, textLabels: []);
   final parts = s.split('|');
 
   final pts =
@@ -228,13 +256,30 @@ String encodeCanvas(List<Offset> pts, List<CanvasLine> lines, Map<int, String> l
           }).toList()
           : <CanvasLine>[];
 
-  final labels = <int, String>{};
+  final labels = <String, String>{};
   if (parts.length > 2 && parts[2].isNotEmpty) {
     for (final e in parts[2].split(';')) {
-      final i = e.indexOf(':');
-      if (i != -1) labels[int.parse(e.substring(0, i))] = e.substring(i + 1);
+      final i = e.indexOf('=');
+      if (i != -1) {
+        labels[e.substring(0, i)] = Uri.decodeComponent(e.substring(i + 1));
+      }
     }
   }
 
-  return (pts: pts, lines: lines, labels: labels);
+  final textLabels = <CanvasTextLabel>[];
+  if (parts.length > 3 && parts[3].isNotEmpty) {
+    for (final e in parts[3].split(';')) {
+      final c1 = e.indexOf(',');
+      if (c1 == -1) continue;
+      final c2 = e.indexOf(',', c1 + 1);
+      if (c2 == -1) continue;
+      final x = double.tryParse(e.substring(0, c1));
+      final y = double.tryParse(e.substring(c1 + 1, c2));
+      if (x == null || y == null) continue;
+      final text = Uri.decodeComponent(e.substring(c2 + 1));
+      if (text.isNotEmpty) textLabels.add(CanvasTextLabel(pos: Offset(x, y), text: text));
+    }
+  }
+
+  return (pts: pts, lines: lines, labels: labels, textLabels: textLabels);
 }

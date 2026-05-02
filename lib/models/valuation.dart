@@ -78,6 +78,9 @@ class Valuation {
   final String photos;
   final String remarks;
   final String sketch;
+  final String landBoundariesDemarkation;
+  final String topographyOfLand;
+  final String adjacentPlotLevels;
 
   Valuation({
     required this.id,
@@ -153,7 +156,10 @@ class Valuation {
     required this.buildingReplacementRate,
     required this.photos,
     required this.remarks,
-    required this.sketch
+    required this.sketch,
+    required this.landBoundariesDemarkation,
+    required this.topographyOfLand,
+    required this.adjacentPlotLevels,
   });
 
   static const String ID = "id";
@@ -230,6 +236,9 @@ class Valuation {
   static const String REMARKS = "Remarks";
   static const String REPORT_LINK = "Report link";
   static const String LAND_SKETCH = "Land Sketch";
+  static const String LAND_BOUNDARIES_DEMARKATION = "Land Boundaries Demarkation";
+  static const String TOPOGRAPHY_OF_LAND = "Topography of Land";
+  static const String ADJACENT_PLOT_LEVELS = "Adjacent Plot Levels";
 
   factory Valuation.fromJson(Map<String, dynamic> json) {
     return Valuation(
@@ -306,7 +315,10 @@ class Valuation {
       photos: (json[PHOTOS] ?? "").toString(),
       remarks: (json[REMARKS] ?? "").toString(),
       reportLink: (json[REPORT_LINK] ?? "").toString(),
-      sketch: (json[LAND_SKETCH] ?? "").toString()
+      sketch: (json[LAND_SKETCH] ?? "").toString(),
+      landBoundariesDemarkation: (json[LAND_BOUNDARIES_DEMARKATION] ?? "").toString(),
+      topographyOfLand: (json[TOPOGRAPHY_OF_LAND] ?? "").toString(),
+      adjacentPlotLevels: (json[ADJACENT_PLOT_LEVELS] ?? "").toString(),
     );
   }
 
@@ -385,7 +397,10 @@ class Valuation {
       PHOTOS: photos,
       REMARKS: remarks,
       REPORT_LINK: reportLink,
-      LAND_SKETCH: sketch
+      LAND_SKETCH: sketch,
+      LAND_BOUNDARIES_DEMARKATION: landBoundariesDemarkation,
+      TOPOGRAPHY_OF_LAND: topographyOfLand,
+      ADJACENT_PLOT_LEVELS: adjacentPlotLevels,
     };
   }
 
@@ -495,7 +510,10 @@ class Valuation {
     PROPERTY_AREA_RATE,
     PHOTOS,
     REMARKS,
-    LAND_SKETCH
+    LAND_SKETCH,
+    LAND_BOUNDARIES_DEMARKATION,
+    TOPOGRAPHY_OF_LAND,
+    ADJACENT_PLOT_LEVELS,
   ];
 
   static const statusOptions = ["In progress", "Completed"];

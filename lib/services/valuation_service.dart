@@ -14,6 +14,7 @@ class ValuationService extends ExcelService {
   final _driveId = "b!bjWHx8vaSUGa2c_fZH7AoTlNAe4QjSFKrgLAyq8Smcgfz6YLhZb1T7j74-c_w8yy";
   final _reportPath = "/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/GENERAL/Apps/Uploads";
   final _templateId = "01OTD6NSL45WSFMTT37RBJ6JCXOIPXL3IG";
+  final _uploadFolderId = "01OTD6NSJTOYPXC6IBDVELYIKBNT43MX7J";
 
   Future createNewReportWorksheet({required Client client, required String fileName}) async {
     try {
@@ -23,7 +24,7 @@ class ValuationService extends ExcelService {
         Uri.parse("${fileEndpoint.replaceAll("_ID_", _templateId)}/copy"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "parentReference": {"driveId": _driveId, "path": _reportPath},
+          "parentReference": {"driveId": _driveId, "id": _uploadFolderId},
           "name": fileName,
         }),
       );
@@ -31,7 +32,7 @@ class ValuationService extends ExcelService {
         throw Exception("Error creating new report workbook. ${response.statusCode} ${response.body}");
       }
       // Get file ID of new file
-      final fileResponse = await client.get(Uri.parse("https://graph.microsoft.com/v1.0/users/$userId$_reportPath/$fileName"));
+      final fileResponse = await client.get(Uri.parse("https://graph.microsoft.com/v1.0/users/$userId/drive/items/$_uploadFolderId:/$fileName"));
       if (fileResponse.statusCode != 200) {
         throw Exception("Error retrieving file id. ${fileResponse.statusCode} ${fileResponse.body}");
       }

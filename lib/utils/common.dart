@@ -118,3 +118,16 @@ LatLng? parseLatLng(String input) {
   }
   return null;
 }
+
+String getCent(String input) {
+  if (input.isEmpty) {
+    return "";
+  }
+  try {
+    double are = double.parse(input);
+    double cent = are * 2.471;
+    return cent.toStringAsFixed(2);
+  } catch(e) {
+    return "";
+  }
+}

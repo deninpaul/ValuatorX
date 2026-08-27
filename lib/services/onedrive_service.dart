@@ -6,11 +6,11 @@ class OneDriveService {
   late final String uploadEndpoint;
   late final String fileEndpoint;
   late final String userId;
+  final _uploadFolderId = "01OTD6NSJTOYPXC6IBDVELYIKBNT43MX7J";
 
   OneDriveService() {
     userId = "a328ee73-9709-4f7c-bb40-ae497e488a66";
-    uploadEndpoint =
-        "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/GENERAL/Apps/Uploads/_NAME_:/content";
+    uploadEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$_uploadFolderId:/_NAME_:/content";
     fileEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/_ID_";
   }
 

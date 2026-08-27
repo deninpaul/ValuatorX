@@ -81,6 +81,11 @@ class Valuation {
   final String landBoundariesDemarkation;
   final String topographyOfLand;
   final String adjacentPlotLevels;
+  final String kitchenFloorAndWallUnit;
+  final String builtInWardrobe;
+  final String compoundWall;
+  final String wellAndWaterArrangements;
+  final String externalPavingStoneConcretePavingTiles;
 
   Valuation({
     required this.id,
@@ -160,6 +165,11 @@ class Valuation {
     required this.landBoundariesDemarkation,
     required this.topographyOfLand,
     required this.adjacentPlotLevels,
+    required this.kitchenFloorAndWallUnit,
+    required this.builtInWardrobe,
+    required this.compoundWall,
+    required this.wellAndWaterArrangements,
+    required this.externalPavingStoneConcretePavingTiles,
   });
 
   static const String ID = "id";
@@ -182,12 +192,16 @@ class Valuation {
   static const String BUILDING_APPROVAL_REFERENCE = "Building Approval Reference";
   static const String SURVEY_NO_RE_SY_NO_1 = "Survey No./ Re. Sy. No. - 1";
   static const String AREA_IN_ARE_1 = "Area (in Are) - 1";
+  static const String AREA_IN_CENT_1 = "Area (in Cent) - 1";
   static const String SURVEY_NO_RE_SY_NO_2 = "Survey No./ Re. Sy. No. - 2";
   static const String AREA_IN_ARE_2 = "Area (in Are) - 2";
+  static const String AREA_IN_CENT_2 = "Area (in Cent) - 2";
   static const String SURVEY_NO_RE_SY_NO_3 = "Survey No./ Re. Sy. No. - 3";
   static const String AREA_IN_ARE_3 = "Area (in Are) - 3";
+  static const String AREA_IN_CENT_3 = "Area (in Cent) - 3";
   static const String SURVEY_NO_RE_SY_NO_4 = "Survey No./ Re. Sy. No. - 4";
   static const String AREA_IN_ARE_4 = "Area (in Are) - 4";
+  static const String AREA_IN_CENT_4 = "Area (in Cent) - 4";
   static const String VILLAGE = "Village";
   static const String TALUK = "Taluk";
   static const String PANCHAYATH = "Panchayath";
@@ -239,6 +253,11 @@ class Valuation {
   static const String LAND_BOUNDARIES_DEMARKATION = "Land Boundaries Demarkation";
   static const String TOPOGRAPHY_OF_LAND = "Topography of Land";
   static const String ADJACENT_PLOT_LEVELS = "Adjacent Plot Levels";
+  static const String KITCHEN_FLOOR_AND_WALL_UNIT = "Kitchen Floor & Wall Unit";
+  static const String BUILT_IN_WARDROBE = "Built in Wardrobe";
+  static const String COMPOUND_WALL = "Compound Wall";
+  static const String WELL_AND_WATER_ARRANGEMENTS = "Well & water arrangements";
+  static const String EXTERNAL_PAVING_STONE_CONCRETE_PAVING_TILES = "External Paving stone/ Concrete Paving tiles";
 
   factory Valuation.fromJson(Map<String, dynamic> json) {
     return Valuation(
@@ -319,6 +338,11 @@ class Valuation {
       landBoundariesDemarkation: (json[LAND_BOUNDARIES_DEMARKATION] ?? "").toString(),
       topographyOfLand: (json[TOPOGRAPHY_OF_LAND] ?? "").toString(),
       adjacentPlotLevels: (json[ADJACENT_PLOT_LEVELS] ?? "").toString(),
+      kitchenFloorAndWallUnit: (json[KITCHEN_FLOOR_AND_WALL_UNIT] ?? "").toString(),
+      builtInWardrobe: (json[BUILT_IN_WARDROBE] ?? "").toString(),
+      compoundWall: (json[COMPOUND_WALL] ?? "").toString(),
+      wellAndWaterArrangements: (json[WELL_AND_WATER_ARRANGEMENTS] ?? "").toString(),
+      externalPavingStoneConcretePavingTiles: (json[EXTERNAL_PAVING_STONE_CONCRETE_PAVING_TILES] ?? "").toString(),
     );
   }
 
@@ -401,6 +425,11 @@ class Valuation {
       LAND_BOUNDARIES_DEMARKATION: landBoundariesDemarkation,
       TOPOGRAPHY_OF_LAND: topographyOfLand,
       ADJACENT_PLOT_LEVELS: adjacentPlotLevels,
+      KITCHEN_FLOOR_AND_WALL_UNIT: kitchenFloorAndWallUnit,
+      BUILT_IN_WARDROBE: builtInWardrobe,
+      COMPOUND_WALL: compoundWall,
+      WELL_AND_WATER_ARRANGEMENTS: wellAndWaterArrangements,
+      EXTERNAL_PAVING_STONE_CONCRETE_PAVING_TILES: externalPavingStoneConcretePavingTiles,
     };
   }
 
@@ -514,6 +543,11 @@ class Valuation {
     LAND_BOUNDARIES_DEMARKATION,
     TOPOGRAPHY_OF_LAND,
     ADJACENT_PLOT_LEVELS,
+    KITCHEN_FLOOR_AND_WALL_UNIT,
+    BUILT_IN_WARDROBE,
+    COMPOUND_WALL,
+    WELL_AND_WATER_ARRANGEMENTS,
+    EXTERNAL_PAVING_STONE_CONCRETE_PAVING_TILES,
   ];
 
   static const statusOptions = ["In progress", "Completed"];

@@ -9,6 +9,7 @@ class TableField extends StatefulWidget {
   final List<List<TextEditingController>> controllers;
   final List<List<String>> fieldNames;
   final String focusField;
+  final List<String> disabledFields;
   const TableField({
     super.key,
     required this.title,
@@ -16,6 +17,7 @@ class TableField extends StatefulWidget {
     this.minRows = 1,
     this.keyboardType = TextInputType.text,
     this.focusField = "",
+    this.disabledFields = const [],
     required this.controllers,
     required this.fieldNames,
   });
@@ -74,6 +76,7 @@ class _TableFieldState extends State<TableField> {
                           removeIcon(rowIndex, theme),
                           ...List.generate(widget.controllers[rowIndex].length, (colIndex) {
                             final labelText = widget.fieldNames[rowIndex][colIndex];
+                            final isDisabled = widget.disabledFields.contains(labelText);
                             return Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -83,6 +86,7 @@ class _TableFieldState extends State<TableField> {
                                     controller: widget.controllers[rowIndex][colIndex],
                                     keyboardType: widget.keyboardType,
                                     autofocus: labelText == widget.focusField,
+                                    readOnly: isDisabled,
                                     onChanged: (value) => setState(() {}),
                                     decoration: InputDecoration(border: const OutlineInputBorder(), labelText: labelText),
                                   ),

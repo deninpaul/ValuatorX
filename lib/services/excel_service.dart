@@ -6,7 +6,6 @@ class ExcelService {
   late final String tableHeadersEndpoint;
   late final String addTableEndpoint;
   late final String tableRowEndpoint;
-  late final String fileUploadEndpoint;
   late final String fileEndpoint;
   late final String fileId;
   late final String sheetName;
@@ -18,8 +17,6 @@ class ExcelService {
     addTableEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows/add";
     tableRowEndpoint =
         "https://graph.microsoft.com/v1.0/users/$userId/drive/items/$fileId/workbook/tables/$tableName/rows/\$/ItemAt(index=_ID_)";
-    fileUploadEndpoint =
-        "https://graph.microsoft.com/v1.0/users/$userId/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/GENERAL/Apps/Uploads/_NAME_:/content";
     fileEndpoint = "https://graph.microsoft.com/v1.0/users/$userId/drive/items/_ID_";
   }
 

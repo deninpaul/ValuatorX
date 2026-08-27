@@ -726,6 +726,25 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                         onPressed: onEditAction,
                         tabIndex: 2,
                       ),
+                      TableViewTile(
+                        title: "Valuation of Amenities/Services",
+                        icon: Icons.kitchen_outlined,
+                        minRows: 5,
+                        values: [
+                          [widget.valuation.kitchenFloorAndWallUnit],
+                          [widget.valuation.builtInWardrobe],
+                          [widget.valuation.compoundWall],
+                          [widget.valuation.wellAndWaterArrangements],
+                          [widget.valuation.externalPavingStoneConcretePavingTiles],
+                        ],
+                        fieldNames: [
+                          [Valuation.KITCHEN_FLOOR_AND_WALL_UNIT],
+                          [Valuation.BUILT_IN_WARDROBE],
+                          [Valuation.COMPOUND_WALL],
+                          [Valuation.WELL_AND_WATER_ARRANGEMENTS],
+                          [Valuation.EXTERNAL_PAVING_STONE_CONCRETE_PAVING_TILES]
+                        ],
+                      ),
                     ],
                   ),
                 ),

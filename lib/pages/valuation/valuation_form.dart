@@ -65,6 +65,7 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     if (!templateMode) "Photo",
     if (!templateMode) "Land Sketch",
   ];
+  List<String> virtualFields = [Valuation.AREA_IN_CENT_1, Valuation.AREA_IN_CENT_2, Valuation.AREA_IN_CENT_3, Valuation.AREA_IN_CENT_4];
 
   Valuation generateValuation(String? id, {String? status}) {
     status = status ?? (templateMode ? 'Template' : (!editMode || widget.isDraft ? Valuation.statusOptions[0] : null));
@@ -166,13 +167,29 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
     }
   }
 
+  void setupFieldListeners() {
+    controllers[Valuation.AREA_IN_ARE_1]?.addListener(
+      () => controllers[Valuation.AREA_IN_CENT_1]!.text = getCent(controllers[Valuation.AREA_IN_ARE_1]!.text),
+    );
+    controllers[Valuation.AREA_IN_ARE_2]?.addListener(
+      () => controllers[Valuation.AREA_IN_CENT_2]!.text = getCent(controllers[Valuation.AREA_IN_ARE_2]!.text),
+    );
+    controllers[Valuation.AREA_IN_ARE_3]?.addListener(
+      () => controllers[Valuation.AREA_IN_CENT_3]!.text = getCent(controllers[Valuation.AREA_IN_ARE_3]!.text),
+    );
+    controllers[Valuation.AREA_IN_ARE_4]?.addListener(
+      () => controllers[Valuation.AREA_IN_CENT_4]!.text = getCent(controllers[Valuation.AREA_IN_ARE_4]!.text),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    for (final key in fieldKeys) {
+    for (final key in [...fieldKeys, ...virtualFields]) {
       controllers[key] = TextEditingController();
     }
     _tabController = TabController(length: tabs.length, vsync: this, initialIndex: widget.focusTabIndex);
+    setupFieldListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       populateForm();
       if (!templateMode) syncToDraft();
@@ -361,17 +378,34 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                           focusField: widget.focusField,
                           minRows: 2,
                           controllers: [
-                            [controllers[Valuation.SURVEY_NO_RE_SY_NO_1]!, controllers[Valuation.AREA_IN_ARE_1]!],
-                            [controllers[Valuation.SURVEY_NO_RE_SY_NO_2]!, controllers[Valuation.AREA_IN_ARE_2]!],
-                            [controllers[Valuation.SURVEY_NO_RE_SY_NO_3]!, controllers[Valuation.AREA_IN_ARE_3]!],
-                            [controllers[Valuation.SURVEY_NO_RE_SY_NO_4]!, controllers[Valuation.AREA_IN_ARE_4]!],
+                            [
+                              controllers[Valuation.SURVEY_NO_RE_SY_NO_1]!,
+                              controllers[Valuation.AREA_IN_ARE_1]!,
+                              controllers[Valuation.AREA_IN_CENT_1]!,
+                            ],
+                            [
+                              controllers[Valuation.SURVEY_NO_RE_SY_NO_2]!,
+                              controllers[Valuation.AREA_IN_ARE_2]!,
+                              controllers[Valuation.AREA_IN_CENT_2]!,
+                            ],
+                            [
+                              controllers[Valuation.SURVEY_NO_RE_SY_NO_3]!,
+                              controllers[Valuation.AREA_IN_ARE_3]!,
+                              controllers[Valuation.AREA_IN_CENT_3]!,
+                            ],
+                            [
+                              controllers[Valuation.SURVEY_NO_RE_SY_NO_4]!,
+                              controllers[Valuation.AREA_IN_ARE_4]!,
+                              controllers[Valuation.AREA_IN_CENT_4]!,
+                            ],
                           ],
                           fieldNames: [
-                            ["Survey No./ Re. Sy. No.", "Area (in Are)"],
-                            ["Survey No./ Re. Sy. No.", "Area (in Are)"],
-                            ["Survey No./ Re. Sy. No.", "Area (in Are)"],
-                            ["Survey No./ Re. Sy. No.", "Area (in Are)"],
+                            ["Survey No./ Re. Sy. No.", "Area (in Are)", "Area (in Cents)"],
+                            ["Survey No./ Re. Sy. No.", "Area (in Are)", "Area (in Cents)"],
+                            ["Survey No./ Re. Sy. No.", "Area (in Are)", "Area (in Cents)"],
+                            ["Survey No./ Re. Sy. No.", "Area (in Are)", "Area (in Cents)"],
                           ],
+                          disabledFields: ["Area (in Cents)"],
                         ),
                         Divider(),
                         BasicField(
@@ -612,6 +646,27 @@ class _ValuationFormState extends State<ValuationForm> with TickerProviderStateM
                           controller: controllers[Valuation.BUILDING_REPLACEMENT_RATE]!,
                           focusField: widget.focusField,
                           icon: Icons.toll_outlined,
+                        ),
+                        Divider(),
+                        TableField(
+                          title: "Valuation of Amenities/Services",
+                          icon: Icons.kitchen_outlined,
+                          focusField: widget.focusField,
+                          minRows: 5,
+                          controllers: [
+                            [controllers[Valuation.KITCHEN_FLOOR_AND_WALL_UNIT]!],
+                            [controllers[Valuation.BUILT_IN_WARDROBE]!],
+                            [controllers[Valuation.COMPOUND_WALL]!],
+                            [controllers[Valuation.WELL_AND_WATER_ARRANGEMENTS]!],
+                            [controllers[Valuation.EXTERNAL_PAVING_STONE_CONCRETE_PAVING_TILES]!],
+                          ],
+                          fieldNames: [
+                            [Valuation.KITCHEN_FLOOR_AND_WALL_UNIT],
+                            [Valuation.BUILT_IN_WARDROBE],
+                            [Valuation.COMPOUND_WALL],
+                            [Valuation.WELL_AND_WATER_ARRANGEMENTS],
+                            [Valuation.EXTERNAL_PAVING_STONE_CONCRETE_PAVING_TILES]
+                          ],
                         ),
                       ],
                     ),

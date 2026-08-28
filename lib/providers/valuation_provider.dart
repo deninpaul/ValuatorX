@@ -249,6 +249,29 @@ class ValuationProvider extends ChangeNotifier {
     ).toList();
   }
 
+  Future<void> unarchiveValuation(BuildContext context, Valuation valuation) async {
+    valuation.status = Valuation.statusOptions[0];
+    try {
+      setCreating(true);
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final client = await authProvider.getClient();
+      final values = await service.generateTableValues(client: client, data: valuation.toJson());
+      await Future.wait([
+        archiveService.deleteExcelTableRow(client: client, index: valuation.id),
+        service.addToExcelTable(client: client, values: values),
+      ]);
+      debugPrint("Valuation ${valuation.id} has been unarchived successfully.");
+      archived.removeWhere((v) => v.id == valuation.id);
+      valuations = [valuation, ...valuations];
+      getValuations(context, refresh: false);
+      getArchivedValuations(context, refresh: false);
+    } catch (e) {
+      debugPrint("Failed to unarchive Valuation: ${e.toString()}");
+    } finally {
+      setCreating(false);
+    }
+  }
+
   Future generateReport(BuildContext context, Valuation valuation, void Function(String message, {Status newStatus}) onStatusUpdate) async {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);

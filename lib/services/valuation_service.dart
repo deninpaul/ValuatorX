@@ -12,7 +12,6 @@ class ValuationService extends ExcelService {
       );
 
   final _driveId = "b!bjWHx8vaSUGa2c_fZH7AoTlNAe4QjSFKrgLAyq8Smcgfz6YLhZb1T7j74-c_w8yy";
-  final _reportPath = "/drive/root:/SAMANTO ASSOCIATES (P) Ltd/00 VALUATION/GENERAL/Apps/Uploads";
   final _templateId = "01OTD6NSL45WSFMTT37RBJ6JCXOIPXL3IG";
   final _uploadFolderId = "01OTD6NSJTOYPXC6IBDVELYIKBNT43MX7J";
 

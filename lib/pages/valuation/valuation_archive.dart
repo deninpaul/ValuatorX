@@ -121,9 +121,9 @@ class _ValuationArchiveState extends State<ValuationArchive> {
               visible: !isArchivePage,
               destroyOnHide: true,
               child: ValuationDetails(
-                valuation: provider.getSelectedArchivedValuation(),
-                readOnly: true,
                 padding: EdgeInsetsGeometry.symmetric(horizontal: isMobile(context) ? 0 : 40),
+                valuation: provider.getSelectedArchivedValuation(),
+                archived: true,
               ),
             ),
           ],

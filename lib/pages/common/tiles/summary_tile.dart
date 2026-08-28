@@ -89,7 +89,7 @@ class SummaryTile extends StatelessWidget {
                   ],
                 ),
               ),
-              if (tag.isNotEmpty && info.isNotEmpty)
+              if (tag.isNotEmpty)
                 Column(
                   spacing: 8,
                   crossAxisAlignment: CrossAxisAlignment.end,

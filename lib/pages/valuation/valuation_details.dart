@@ -9,6 +9,7 @@ import 'package:valuatorx/pages/common/field/tag.dart';
 import 'package:valuatorx/pages/common/header/actions_header.dart';
 import 'package:valuatorx/pages/common/header/title_header.dart';
 import 'package:valuatorx/pages/common/image/image_picker.dart';
+import 'package:valuatorx/pages/common/modal/unarchive_dialog.dart';
 import 'package:valuatorx/pages/common/view/sketch_view.dart';
 import 'package:valuatorx/pages/common/view/location_view.dart';
 import 'package:valuatorx/pages/common/view/notes_view.dart';
@@ -21,9 +22,9 @@ import 'package:valuatorx/utils/common.dart';
 
 class ValuationDetails extends StatefulWidget {
   final Valuation valuation;
-  final bool readOnly;
+  final bool archived;
   final EdgeInsetsGeometry padding;
-  const ValuationDetails({super.key, required this.valuation, this.readOnly = false, this.padding = const EdgeInsets.all(0)});
+  const ValuationDetails({super.key, required this.valuation, this.archived = false, this.padding = const EdgeInsets.all(0)});
 
   @override
   State<ValuationDetails> createState() => _ValuationDetailsState();
@@ -57,7 +58,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
     final formPadding = EdgeInsets.symmetric(vertical: 24, horizontal: isDesktop(context) ? 200 : 15);
 
     onEditAction({String fieldName = "", int fieldTab = 0}) {
-      if (!widget.readOnly) {
+      if (!widget.archived) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ValuationForm(mode: Mode.edit, focusField: fieldName, focusTabIndex: fieldTab)),
@@ -104,6 +105,21 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
       }
     }
 
+    onUnarchiveAction() async {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder:
+            (ctx) => UnArchiveDialog(
+              onUnarchive: () async {
+                await provider.unarchiveValuation(context, widget.valuation);
+              },
+            ),
+      );
+      if (confirmed == true) {
+        provider.setSelectedItem("");
+      }
+    }
+
     onBackAction() {
       provider.setSelectedItem("");
     }
@@ -125,7 +141,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                   title: widget.valuation.title,
                   expandedHeight: 124,
                   onBackPressed: onBackAction,
-                  readOnly: widget.readOnly,
+                  readOnly: widget.archived,
                   actions: [
                     Tag(
                       text: widget.valuation.status,
@@ -136,7 +152,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                     ),
                   ],
                 ),
-                if (!widget.readOnly)
+                if (!widget.archived)
                   ActionsHeader(
                     actions: [
                       ActionButton(
@@ -153,6 +169,11 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                         ),
                       if (!isDraft) ActionButton(icon: Icons.copy, label: "Duplicate", onPressed: onDuplicateAction),
                     ],
+                  )
+                else
+                  ActionsHeader(
+                    expandedHeight: 86,
+                    actions: [ActionButton(icon: Icons.unarchive_outlined, label: "Unarchive", onPressed: onUnarchiveAction)],
                   ),
                 SliverAppBar(
                   pinned: true,
@@ -339,16 +360,16 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                         tabIndex: 1,
                         minRows: 2,
                         values: [
-                          [widget.valuation.surveyNo1, widget.valuation.area1],
-                          [widget.valuation.surveyNo2, widget.valuation.area2],
-                          [widget.valuation.surveyNo3, widget.valuation.area3],
-                          [widget.valuation.surveyNo4, widget.valuation.area4],
+                          [widget.valuation.surveyNo1, widget.valuation.area1, getCent(widget.valuation.area1)],
+                          [widget.valuation.surveyNo2, widget.valuation.area2, getCent(widget.valuation.area2)],
+                          [widget.valuation.surveyNo3, widget.valuation.area3, getCent(widget.valuation.area3)],
+                          [widget.valuation.surveyNo4, widget.valuation.area4, getCent(widget.valuation.area4)],
                         ],
                         fieldNames: [
-                          ["Survey No./ Re. Sy. No.", "Area (in Are)"],
-                          ["Survey No./ Re. Sy. No.", "Area (in Are)"],
-                          ["Survey No./ Re. Sy. No.", "Area (in Are)"],
-                          ["Survey No./ Re. Sy. No.", "Area (in Are)"],
+                          ["Survey No./ Re. Sy. No.", "Area (in Are)", "Area (in Cent)"],
+                          ["Survey No./ Re. Sy. No.", "Area (in Are)", "Area (in Cent)"],
+                          ["Survey No./ Re. Sy. No.", "Area (in Are)", "Area (in Cent)"],
+                          ["Survey No./ Re. Sy. No.", "Area (in Are)", "Area (in Cent)"],
                         ],
                       ),
                       Divider(),
@@ -756,7 +777,7 @@ class _ValuationDetailsState extends State<ValuationDetails> with TickerProvider
                   padding: formPadding,
                   child: ImagePickerField(
                     editMode: false,
-                    readOnly: widget.readOnly,
+                    readOnly: widget.archived,
                     value: widget.valuation.photos,
                     onEditAction: () => onEditAction(fieldTab: 4),
                   ),

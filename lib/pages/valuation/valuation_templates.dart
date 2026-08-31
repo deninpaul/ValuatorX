@@ -48,29 +48,31 @@ class ValuationTemplates extends StatelessWidget {
           backgroundColor: colorScheme.surfaceContainer,
           title: Text('Templates', style: headerTheme),
           leading: IconButton(icon: Icon(Icons.arrow_back_outlined), onPressed: onBack),
+          surfaceTintColor: Colors.transparent,
         ),
         body: Container(
           margin: EdgeInsets.only(top: 11),
           height: double.infinity,
-          width: double.infinity,
-          child: ExpandableList(
-            items: provider.getSearchResults(query: '', filter: 'template'),
-            isLoading: provider.isLoading,
-            initialCount: 30,
-            incrementCount: 30,
-            itemBuilder: (ctx, valuation, index) {
-              return SummaryTile(
-                id: valuation.id,
-                title: valuation.templateTile,
-                subtitle: 'Edit template',
-                info: '',
-                tag: '',
-                onTapAction: onEditValuation,
-                actions: [
-                  IconButton(onPressed: () => onDeleteAction(valuation), icon: Icon(Icons.delete_outline, color: colorScheme.error)),
-                ],
-              );
-            },
+          child: SingleChildScrollView(
+            child: ExpandableList(
+              items: provider.getSearchResults(query: '', filter: 'template'),
+              isLoading: provider.isLoading,
+              initialCount: 30,
+              incrementCount: 30,
+              itemBuilder: (ctx, valuation, index) {
+                return SummaryTile(
+                  id: valuation.id,
+                  title: valuation.templateTile,
+                  subtitle: 'Edit template',
+                  info: '',
+                  tag: '',
+                  onTapAction: onEditValuation,
+                  actions: [
+                    IconButton(onPressed: () => onDeleteAction(valuation), icon: Icon(Icons.delete_outline, color: colorScheme.error)),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
